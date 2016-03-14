@@ -10,9 +10,9 @@ public class TestClassMarkus {
         c.setTile(2,1,5,Type.Water);
         c.setTile(2,3,5,Type.Hole);
 
-        c.savePlaylist("courseText.txt");
+        c.saveCourse("courseText.txt");
 
-        c = Course.loadPlaylist("courseText.txt");
+        c = Course.loadCourse("courseText.txt");
     }
 
 

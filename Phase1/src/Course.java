@@ -2,8 +2,6 @@
  * Created by nibbla on 14.03.16.
  */
 
-import java.io.*;
-
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
  * A tile is 1cm³
@@ -12,11 +10,13 @@ import java.io.*;
  */
 public class Course {
  String name;
+
     Tile[][][] playfield;
     Tile[][][] copy;
     int par;
 
-    public Course(String test1, int length, int width, int height, Type standartType, int par){
+    public Course(String name, int length, int width, int height, Type standartType, int par){
+        this.name = name;
         playfield = new Tile[length][width][height];
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
@@ -39,8 +39,8 @@ public class Course {
         return playfield[x][y][z];
     }
 
-    static Course loadPlaylist(String path){
-        String content = readFile(path);
+    static Course loadCourse(String path){
+        String content = Utils.readFile(path);
        String[] lines = content.split("\n");
         String name = lines[0];
         int par = Integer.parseInt(lines[1].split(":")[1]);
@@ -70,59 +70,8 @@ public class Course {
         return c;
 
     }
-    static String readFile(String path){
-        BufferedReader br = null;
-        try {
-            br = new BufferedReader(new FileReader(path));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        String everything = "";
-        try {
-            StringBuilder sb = new StringBuilder();
-            String line = br.readLine();
 
-            while (line != null) {
-                sb.append(line);
-                sb.append(System.lineSeparator());
-                line = br.readLine();
-            }
-            everything = sb.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return everything;
-    }
-    void saveFile(String path, String content){
-        BufferedWriter writer = null;
-        try
-        {
-            writer = new BufferedWriter( new FileWriter(path));
-            writer.write(content);
-
-        }
-        catch ( IOException e)
-        {
-        }
-        finally
-        {
-            try
-            {
-                if ( writer != null)
-                    writer.close( );
-            }
-            catch ( IOException e)
-            {
-            }
-        }
-    }
-    void savePlaylist(String path){
+    void saveCourse(){
         StringBuilder s = new StringBuilder();
         int length = playfield.length;
         int width = playfield[0].length;
@@ -144,9 +93,13 @@ public class Course {
             }
         }
 
-        saveFile(path, s.toString());
+        Utils.saveFile(name + ".txt", s.toString());
 
 
 
+    }
+
+    public String getName() {
+        return name;
     }
 }
