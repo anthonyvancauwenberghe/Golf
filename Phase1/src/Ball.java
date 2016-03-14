@@ -9,7 +9,7 @@ public class Ball {
     double fX, fY, fZ;
 
     public Ball() {
-    	//esther ftwd
+    	//esther still ftwd
     }
 
     public void magic(long deltaT) {
