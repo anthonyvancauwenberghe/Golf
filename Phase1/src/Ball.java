@@ -9,11 +9,11 @@ public class Ball {
     double fX, fY, fZ;
 
     public Ball() {
-    	//esther still ftwd
+
     }
 
     public void magic(long deltaT) {
-        //testing some magic
+
     }
 
 }
