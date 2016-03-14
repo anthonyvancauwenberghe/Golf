@@ -59,6 +59,7 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+Phase1.iml
 
 # Windows shortcuts
 *.lnk
