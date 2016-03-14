@@ -8,11 +8,11 @@ public class Ball {
     double velX, velY, velZ;
     double fX, fY, fZ;
 
-    public Ball(){
+    public Ball() {
 
     }
 
-    public void magic (long deltaT){
+    public void magic(long deltaT) {
 
     }
 
