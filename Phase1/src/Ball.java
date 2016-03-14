@@ -13,7 +13,7 @@ public class Ball {
     }
 
     public void magic(long deltaT) {
-
+        //testing some magic
     }
 
 }
