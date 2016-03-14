@@ -1,5 +1,5 @@
 public class Game {
     public static void main(String [] args){
-        System.out.println("golf game: ");
+        System.out.println("golf game: whazzaa");
     }
 }
