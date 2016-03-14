@@ -16,4 +16,11 @@ public class Ball {
         //testing some magic
     }
 
+    public void magic(Course c, double angX, double angY, double power) {
+
+    }
+
+    public boolean inPlay() {
+        return true;
+    }
 }

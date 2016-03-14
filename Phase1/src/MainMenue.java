@@ -10,6 +10,9 @@ public class MainMenue {
     GUI gui;
 
     static void main(String[] args){
+        MainMenue m = new MainMenue();
+        m.gui = new GUI();
+        m.gui.showMainMenue(m);
 
     }
 
@@ -40,15 +43,16 @@ public class MainMenue {
         players.clear();
     }
     void startRound(){
+        for (int i = 0; i < playlist.size(); i++) {
+            Game g = new Game(playlist.get(i),players);
+            gui.showGame(g);
 
+        }
     }
 
     void designCourse(String path){
 
     }
-    void savePlaylist(String path){
 
-
-    }
 
 }

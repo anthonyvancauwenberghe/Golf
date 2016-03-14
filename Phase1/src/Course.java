@@ -39,6 +39,10 @@ public class Course {
         return playfield[x][y][z];
     }
 
+    Tile[][][] getPlayfield(){
+        return playfield;
+    }
+
     static Course loadCourse(String path){
         String content = Utils.readFile(path);
        String[] lines = content.split("\n");
