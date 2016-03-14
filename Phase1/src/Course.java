@@ -8,6 +8,7 @@ import java.io.*;
  * A typical course would be 800*600*100 tiles, mostly empty
  * A tile is 1cm³
  *
+ *
  */
 public class Course {
  String name;
