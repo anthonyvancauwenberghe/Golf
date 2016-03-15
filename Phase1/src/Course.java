@@ -45,8 +45,9 @@ public class Course {
 
     static Course loadCourse(String path){
         String content = Utils.readFile(path);
-       String[] lines = content.split("\n");
+       String[] lines = content.split(System.lineSeparator());
         String name = lines[0];
+
         int par = Integer.parseInt(lines[1].split(":")[1]);
         int length = Integer.parseInt(lines[2].split(":")[1]);
         int width = Integer.parseInt(lines[3].split(":")[1]);
