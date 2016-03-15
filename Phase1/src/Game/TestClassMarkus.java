@@ -1,3 +1,5 @@
+package Game;
+
 /**
  * Created by nibbla on 14.03.16.
  */

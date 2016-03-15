@@ -1,3 +1,5 @@
+package Game;
+
 import java.applet.Applet;
 import java.awt.*;
 

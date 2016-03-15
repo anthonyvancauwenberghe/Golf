@@ -1,3 +1,5 @@
+package Game;
+
 /**
  * This is the coordinate class which holds the x, y, z coordinates and the type of object the coordinate is
  * referencing.  Coordinate is a node.

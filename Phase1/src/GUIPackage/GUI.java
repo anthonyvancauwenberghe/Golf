@@ -1,6 +1,7 @@
 package GUIPackage;
 
 import javax.swing.*;
+import Game.Game;
 import java.awt.event.ActionListener;
 
 public class GUI {
