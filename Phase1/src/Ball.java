@@ -25,4 +25,7 @@ public class Ball {
 
     }
 
+    public boolean inPlay() {
+        return true;
+    }
 }
