@@ -27,14 +27,6 @@ public class Game {
     }
 
     public void shoot(double angX, double angY, double power){
-        //Getting directional vector
-        GolfPhysics physics = new GolfPhysics();
-        double[] vector = physics.getVector(angX);
-
-        //multiplying with power
-        for (int i = 0; i < vector.length; i++){
-            vector[i] = vector[i]*power;
-        }
         
         //TODO how the physics gets implemented.
         time++; //basic idea of this method. needs to be adjusted.

@@ -1,4 +1,6 @@
 
+import GUIPackage.GUI;
+
 import java.util.ArrayList;
 
 /**
@@ -12,7 +14,7 @@ public class MainMenue {
     static void main(String[] args){
         MainMenue m = new MainMenue();
         m.gui = new GUI();
-        m.gui.showMainMenue(m);
+        m.gui.showMainMenu();
 
     }
 
