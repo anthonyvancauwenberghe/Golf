@@ -48,7 +48,7 @@ public class MainMenue {
     void startRound(){
         for (int i = 0; i < playlist.size(); i++) {
             Game g = new Game(playlist.get(i),players);
-            gui.showGame(g);
+            //gui.showGame(g);
 
         }
     }
