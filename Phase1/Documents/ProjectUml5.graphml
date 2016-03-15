@@ -56,7 +56,7 @@ int TotalStrokes</y:AttributeLabel>
           <y:UML clipContent="true" constraint="" omitDetails="false" stereotype="" use3DEffect="true">
             <y:AttributeLabel>ArrayList&lt;Course&gt; playList
 ArrayList&lt;Player&gt; players
-GUI gui</y:AttributeLabel>
+GUIPackage.GUI gui</y:AttributeLabel>
             <y:MethodLabel>static Main(String[] args);
 loadPlaylist(String Path);
 emptyPlaylist();
@@ -215,7 +215,7 @@ double fZ</y:AttributeLabel>
           <y:Geometry height="196.0" width="228.0" x="674.0" y="70.0"/>
           <y:Fill color="#FFCC00" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="27.11181640625" x="100.444091796875" y="3.0">GUI<y:LabelModel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="13" fontStyle="bold" hasBackgroundColor="false" hasLineColor="false" height="19.92626953125" modelName="custom" textColor="#000000" visible="true" width="27.11181640625" x="100.444091796875" y="3.0">GUIPackage.GUI<y:LabelModel>
               <y:SmartNodeLabelModel distance="4.0"/>
             </y:LabelModel>
             <y:ModelParameter>
