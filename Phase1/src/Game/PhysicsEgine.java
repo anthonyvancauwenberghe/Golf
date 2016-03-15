@@ -2,6 +2,8 @@ package Game;
 
 import java.applet.Applet;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class PhysicsEgine extends Applet implements Runnable {
 
@@ -24,11 +26,14 @@ public class PhysicsEgine extends Applet implements Runnable {
     double dt = 0.2;
     double xFriction = 0.80;
     double wallEnergyLoss = 0.95;
+    private Course c;
 
     @Override
     public void init() {
         setSize(width, height);
-
+        c = new Course("Test2",400,200,100,Type.Grass,4);
+        c.saveCourse();
+        c = Course.loadCourse("Test2.txt");
     }
 
     @Override
@@ -147,10 +152,27 @@ public class PhysicsEgine extends Applet implements Runnable {
 
     @Override
     public void paint(Graphics g) {
+        paintCourse(g,c);
         g.setColor(Color.BLUE);
         g.fillOval(x - radius, y - radius, radius * 2, radius * 2); // painted around center
 
     }
 
+    private void paintCourse(Graphics doubleG, Course course) {
 
+        ArrayList<LinkedList<Tile>> all = course.getObjects();
+        for (int j = 0; j < all.size(); j++) {
+            LinkedList<Tile> objectsOfSingleType = all.get(j);
+            if (objectsOfSingleType.size()==0) continue;
+            if (Type.Empty.ordinal() == j)continue;
+            doubleG.setColor(objectsOfSingleType.get(0).getColor());
+            for (int k = 0; k < objectsOfSingleType.size(); k++) {
+                Tile t = objectsOfSingleType.get(k);
+
+                doubleG.fillRect(t.getX(),t.getY(),1,1);
+            }
+
+        }
+
+    }
 }
