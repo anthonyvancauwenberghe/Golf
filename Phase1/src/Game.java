@@ -40,6 +40,8 @@ public class Game {
         time++; //basic idea of this method. needs to be adjusted.
         balls.get(currentBall).magic(c, angX, angY, power);
         players.get(currentPlayer).addStroke();
+
+        //checks if the ball is still in Play and switches players according to that.
         if (!balls.get(currentBall).inPlay()){ //ball is in the whole
             players.get(currentPlayer).resetCurrentStrokes();
             balls.remove(currentBall);
@@ -64,7 +66,7 @@ public class Game {
         return players.get(currentPlayer);
     }
 
-    public Course getC() {
+    public Course getCourse() {
         return c;
     }
 
