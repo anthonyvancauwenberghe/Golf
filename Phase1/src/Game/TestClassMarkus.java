@@ -6,7 +6,7 @@ package Game;
 public class TestClassMarkus {
 
     public static void main(String[] args){
-        Course c = new Course("Test1",200,100,200,Type.Empty,4);
+        Course c = new Course("Test1",200,100,200,Type.Grass,4);
         c.setTile(2,4,5,Type.Grass);
         c.setTile(2,4,5,Type.Grass);
         c.setTile(2,1,5,Type.Water);

@@ -21,7 +21,7 @@ public class MainMenue {
 
     void loadPlaylist(String path){
         String contend = Utils.readFile(path);
-        String[] p = contend.split("\n");
+        String[] p = contend.split(System.lineSeparator());
         playlist.clear();
         for (int i = 0; i < p.length; i++) {
             playlist.add(Course.loadCourse(p[i]));
@@ -48,7 +48,7 @@ public class MainMenue {
     void startRound(){
         for (int i = 0; i < playlist.size(); i++) {
             Game g = new Game(playlist.get(i),players);
-            gui.showGame(g);
+            //gui.showGame(g);
 
         }
     }

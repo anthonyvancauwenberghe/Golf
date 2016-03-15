@@ -8,8 +8,16 @@ import java.awt.*;
 public class Tile {
     Type t;
 
-    public Tile(Type t) {
+
+
+    int x,y,z;
+    private Type type;
+
+    public Tile(Type t, int x, int y, int z) {
         this.t = t;
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     double getFriction(){
@@ -21,5 +29,37 @@ public class Tile {
 
     public Type getType() {
         return t;
+    }
+
+    public Type getT() {
+        return t;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getZ() {
+        return z;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setZ(int z) {
+        this.z = z;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 }
