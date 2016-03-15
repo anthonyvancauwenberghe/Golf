@@ -19,8 +19,11 @@ public class GUI {
 
 
         //Panel
-        JPanel container = new JPanel();
-        frame.add(container);
+        JPanel left = new JPanel();
+        frame.add(left);
+
+        JPanel right = new JPanel();
+        frame.add(right);
 
         //Button 1
         JButton button = new JButton("Click me!");
