@@ -15,13 +15,15 @@ public class PhysicsEgine extends Applet implements Runnable {
     private Graphics doubleG;
     private int width = 800;
     private int height = 600;
+    private int bounceCounter=0;
+    private int bounceCounterLimit=2;
 
 
     double gravity = 15;
     double energyloss = 0.65;
     double dt = 0.2;
     double xFriction = 0.80;
-    double wallEnergyLoss = 0.8;
+    double wallEnergyLoss = 0.95;
 
     @Override
     public void init() {
@@ -50,47 +52,55 @@ public class PhysicsEgine extends Applet implements Runnable {
 
         if (x + dx > this.getWidth() - radius - 1) {
             x = this.getWidth() - radius - 1; // 1 pixel (counting prob)
+            dx *= wallEnergyLoss;
             dx = -dx; // Change direction after hit
         } else if (x + dx < 0 + radius) {
             x = 0 + radius;
             dx = -dx;
         }// same but for left border
         else {
-            dx *= wallEnergyLoss;
+            //dx *= wallEnergyLoss;
             x += dx;
-
         }
 
         // Y-axis, gravity goes along Y-axis
         if (y > this.getHeight() - radius - 1) {
+            System.out.println("check collission bottom");
             y = this.getHeight() - radius - 1;
+            dy *= wallEnergyLoss;
             dy *= energyloss;
             dy = -dy;
         } else {
-            dy *= wallEnergyLoss;
-            dy += gravity * dt; // velocity formula
+            System.out.println("dy before: " + dy);
+            dy += (gravity * dt)/(bounceCounter+1); // velocity formula
             y += dy * dt + 0.5 * gravity * dt * dt; // position formula
+            System.out.println("dy after: " + dy);
         }
 
     }
 
     public void checkBallStopped() {
+        int y2 = this.getHeight() - radius - 1;
 
-        if(dx==0 && y == this.getHeight() - radius - 1)
-            System.out.println("dx  = 0");
+            //System.out.println("dx = 0");
 
-        if (dx == 0 && getHeight()-y< 30) {
+        if(Math.abs(dx)==0 && Math.abs(dy)<0.3 && (y2-1<=y)){
             ballMoving = false;
             System.out.println("ball stopped");
-
         }
+        if(Math.abs(dx)==0 && Math.abs(dy)<1 && (y2-1<=y)){
+            bounceCounter++;
+            dy*=0.9;
+            System.out.println(bounceCounter);
+        }
+        if(!ballMoving)
+        bounceCounter=0;
     }
 
     @Override
     public void run() {
         while (ballMoving) {
-System.out.println("dx: " + dx);
-            System.out.println("dy: " + dy);
+            System.out.println("dx: " + dx);
             moveBall();
             repaint();
 
@@ -100,7 +110,11 @@ System.out.println("dx: " + dx);
                 e.printStackTrace();
             }
 
-            //checkBallStopped();
+            int y2 = this.getHeight() - radius - 1;
+
+            System.out.println("y: " + y);
+            System.out.println("y2: " + y2);
+            checkBallStopped();
         }
 
     }
