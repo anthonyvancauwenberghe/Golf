@@ -27,7 +27,7 @@ public class GUI {
 
         //Button 1
         JButton button = new JButton("Click me!");
-        container.add(button);
+        //container.add(button);
         //ActionListener listener = new ClickListener();
         //button.addActionListener(listener);
 

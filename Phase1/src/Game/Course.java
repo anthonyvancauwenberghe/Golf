@@ -31,6 +31,7 @@ public class Course {
     public Course(String name, int length, int width, int height, Type standartType, int par){
         this.name = name;
         playfield = new Tile[length][width][height];
+        objectsOnPlayfield = new ArrayList<LinkedList<Tile>>();
         //Creates the arraylist for all the objecttypes
         for (int i = 0; i < Type.values().length; i++) {
             objectsOnPlayfield.add(new LinkedList<>());
@@ -39,13 +40,13 @@ public class Course {
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
-                    playfield[x][y][z] = new Tile(Type.Empty);
+                    playfield[x][y][z] = new Tile(Type.Empty,x,y,z);
                 }
             }
         }
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
-                    Tile t = new Tile(standartType);
+                    Tile t = new Tile(standartType,x,y,0);
                     playfield[x][y][0] = t;
                     if (standartType!= Type.Empty) objectsOnPlayfield.get(standartType.ordinal()).add(t);
             }
@@ -61,12 +62,16 @@ public class Course {
 
     void setTile(int x, int y, int z, Type t){
         Tile originalTile = playfield[x][y][z];
+        Tile newTile = originalTile;
         if (originalTile.getType()!=Type.Empty){
             objectsOnPlayfield.get(originalTile.getType().ordinal()).remove(originalTile);
+
+        }else{
+            newTile.setType(t);
         }
-        Tile newTile = new Tile(t);
+
         playfield[x][y][z] = newTile;
-        objectsOnPlayfield.get(t.ordinal()).add(originalTile);
+        objectsOnPlayfield.get(t.ordinal()).add(newTile);
     }
 
     Tile getTile(int x, int y, int z){
@@ -140,5 +145,9 @@ public class Course {
 
     public String getName() {
         return name;
+    }
+
+    public ArrayList<LinkedList<Tile>> getObjects() {
+        return objectsOnPlayfield;
     }
 }
