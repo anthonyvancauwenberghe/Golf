@@ -18,7 +18,7 @@ public class MainMenue {
 
     void loadPlaylist(String path){
         String contend = Utils.readFile(path);
-        String[] p = contend.split("\n");
+        String[] p = contend.split(System.lineSeparator());
         playlist.clear();
         for (int i = 0; i < p.length; i++) {
             playlist.add(Course.loadCourse(p[i]));

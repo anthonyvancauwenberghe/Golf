@@ -12,7 +12,7 @@ public class Ball {
     static double deltaTime;
     double initialSpeed;
     boolean inMotion = true;
-    Coordinates coords;
+    Coordinate coords;
     double[] directionImpulses = new double[2];
     double y = 0, x = 0;
     final double REIBUNG = 25;
