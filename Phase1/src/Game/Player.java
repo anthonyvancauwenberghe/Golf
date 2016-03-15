@@ -7,6 +7,7 @@ public class Player {
     String name;
     int id;
     static int idCounter;
+
     int currentStrokes;
     int totalStrokes;
 
@@ -23,5 +24,13 @@ public class Player {
     public void addStroke(){
         currentStrokes++;
         totalStrokes++;
+    }
+
+    public int getCurrentStrokes() {
+        return currentStrokes;
+    }
+
+    public int getTotalStrokes() {
+        return totalStrokes;
     }
 }

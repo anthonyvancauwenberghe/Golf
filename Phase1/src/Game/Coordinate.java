@@ -1,5 +1,7 @@
 package Game;
 
+import Game.Type;
+
 /**
  * This is the coordinate class which holds the x, y, z coordinates and the type of object the coordinate is
  * referencing.  Coordinate is a node.
@@ -19,8 +21,6 @@ public class Coordinate {
         this.yCoord = y;
         this.zCoord = z;
         this.type = type;
-        this.next = null;
-        this.previous = null;
     }
 
     public void setX(int x){

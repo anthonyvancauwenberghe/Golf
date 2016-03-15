@@ -2,6 +2,9 @@ package Game; /**
  * Created by nibbla on 14.03.16.
  */
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
  * A tile is 1cm³
@@ -13,26 +16,57 @@ public class Course {
 
     Tile[][][] playfield;
     Tile[][][] copy;
+    ArrayList<LinkedList<Tile>> objectsOnPlayfield;
     int par;
 
+    /**
+     *
+     * @param name Name of the course
+     * @param length
+     * @param width
+     * @param height
+     * @param standartType the lowest level of the level will be filled with this tile
+     * @param par
+     */
     public Course(String name, int length, int width, int height, Type standartType, int par){
         this.name = name;
         playfield = new Tile[length][width][height];
+        //Creates the arraylist for all the objecttypes
+        for (int i = 0; i < Type.values().length; i++) {
+            objectsOnPlayfield.add(new LinkedList<>());
+        }
+
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
-                    playfield[x][y][z] = new Tile(standartType);
+                    playfield[x][y][z] = new Tile(Type.Empty);
                 }
+            }
+        }
+        for (int x = 0; x < length; x++) {
+            for (int y = 0; y < width; y++) {
+                    Tile t = new Tile(standartType);
+                    playfield[x][y][0] = t;
+                    if (standartType!= Type.Empty) objectsOnPlayfield.get(standartType.ordinal()).add(t);
             }
         }
         this.par = par;
 
     }
 
+    LinkedList<Tile> getObjectsOfType(Type t){
+        return objectsOnPlayfield.get(t.ordinal());
+    }
 
 
     void setTile(int x, int y, int z, Type t){
-        playfield[x][y][z] = new Tile(t);
+        Tile originalTile = playfield[x][y][z];
+        if (originalTile.getType()!=Type.Empty){
+            objectsOnPlayfield.get(originalTile.getType().ordinal()).remove(originalTile);
+        }
+        Tile newTile = new Tile(t);
+        playfield[x][y][z] = newTile;
+        objectsOnPlayfield.get(t.ordinal()).add(originalTile);
     }
 
     Tile getTile(int x, int y, int z){
