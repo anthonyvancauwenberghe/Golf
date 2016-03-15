@@ -1,5 +1,3 @@
-import java.util.LinkedList;
-
 /**
  * This is the coordinate class which holds the x, y, z coordinates and the type of object the coordinate is
  * referencing.  Coordinate is a node.
@@ -23,8 +21,6 @@ public class Coordinate {
 
     public void setX(int x){
         this.xCoord = x;
-        LinkedList<Coordinate> dfdf;
-
     }
 
     public void setY(int y){
@@ -38,7 +34,14 @@ public class Coordinate {
     public void setType(Type type){
         this.type = type;
     }
-    
+
+    public void setNext(Coordinate next){
+        this.next = next;
+    }
+
+    public void setPrevious(Coordinate previous){
+        this.previous = previous;
+    }
 
     public int getX(){
         return xCoord;
@@ -56,5 +59,11 @@ public class Coordinate {
         return type;
     }
 
+    public Coordinate getNext(){
+        return next;
+    }
 
+    public Coordinate getPrevious(){
+        return previous;
+    }
 }
