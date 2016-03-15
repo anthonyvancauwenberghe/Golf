@@ -11,7 +11,7 @@ public class Tile {
 
 
     int x,y,z;
-    private Type type;
+
 
     public Tile(Type t, int x, int y, int z) {
         this.t = t;
@@ -60,6 +60,6 @@ public class Tile {
     }
 
     public void setType(Type type) {
-        this.type = type;
+        this.t = type;
     }
 }

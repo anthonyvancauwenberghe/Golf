@@ -2,8 +2,10 @@ package Game; /**
  * Created by nibbla on 14.03.16.
  */
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.ArrayList;
+import java.util.Random;
 
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
@@ -16,8 +18,10 @@ public class Course {
 
     Tile[][][] playfield;
     Tile[][][] copy;
+    int[] dimension;
     ArrayList<ArrayList<Tile>> objectsOnPlayfield;
     int par;
+
 
     /**
      *
@@ -31,6 +35,7 @@ public class Course {
     public Course(String name, int length, int width, int height, Type standartType, int par){
         this.name = name;
         playfield = new Tile[length][width][height];
+        dimension = new int[3]; dimension[0] =length; dimension[1] =width; dimension[2]=height;
         objectsOnPlayfield = new ArrayList<ArrayList<Tile>>();
         //Creates the arraylist for all the objecttypes
         for (int i = 0; i < Type.values().length; i++) {
@@ -44,11 +49,16 @@ public class Course {
                 }
             }
         }
+        Random r = new Random(0);
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
-                    Tile t = new Tile(standartType,x,y,0);
+                    Type typ;
+                    if (standartType == null) typ = Type.values()[r.nextInt(Type.values().length)];
+                    else typ =standartType;
+                    Tile t = new Tile(typ,x,y,0);
                     playfield[x][y][0] = t;
-                    if (standartType!= Type.Empty) objectsOnPlayfield.get(standartType.ordinal()).add(t);
+
+                    if (typ!= Type.Empty) objectsOnPlayfield.get(typ.ordinal()).add(t);
             }
         }
         this.par = par;
@@ -91,7 +101,7 @@ public class Course {
         int length = Integer.parseInt(lines[2].split(":")[1]);
         int width = Integer.parseInt(lines[3].split(":")[1]);
         int height = Integer.parseInt(lines[4].split(":")[1]);
-        Course c = new Course("Test1", length,width,height,Type.Empty,par);
+        Course c = new Course(name, length,width,height,Type.Empty,par);
 
         for (int i = 5; i < lines.length; i++) {
             String currentLine = lines[i];
@@ -149,5 +159,10 @@ public class Course {
 
     public ArrayList<ArrayList<Tile>> getObjects() {
         return objectsOnPlayfield;
+    }
+
+    public int[] getDimension() {
+
+        return dimension;
     }
 }
