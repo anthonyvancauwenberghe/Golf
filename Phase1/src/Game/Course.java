@@ -3,7 +3,7 @@ package Game; /**
  */
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
@@ -16,7 +16,7 @@ public class Course {
 
     Tile[][][] playfield;
     Tile[][][] copy;
-    ArrayList<LinkedList<Tile>> objectsOnPlayfield;
+    ArrayList<ArrayList<Tile>> objectsOnPlayfield;
     int par;
 
     /**
@@ -31,10 +31,10 @@ public class Course {
     public Course(String name, int length, int width, int height, Type standartType, int par){
         this.name = name;
         playfield = new Tile[length][width][height];
-        objectsOnPlayfield = new ArrayList<LinkedList<Tile>>();
+        objectsOnPlayfield = new ArrayList<ArrayList<Tile>>();
         //Creates the arraylist for all the objecttypes
         for (int i = 0; i < Type.values().length; i++) {
-            objectsOnPlayfield.add(new LinkedList<>());
+            objectsOnPlayfield.add(new ArrayList<>());
         }
 
         for (int x = 0; x < length; x++) {
@@ -55,7 +55,7 @@ public class Course {
 
     }
 
-    LinkedList<Tile> getObjectsOfType(Type t){
+    ArrayList<Tile> getObjectsOfType(Type t){
         return objectsOnPlayfield.get(t.ordinal());
     }
 
@@ -147,7 +147,7 @@ public class Course {
         return name;
     }
 
-    public ArrayList<LinkedList<Tile>> getObjects() {
+    public ArrayList<ArrayList<Tile>> getObjects() {
         return objectsOnPlayfield;
     }
 }

@@ -31,7 +31,7 @@ public class PhysicsEgine extends Applet implements Runnable {
     @Override
     public void init() {
         setSize(width, height);
-        c = new Course("Test2",400,200,100,Type.Grass,4);
+        c = new Course("Test2",getWidth(),getHeight(),1,Type.Grass,4);
         c.saveCourse();
         c = Course.loadCourse("Test2.txt");
     }
@@ -160,9 +160,9 @@ public class PhysicsEgine extends Applet implements Runnable {
 
     private void paintCourse(Graphics doubleG, Course course) {
 
-        ArrayList<LinkedList<Tile>> all = course.getObjects();
+        ArrayList<ArrayList<Tile>> all = course.getObjects();
         for (int j = 0; j < all.size(); j++) {
-            LinkedList<Tile> objectsOfSingleType = all.get(j);
+            ArrayList<Tile> objectsOfSingleType = all.get(j);
             if (objectsOfSingleType.size()==0) continue;
             if (Type.Empty.ordinal() == j)continue;
             doubleG.setColor(objectsOfSingleType.get(0).getColor());

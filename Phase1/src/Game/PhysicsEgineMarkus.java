@@ -145,9 +145,9 @@ System.out.println("dx: " + dx);
 
     private void paintCourse(Graphics doubleG, Course course) {
 
-        ArrayList<LinkedList<Tile>> all = course.getObjects();
+        ArrayList<ArrayList<Tile>> all = course.getObjects();
         for (int j = 0; j < all.size(); j++) {
-            LinkedList<Tile> objectsOfSingleType = all.get(j);
+            ArrayList<Tile> objectsOfSingleType = all.get(j);
             if (objectsOfSingleType.size()==0) continue;
             if (Type.Empty.ordinal() == j)continue;
             doubleG.setColor(objectsOfSingleType.get(0).getColor());
