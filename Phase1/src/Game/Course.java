@@ -181,17 +181,17 @@ public class Course {
 
     public int getLength() {
 
-        return dimension[0];
+        return dimension[2];
     }
 
     public int getWidth() {
 
-        return dimension[1];
+        return dimension[0];
     }
 
     public int getHeight() {
 
-        return dimension[2];
+        return dimension[1];
     }
 
     public Tile getStartTile() {

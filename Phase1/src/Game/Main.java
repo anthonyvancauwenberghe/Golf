@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Main {
     public static void main(String [] args){
-        Course course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
+        Course course = new Course("Golf Deluxe Course 1", 800, 600, 1, Type.Grass, 1 );
 
         ArrayList<Player> pp = new ArrayList<>(2);
         Player p = new Player("PlayerEins");
@@ -19,7 +19,7 @@ public class Main {
 
         Frame frame = new JFrame();
         frame.setVisible(true);
-        frame.setSize(800, 600);
+        frame.setSize(1024, 760);
 
         DrawPanel dp = new DrawPanel();
         frame.add(dp);
@@ -36,8 +36,18 @@ public class Main {
         physics.init(course, p.getBall());
         while(true){
             if(p.getBall().isMoving){
+                p.getBall().getPhysics().init(course, p.getBall());
             p.getBall().getPhysics().processPhysics();
                 p.getBall().getPhysics().processNaturalForces();
+                p.getBall().checkBallStopped();
+                p.getBall().printBallInfo();
+
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             dp.repaint();
 

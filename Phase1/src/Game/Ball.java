@@ -4,7 +4,7 @@ public class Ball {
 
     //Color c;
     double mass = 1;
-    double radius = 20;
+    double radius = 1;
     double bounciness;
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
@@ -73,5 +73,23 @@ public class Ball {
 
     public PhysicsEngineFinal getPhysics() {
         return physics;
+    }
+    public void checkBallStopped(){
+        if(Math.abs(speedX)<=0.2 && Math.abs(speedY)<=0.3 && Math.abs(speedZ)<=1){
+            isMoving=false;
+            System.out.println("ballStopped");
+        }
+
+    }
+    public void printBallInfo(){
+        System.out.println("X: " + getCoordinate().getX());
+        System.out.println("Y: " + getCoordinate().getY());
+        System.out.println("Z: " + getCoordinate().getZ());
+        System.out.println("SpeedX: " + speedX);
+        System.out.println("SpeedY: " + speedY);
+        System.out.println("SpeedZ: " + speedZ);
+        System.out.println("ball radius: " + getRadius());
+        if(!isMoving)
+            System.out.println("ballStopped");
     }
 }
