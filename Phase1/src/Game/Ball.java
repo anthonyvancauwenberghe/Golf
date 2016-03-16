@@ -54,4 +54,5 @@ public class Ball {
     public Coordinate getCoordinate() {
         return coordinate;
     }
+
 }

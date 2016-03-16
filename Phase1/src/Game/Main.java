@@ -10,7 +10,9 @@ public class Main {
 
         physics.init(course, ball);
         while(true){
+            if(ball.isMoving){
 
+            }
         }
     }
 }

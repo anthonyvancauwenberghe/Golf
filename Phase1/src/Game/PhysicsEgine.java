@@ -135,9 +135,6 @@ public void processMovement(){
         }
         ballMoving = true;
         //System.out.println("ball moving");
-
-
-
     }
 
     public void checkBallStopped() {
