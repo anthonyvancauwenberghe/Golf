@@ -5,7 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-public class PhysicsEgineMarkus extends Applet implements Runnable {
+public class PhysicsEngineMarkus extends Applet implements Runnable {
 
     int x = 400;
     int y = 400;
