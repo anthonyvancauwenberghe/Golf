@@ -17,7 +17,7 @@ public class GUI extends JPanel{
     }
 
     public void showEditor()  {
-
+        GUIEditor editor = new GUIEditor();
     }
 
     public void showGame(Game g) {
