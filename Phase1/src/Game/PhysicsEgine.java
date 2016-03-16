@@ -2,124 +2,223 @@ package Game;
 
 import java.applet.Applet;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 
-public class PhysicsEgine extends Applet implements Runnable {
+public class PhysicsEgine extends Applet implements Runnable, MouseListener {
 
-    int x = 400;
-    int y = 400;
+
+    private static int test = 2;
     int radius = 20;
-    double dx = 1;
-    double dy = 0; // Change in value (Moving along the axis)
+    private double speedX = 0;
+    private double speedY = 0; // Change in value (Moving along the axis)
     private Image i;
-    private boolean ballMoving = true;
+    private boolean ballMoving = false;
     private Graphics doubleG;
     private int width = 800;
     private int height = 600;
-    private int bounceCounter=0;
-    private int bounceCounterLimit=2;
+    private int bounceCounter = 0;
+    private boolean autoShoot = false;
+    private int firstXClick=0;
+    private int firstYClick=0;
+    private int secondXClick=0;
+    private int secondYClick=0;
+    private double airFriction=0.99;
 
-
-    double gravity = 15;
+    double gravity = 25;
     double energyloss = 0.65;
     double dt = 0.2;
-    double xFriction = 0.80;
-    double wallEnergyLoss = 0.95;
+    double groundFriction = 0.8;
+    double wallEnergyLoss = 0.7;
     private Course c;
+    int x = radius;
+    int y = getHeight() - radius;
+
+    public static int getTest() {
+        return test;
+    }
+
+    public static void setTest(int test) {
+        PhysicsEgine.test = test;
+    }
+
+    public int getFirstXClick() {
+        return firstXClick;
+    }
+
+    public void setFirstXClick(int firstXClick) {
+        this.firstXClick = firstXClick;
+    }
+
+    public int getFirstYClick() {
+        return firstYClick;
+    }
+
+    public void setFirstYClick(int firstYClick) {
+        this.firstYClick = firstYClick;
+    }
+
+    public int getSecondXClick() {
+        return secondXClick;
+    }
+
+    public void setSecondXClick(int secondXClick) {
+        this.secondXClick = secondXClick;
+    }
+
+    public int getSecondYClick() {
+        return secondYClick;
+    }
+
+    public void setSecondYClick(int secondYClick) {
+        this.secondYClick = secondYClick;
+    }
+
+    @Override
+    public int getWidth() {
+        return width;
+
+    }
+
+    @Override
+    public int getHeight() {
+        return height;
+    }
 
     @Override
     public void init() {
         setSize(width, height);
-        c = new Course("Test2",getWidth(),getHeight(),1,Type.Grass,4);
+
+        c = new Course("Test2", getWidth(), getHeight(), 1, Type.Grass, 4);
         c.saveCourse();
         c = Course.loadCourse("Test2.txt");
+        addMouseListener(this);
     }
 
     @Override
     public void start() {
         Thread thread = new Thread(this);
         thread.start();
+    }
+
+    public void processGravity() {
+
+    }
+public void processMovement(){
+    if (y == this.getHeight() - radius ) {
+        System.out.println("ball is on the ground");
+        speedX *= groundFriction;
+
+    }
+    else {
+        speedX *= airFriction;
+
 
     }
 
-    public void moveBall() {
-        if (y == this.getHeight() - radius - 1) {
-            System.out.println("check if ball hits bottom");
-            dx *= xFriction;
-            if (Math.abs(dx) < 0.8) {
-                dx = 0;
-            }
-        }
+    //Collisions detect borders
+    // X-axis
 
-        //Collisions detect borders
-        // X-axis
+    if (x + speedX > this.getWidth() - radius) {
+        x = this.getWidth() - radius; // 1 pixel (counting prob)
+        speedX *= wallEnergyLoss;
+        speedX = -speedX; // Change direction after hit
+    } else if (x + speedX < 0 + radius) {
+        x = 0 + radius;
+        speedX = -speedX;
+    }// same but for left border
+    else {
+        //speedX *= wallEnergyLoss;
+        x += speedX;
+    }
 
-        if (x + dx > this.getWidth() - radius - 1) {
-            x = this.getWidth() - radius - 1; // 1 pixel (counting prob)
-            dx *= wallEnergyLoss;
-            dx = -dx; // Change direction after hit
-        } else if (x + dx < 0 + radius) {
-            x = 0 + radius;
-            dx = -dx;
-        }// same but for left border
-        else {
-            //dx *= wallEnergyLoss;
-            x += dx;
+    // Y-axis, gravity goes along Y-axis
+    if (y > this.getHeight() - radius) {
+        System.out.println("ball hit bottom");
+        y = this.getHeight() - radius;
+        speedY *= wallEnergyLoss;
+        speedY *= energyloss;
+        speedY = -speedY;
+    } // same but for left border
+    else if (y <= 0) {
+        System.out.println("ball hit top");
+        y = radius + 1;
+        speedY *= wallEnergyLoss;
+        speedY *= energyloss;
+        speedY = -speedY;
+    } else {
+        //System.out.println("speedY before: " + speedY);
+        speedY += (gravity * dt) / (bounceCounter + 1); // velocity formula
+        y += speedY * dt + 0.5 * gravity * dt * dt; // position formula
+        //System.out.println("speedY after: " + speedY);
+    }
+}
+    public void shootBall(int velocityX, int velocityY) {
+        if (!ballMoving) {
+            speedX = velocityX;
+            speedY = velocityY;
         }
+        ballMoving = true;
+        //System.out.println("ball moving");
 
-        // Y-axis, gravity goes along Y-axis
-        if (y > this.getHeight() - radius - 1) {
-            System.out.println("check collission bottom");
-            y = this.getHeight() - radius - 1;
-            dy *= wallEnergyLoss;
-            dy *= energyloss;
-            dy = -dy;
-        } else {
-            System.out.println("dy before: " + dy);
-            dy += (gravity * dt)/(bounceCounter+1); // velocity formula
-            y += dy * dt + 0.5 * gravity * dt * dt; // position formula
-            System.out.println("dy after: " + dy);
-        }
+
 
     }
 
     public void checkBallStopped() {
-        int y2 = this.getHeight() - radius - 1;
+        int y2 = this.getHeight() - radius;
 
-            //System.out.println("dx = 0");
+        //System.out.println("speedX = 0");
 
-        if(Math.abs(dx)==0 && Math.abs(dy)<0.3 && (y2-1<=y)){
+        if (Math.abs(speedX) < 2 && Math.abs(speedY) < 0.4 && (y2 - 1 <= y)) {
             ballMoving = false;
+            autoShoot = false;
+            bounceCounter=0;
             System.out.println("ball stopped");
         }
-        if(Math.abs(dx)==0 && Math.abs(dy)<1 && (y2-1<=y)){
+        if (Math.abs(speedY) < 5 && (y2 - 1 <= y)) {
             bounceCounter++;
-            dy*=0.9;
+            speedY *= 0.95;
+            if(bounceCounter>3)
+                speedY*=0.4;
+
+                if(bounceCounter>5)
+                    speedX*=0.95;
+
+
             System.out.println(bounceCounter);
         }
-        if(!ballMoving)
-        bounceCounter=0;
+        if (!ballMoving)
+            bounceCounter = 0;
     }
 
     @Override
     public void run() {
-        while (ballMoving) {
-            System.out.println("dx: " + dx);
-            moveBall();
-            repaint();
 
-            try {
-                Thread.sleep(33);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        while (true) {
+            //processGravity();
+            if (autoShoot)
+                shootBall(30, 150);
+
+            if (ballMoving) {
+
+                System.out.println("speedX: " + speedX);
+                processMovement();
+
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                int y2 = this.getHeight() - radius;
+
+                System.out.println("y: " + y);
+                //System.out.println("y2: " + y2);
+                checkBallStopped();
             }
-
-            int y2 = this.getHeight() - radius - 1;
-
-            System.out.println("y: " + y);
-            System.out.println("y2: " + y2);
-            checkBallStopped();
+            repaint();
         }
 
     }
@@ -152,7 +251,7 @@ public class PhysicsEgine extends Applet implements Runnable {
 
     @Override
     public void paint(Graphics g) {
-        paintCourse(g,c);
+        paintCourse(g, c);
         g.setColor(Color.BLUE);
         g.fillOval(x - radius, y - radius, radius * 2, radius * 2); // painted around center
 
@@ -163,16 +262,48 @@ public class PhysicsEgine extends Applet implements Runnable {
         ArrayList<ArrayList<Tile>> all = course.getObjects();
         for (int j = 0; j < all.size(); j++) {
             ArrayList<Tile> objectsOfSingleType = all.get(j);
-            if (objectsOfSingleType.size()==0) continue;
-            if (Type.Empty.ordinal() == j)continue;
+            if (objectsOfSingleType.size() == 0) continue;
+            if (Type.Empty.ordinal() == j) continue;
             doubleG.setColor(objectsOfSingleType.get(0).getColor());
             for (int k = 0; k < objectsOfSingleType.size(); k++) {
                 Tile t = objectsOfSingleType.get(k);
 
-                doubleG.fillRect(t.getX(),t.getY(),1,1);
+                doubleG.fillRect(t.getX(), t.getY(), 1, 1);
             }
 
         }
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        System.out.println("first x: " + getFirstXClick());
+        System.out.println("first Y: " + getFirstYClick());
+        System.out.println("second x: " + e.getX());
+        System.out.println("second Y: " + e.getY());
+        System.out.println("deltaX: " + (getFirstXClick()- e.getX())/10);
+        System.out.println("deltaY: " + (getFirstYClick()- e.getY()));
+        shootBall((-(getFirstXClick()- e.getX()))/2, -(getFirstYClick() - e.getY()) );
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        setFirstXClick(e.getX());
+        setFirstYClick(e.getY());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
 
     }
 }

@@ -86,7 +86,7 @@ public class PhysicsEgineMarkus extends Applet implements Runnable {
     public void checkBallStopped() {
 
         if(dx==0 && y == this.getHeight() - radius - 1)
-            System.out.println("dx  = 0");
+            System.out.println("speedX  = 0");
 
         if (dx == 0 && getHeight()-y< 30) {
             ballMoving = false;
@@ -98,8 +98,8 @@ public class PhysicsEgineMarkus extends Applet implements Runnable {
     @Override
     public void run() {
         while (ballMoving) {
-System.out.println("dx: " + dx);
-            System.out.println("dy: " + dy);
+System.out.println("speedX: " + dx);
+            System.out.println("speedY: " + dy);
             moveBall();
             repaint();
 
