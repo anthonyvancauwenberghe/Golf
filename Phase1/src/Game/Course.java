@@ -22,6 +22,7 @@ public class Course {
     ArrayList<ArrayList<Tile>> objectsOnPlayfield;
     int par;
     private Tile startTile;
+    private Hole hole;
 
 
     /**
@@ -64,11 +65,7 @@ public class Course {
             }
         }
 
-        if (startTile == null){
 
-            setTile(20, 20, 0, Type.Start);
-            startTile = getTile(20, 20, 0);
-        }
 
         this.par = par;
 
@@ -87,8 +84,20 @@ public class Course {
 
         }
         newTile.setType(t);
-        playfield[x][y][z] = newTile;
-        objectsOnPlayfield.get(t.ordinal()).add(newTile);
+        if (t== Type.Hole){
+            hole = new Hole(Config.getHoleRadius(), x,y,z) ;
+            playfield[x][y][z] = hole;
+            objectsOnPlayfield.get(t.ordinal()).add(hole);
+        }else if (t == Type.Start) {
+            startTile = newTile;
+            playfield[x][y][z] = newTile;
+            objectsOnPlayfield.get(t.ordinal()).add(newTile);
+        }else{
+            playfield[x][y][z] = newTile;
+            objectsOnPlayfield.get(t.ordinal()).add(newTile);
+        }
+
+
     }
 
     Tile getTile(int x, int y, int z){
@@ -129,8 +138,14 @@ public class Course {
         }
         if (c.startTile == null){
 
-            c.setTile(20,20,0,Type.Start);
-            c.startTile = c.getTile(20,20,0);
+            c.setTile(20, 20, 0, Type.Start);
+            c.startTile = c.getTile(20, 20, 0);
+        }
+        if (c.hole == null){
+            int x = (int) (length*0.8);
+            int y = (int) (width*0.8);
+            c.setTile(x, y, 0, Type.Hole);
+            c.hole = (Hole) c.getTile(x, y, 0);
         }
         return c;
 
@@ -224,5 +239,10 @@ public class Course {
             }
 
         }
+    }
+
+
+    public Hole getHole() {
+        return hole;
     }
 }

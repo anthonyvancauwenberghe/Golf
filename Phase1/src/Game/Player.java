@@ -59,4 +59,9 @@ public class Player {
     public int getTotalStrokes() {
         return totalStrokes;
     }
+
+    public void shootBall(int x, int y, int z) {
+        currentStrokes++;
+        b.shootBall(x,y,z);
+    }
 }
