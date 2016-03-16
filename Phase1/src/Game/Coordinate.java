@@ -8,30 +8,33 @@ import Game.Type;
  */
 public class Coordinate {
 
-    private int xCoord, yCoord, zCoord;
+    private double xCoord, yCoord, zCoord;
     private Type type;//This will be the value that references the object at the coordinate space.
-    private Coordinate next, previous;
 
     public Coordinate(){
-        this(0, 0, 0, null);
+        this(0, 0, 0);
     }
 
-    public Coordinate(int x, int y, int z, Type type){
+    public Coordinate(int x, int y, int z){
         this.xCoord = x;
         this.yCoord = y;
         this.zCoord = z;
-        this.type = type;
+    }
+    public Coordinate(double x, double y, double z){
+        this.xCoord = x;
+        this.yCoord = y;
+        this.zCoord = z;
     }
 
-    public void setX(int x){
+    public void setX(double x){
         this.xCoord = x;
     }
 
-    public void setY(int y){
+    public void setY(double y){
         this.yCoord = y;
     }
 
-    public void setZ(int z){
+    public void setZ(double z){
         this.zCoord = z;
     }
 
@@ -39,35 +42,19 @@ public class Coordinate {
         this.type = type;
     }
 
-    public void setNext(Coordinate next){
-        this.next = next;
-    }
 
-    public void setPrevious(Coordinate previous){
-        this.previous = previous;
-    }
 
-    public int getX(){
+    public double getX(){
         return xCoord;
     }
 
-    public int getY(){
+    public double getY(){
         return yCoord;
     }
 
-    public int getZ(){
+    public double getZ(){
         return zCoord;
     }
 
-    public Type getType(){
-        return type;
-    }
 
-    public Coordinate getNext(){
-        return next;
-    }
-
-    public Coordinate getPrevious(){
-        return previous;
-    }
 }
