@@ -53,7 +53,9 @@ public class DrawPanel extends JPanel {
                 System.out.println("deltaX: " + (getFirstXClick() - e.getX()) / 10);
                 System.out.println("deltaY: " + (getFirstYClick() - e.getY()));
                 if (currentPlayer != null)
-                    currentPlayer.getBall().shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
+
+                currentPlayer.shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
+
             }
 
             @Override
@@ -105,6 +107,10 @@ public class DrawPanel extends JPanel {
 
         super.paintComponent(g);
         if (managedBufferedImage != null) g.drawImage(managedBufferedImage, 0, 0, null);
+
+        Hole t = course.getHole();
+
+        g.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) t.radius, (int) t.radius);
         for (int i = 0; i < players.size(); i++) {
             if (!players.get(i).isInPlay())
                 continue;
