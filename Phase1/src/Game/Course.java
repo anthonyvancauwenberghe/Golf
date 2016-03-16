@@ -37,11 +37,12 @@ public class Course {
         playfield = new Tile[length][width][height];
         dimension = new int[3]; dimension[0] =length; dimension[1] =width; dimension[2]=height;
         objectsOnPlayfield = new ArrayList<ArrayList<Tile>>();
-        //Creates the arraylist for all the objecttypes
+        //Creates the arraylists for the different objecttypes
         for (int i = 0; i < Type.values().length; i++) {
             objectsOnPlayfield.add(new ArrayList<>());
         }
 
+        //fills the playfield with empty tiles
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
