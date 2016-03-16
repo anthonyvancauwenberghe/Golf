@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 public class GUI extends JPanel{
 
     public GUI(){
+
     }
 
     public void showMainMenu() {
@@ -20,6 +21,7 @@ public class GUI extends JPanel{
     }
 
     public void showGame(Game g) {
+
     }
 
     public void showTest(){
