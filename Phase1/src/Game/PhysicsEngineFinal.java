@@ -9,7 +9,7 @@ public class PhysicsEngineFinal {
 
     private final double GROUND_FRICTION = 0.95;
     private final double AIR_FRICTION = 0.995;
-    private final double GRAVITY_FORCE = 9.81;
+    private final double GRAVITY_FORCE = -9.81;
     private final double WALL_ENERGY_LOSS = 0.7;
 
     public PhysicsEngineFinal() {
@@ -35,7 +35,7 @@ public class PhysicsEngineFinal {
             ball.speedX *= AIR_FRICTION;
             ball.speedZ *= AIR_FRICTION;
             ball.speedY *= AIR_FRICTION;
-            ball.speedY *= GRAVITY_FORCE;
+            ball.speedY -= GRAVITY_FORCE;
         }
     }
 
@@ -46,14 +46,14 @@ public class PhysicsEngineFinal {
         /*********************************/
 
         // check right X border
-        if (ball.getCoordinate().getX() > course.getWidth() - ball.getRadius()) {
+        if (ball.getCoordinate().getX() >= course.getWidth() - ball.getRadius()) {
             ball.getCoordinate().setX(course.getWidth() - ball.getRadius());
             ball.speedX *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionX();
             System.out.println("ball hit right border");
         }
         //check left X border
-        else if (ball.getCoordinate().getX() + ball.getSpeedX() < ball.getRadius()) {
+        else if (ball.getCoordinate().getX() + ball.getSpeedX() <= ball.getRadius()) {
             ball.getCoordinate().setX(ball.getRadius());
             ball.speedX *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionX();
@@ -61,25 +61,42 @@ public class PhysicsEngineFinal {
         }
         // Add speed if no colission
         else {
-            processMovement(0);
+            ball.getCoordinate().setX(ball.getCoordinate().getX() + ball.getSpeedX());
         }
 
         /*********************************/
         /** Process Border Colissions Y **/
         /*********************************/
 
+        // check bottom border
+        if (ball.getCoordinate().getY() >= course.getHeight() - ball.getRadius()) {
+            ball.getCoordinate().setY(course.getHeight() - ball.getRadius());
+            ball.speedY *= WALL_ENERGY_LOSS;
+            ball.reverseBallDirectionY();
+            System.out.println("ball hit bottom border");
+        }
+
+        //check top border
+        else if (ball.getCoordinate().getY() + ball.getSpeedY() <= ball.getRadius()) {
+            ball.getCoordinate().setY(ball.getRadius());
+            ball.speedY *= WALL_ENERGY_LOSS;
+            ball.reverseBallDirectionY();
+            System.out.println("ball hit top border");
+        }
 
         /*********************************/
         /** Process Border Colissions Z **/
         /*********************************/
-        if (ball.getCoordinate().getZ() > course.getWidth() - ball.getRadius()) {
-            ball.getCoordinate().setZ(course.getWidth() - ball.getRadius());
+
+        //check back border
+        if (ball.getCoordinate().getZ() >= course.getLength() - ball.getRadius()) {
+            ball.getCoordinate().setZ(course.getLength() - ball.getRadius());
             ball.speedZ *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionZ();
             System.out.println("ball hit back border");
         }
-        //check left X border
-        else if (ball.getCoordinate().getZ() + ball.getSpeedZ() < ball.getRadius()) {
+        //check front border
+        else if (ball.getCoordinate().getZ() + ball.getSpeedZ() <= ball.getRadius()) {
             ball.getCoordinate().setZ(ball.getRadius());
             ball.speedZ *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionZ();
@@ -87,7 +104,7 @@ public class PhysicsEngineFinal {
         }
         // Add speed if no colission
         else {
-            processMovement(0);
+            ball.getCoordinate().setZ(ball.getCoordinate().getZ() + ball.getSpeedZ());
         }
 
     }
@@ -99,11 +116,11 @@ public class PhysicsEngineFinal {
         /** 2: Z direction **/
 
         if (direction == 0) {
-            ball.getCoordinate().setX(ball.getCoordinate().getX() + ball.getSpeedX());
+
         } else if (direction == 1) {
             ball.getCoordinate().setY(ball.getCoordinate().getY() + ball.getSpeedY());
         } else if (direction == 2) {
-            ball.getCoordinate().setZ(ball.getCoordinate().getZ() + ball.getSpeedZ());
+
         }
 
     }
