@@ -59,22 +59,6 @@ public class PhysicsEgine extends Applet implements Runnable, MouseListener {
         this.firstYClick = firstYClick;
     }
 
-    public int getSecondXClick() {
-        return secondXClick;
-    }
-
-    public void setSecondXClick(int secondXClick) {
-        this.secondXClick = secondXClick;
-    }
-
-    public int getSecondYClick() {
-        return secondYClick;
-    }
-
-    public void setSecondYClick(int secondYClick) {
-        this.secondYClick = secondYClick;
-    }
-
     @Override
     public int getWidth() {
         return width;
@@ -113,8 +97,6 @@ public void processMovement(){
     }
     else {
         speedX *= airFriction;
-
-
     }
 
     //Collisions detect borders
@@ -197,7 +179,6 @@ public void processMovement(){
     public void run() {
 
         while (true) {
-            //processGravity();
             if (autoShoot)
                 shootBall(30, 150);
 
