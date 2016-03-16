@@ -7,9 +7,24 @@ public class Player {
     String name;
     int id;
     static int idCounter;
+    Ball b = new Ball(Config.getBallMass(),Config.getBallRadius());
 
     int currentStrokes;
     int totalStrokes;
+
+    public Ball getBall(){
+        return b;
+    }
+
+    public void shoot(double speedX, double speedY, double speedZ){
+        b.shootBall(speedX,speedY,speedZ);
+    }
+
+    public void setBallPosition(Coordinate c){
+        b.getCoordinate().setX(c.getX());
+        b.getCoordinate().setY(c.getY());
+        b.getCoordinate().setZ(c.getZ());
+    }
 
     public Player(String name){
         this.name = name;
