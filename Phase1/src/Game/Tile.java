@@ -13,11 +13,23 @@ public class Tile {
     int x,y,z;
 
 
+    public static Tile newTile(Type t, int x, int y, int z){
+        Tile a;;
+        if (t == Type.Hole) {
+            a = new Hole(4, x, y, z);
+        }else{
+            a = new Tile(t, x, y, z);
+        }
+        return a;
+
+
+    }
     public Tile(Type t, int x, int y, int z) {
         this.t = t;
         this.x = x;
         this.y = y;
         this.z = z;
+
     }
 
     double getFriction(){
