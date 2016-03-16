@@ -17,7 +17,7 @@ public class Tile {
     public static Tile newTile(Type t, int x, int y, int z){
         Tile a;
         if (t == Type.Hole) {
-            a = new Hole(4, x, y, z);
+            a = new Hole(Config.getHoleRadius(), x, y, z);
         }else{
             a = new Tile(t, x, y, z);
         }
