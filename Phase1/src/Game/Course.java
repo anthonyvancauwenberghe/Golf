@@ -20,6 +20,7 @@ public class Course {
     Tile[][][] copy;
     int[] dimension;
     ArrayList<ArrayList<Tile>> objectsOnPlayfield;
+    Tile startTile;
     int par;
 
 
@@ -121,7 +122,9 @@ public class Course {
 
 
         }
-
+        if (c.startTile == null){
+            c.setTile(20,20,0,Type.Start);
+        }
         return c;
 
     }

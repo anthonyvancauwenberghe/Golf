@@ -6,15 +6,14 @@ public class Ball {
     double mass = 1;
     double radius = 20;
     double bounciness;
-    double speedX, speedY, speedZ;
-    double fX, fY, fZ;
-    boolean isMoving = false;
+    public double speedX, speedY, speedZ;
+    public boolean isMoving = false;
     private Coordinate coordinate;
 
 
     public Ball(double mass, double radius) {
-        this.mass=mass;
-        this.radius= radius;
+        this.mass = mass;
+        this.radius = radius;
     }
 
     public boolean isMoving() {
@@ -39,18 +38,31 @@ public class Ball {
         return true;
     }
 
+    public double getSpeedX() {
+        return speedX;
+    }
+
     public double getSpeedY() {
         return speedY;
     }
 
-    public double getSpeedX() {
-        return speedX;
+    public double getSpeedZ() {
+        return speedZ;
     }
 
     public double getRadius() {
         return radius;
     }
 
+    public void reverseBallDirectionX() {
+        speedX = -speedX;
+    }
+    public void reverseBallDirectionY() {
+        speedY = -speedY;
+    }
+    public void reverseBallDirectionZ() {
+        speedZ = -speedZ;
+    }
     public Coordinate getCoordinate() {
         return coordinate;
     }
