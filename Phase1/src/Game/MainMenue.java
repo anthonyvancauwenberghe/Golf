@@ -15,7 +15,7 @@ public class MainMenue {
     static void main(String[] args){
         MainMenue m = new MainMenue();
         m.gui = new GUI();
-        m.gui.showMainMenu();
+        m.gui.getMainMenu();
 
     }
 

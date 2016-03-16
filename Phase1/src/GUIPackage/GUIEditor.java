@@ -1,15 +1,12 @@
 package GUIPackage;
 
-import com.sun.tools.javah.Util;
+import oracle.jvm.hotspot.jfr.JFR;
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * Created by lukas on 16/03/16.
- */
+
 public class GUIEditor {
     private JFrame frame;
     private JPanel panel1;
@@ -23,12 +20,13 @@ public class GUIEditor {
     private JButton butBackMain;
 
     public GUIEditor() {
-        frame = new JFrame("GUIEditor");
+
 
         butBackMain.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new GUI().showMainMenu();
+                GUI gui = new GUI();
+                gui.getMainMenu();
             }
         });
         butExit.addActionListener(new ActionListener() {
@@ -39,12 +37,12 @@ public class GUIEditor {
         });
     }
 
-    public static void main(String[] args) {
+    public JFrame getFrame() {
         JFrame frame = new JFrame("GUIEditor");
         frame.setContentPane(new GUIEditor().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+
+
+        return frame;
     }
 
 }
