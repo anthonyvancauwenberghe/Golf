@@ -35,26 +35,32 @@ public class DrawPanel extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
+                if(e.getButton()== MouseEvent.BUTTON3){
+                    Main.addObject(e.getPoint());
+                }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                setFirstXClick(e.getX());
-                setFirstYClick(e.getY());
+                if(e.getButton()!= MouseEvent.BUTTON3) {
+                    setFirstXClick(e.getX());
+                    setFirstYClick(e.getY());
+                }
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                System.out.println("first x: " + getFirstXClick());
-                System.out.println("first Y: " + getFirstYClick());
-                System.out.println("second x: " + e.getX());
-                System.out.println("second Y: " + e.getY());
-                System.out.println("deltaX: " + (getFirstXClick() - e.getX()) / 10);
-                System.out.println("deltaY: " + (getFirstYClick() - e.getY()));
-                if (currentPlayer != null)
+                if(e.getButton()!= MouseEvent.BUTTON3) {
+                    System.out.println("first x: " + getFirstXClick());
+                    System.out.println("first Y: " + getFirstYClick());
+                    System.out.println("second x: " + e.getX());
+                    System.out.println("second Y: " + e.getY());
+                    System.out.println("deltaX: " + (getFirstXClick() - e.getX()) / 10);
+                    System.out.println("deltaY: " + (getFirstYClick() - e.getY()));
+                    if (currentPlayer != null)
 
-                currentPlayer.shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
+                        currentPlayer.shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
+                }
 
             }
 

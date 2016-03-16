@@ -245,4 +245,8 @@ public class Course {
     public Hole getHole() {
         return hole;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }
