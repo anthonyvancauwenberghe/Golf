@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String [] args){
         int counter = 0;
+
+
         Course course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
         course.addRectangle(20, 40, 30, 50, 0, Type.Sand);
         course.addSquircle(20,60,20,4,0,Type.Water);
@@ -28,6 +30,7 @@ public class Main {
         frame.setSize(800, 600);
 
         DrawPanel dp = new DrawPanel();
+
         frame.add(dp);
 
         p.setBallPosition(course.getStartTile().getCoordinate());
@@ -48,7 +51,14 @@ public class Main {
                 p.getBall().checkBallStopped();
                 p.getBall().printBallInfo();
                 try {
-                    dp.repaint();
+                    Runnable repaint = new Runnable(){
+
+                        public void run(){
+                            dp.repaint();
+                        }
+                    };
+                    Thread paintThread = new Thread(repaint);
+                    paintThread.start();
                     Thread.sleep(33);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
