@@ -98,6 +98,7 @@ public class DrawPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
+
         super.paintComponent(g);
         if (managedBufferedImage != null) g.drawImage(managedBufferedImage, 0, 0, null);
         for (int i = 0; i < players.size(); i++) {
@@ -105,7 +106,8 @@ public class DrawPanel extends JPanel {
             g.setColor(Color.CYAN);
             Coordinate c = b.getCoordinate();
             double radius = b.getRadius();
-            g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 2, (int) radius * 2);
+            //if (c != null)
+                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 2, (int) radius * 2);
 
         }
 

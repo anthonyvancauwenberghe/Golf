@@ -8,7 +8,7 @@ public class Ball {
     double bounciness;
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
-    private Coordinate coordinate;
+    private Coordinate coordinate = new Coordinate();
 
 
     public Ball(double mass, double radius) {

@@ -17,11 +17,20 @@ public class Main {
         pp.add(p);
         pp.add(p2);
 
+        Frame frame = new JFrame();
+        frame.setVisible(true);
+        frame.setSize(800, 600);
+
         DrawPanel dp = new DrawPanel();
+        frame.add(dp);
+
+
         dp.setPlayers(pp);
         dp.setCurrentPlayer(p);
         dp.setCourse(course);
-        Frame fenster = new JFrame(); fenster.add(dp);
+        dp.repaint();
+
+
         PhysicsEngineFinal physics = new PhysicsEngineFinal();
 
         physics.init(course, ball);
@@ -29,6 +38,7 @@ public class Main {
             if(ball.isMoving){
 
             }
+            dp.repaint();
         }
     }
 }
