@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String [] args){
         Course course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
-
+        course.addArea(20,40,30,50,0,Type.Sand);
         ArrayList<Player> pp = new ArrayList<>(2);
         Player p = new Player("PlayerEins");
         Player p2 = new Player("PlayerZwei");

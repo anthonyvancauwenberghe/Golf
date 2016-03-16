@@ -82,6 +82,8 @@ public class DrawPanel extends JPanel {
                 for (int z = 0; z < d[2]; z++) {
                     Tile t = pf[x][y][z];
                     if (t.getType() == Type.Empty) continue;
+                    if (t.getType() == Type.Sand)
+                        System.out.println("Sand?");
                     g.setColor(t.getColor());
                     g.fillRect(x, y, 10, 10);
                 }
