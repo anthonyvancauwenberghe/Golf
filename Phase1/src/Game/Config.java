@@ -5,5 +5,14 @@ package Game;
  */
 public class Config {
     public static final double maxSpeedToFallIntoHole = 3;
+    private static final double ballMass = 1;
+    private static final double ballRadius = 1;
 
+    public static double getBallMass() {
+        return ballMass;
+    }
+
+    public static double getBallRadius() {
+        return ballRadius;
+    }
 }

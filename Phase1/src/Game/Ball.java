@@ -20,11 +20,12 @@ public class Ball {
         return isMoving;
     }
 
-    public void shootBall(double speedX, double speedY) {
+    public void shootBall(double speedX, double speedY, double speedZ) {
         if (!isMoving && inPlay()) {
             isMoving = true;
             this.speedX = speedX;
             this.speedY = speedY;
+            this.speedZ = speedZ;
         } else {
             System.out.println("ball is still moving or not in play");
         }
