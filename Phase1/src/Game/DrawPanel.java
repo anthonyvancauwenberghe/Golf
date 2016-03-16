@@ -82,8 +82,8 @@ public class DrawPanel extends JPanel {
                 for (int z = 0; z < d[2]; z++) {
                     Tile t = pf[x][y][z];
                     if (t.getType() == Type.Empty) continue;
-                    if (t.getType() == Type.Sand)
-                        System.out.println("Sand?");
+
+
                     g.setColor(t.getColor());
                     g.fillRect(x, y, 10, 10);
                 }
@@ -113,7 +113,7 @@ public class DrawPanel extends JPanel {
             Coordinate c = b.getCoordinate();
             double radius = b.getRadius();
             //if (c != null)
-                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 20, (int) radius * 20);
+                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius, (int) radius);
 
         }
 
