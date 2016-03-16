@@ -9,8 +9,9 @@ import java.util.ArrayList;
  */
 public class Main {
     public static void main(String [] args){
-        Course course = new Course("Golf Deluxe Course 1", 800, 600, 1, Type.Grass, 1 );
-
+        Course course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
+        course.addRectangle(20, 40, 30, 50, 0, Type.Sand);
+        course.addSquircle(20,60,20,4,0,Type.Water);
         ArrayList<Player> pp = new ArrayList<>(2);
         Player p = new Player("PlayerEins");
         Player p2 = new Player("PlayerZwei");
@@ -19,7 +20,7 @@ public class Main {
 
         Frame frame = new JFrame();
         frame.setVisible(true);
-        frame.setSize(1024, 760);
+        frame.setSize(800, 600);
 
         DrawPanel dp = new DrawPanel();
         frame.add(dp);

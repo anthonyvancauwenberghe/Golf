@@ -66,8 +66,8 @@ public class Course {
 
         if (startTile == null){
 
-            setTile(20,20,0,Type.Start);
-            startTile = getTile(20,20,0);
+            setTile(20, 20, 0, Type.Start);
+            startTile = getTile(20, 20, 0);
         }
 
         this.par = par;
@@ -85,10 +85,8 @@ public class Course {
         if (originalTile.getType()!=Type.Empty){
             objectsOnPlayfield.get(originalTile.getType().ordinal()).remove(originalTile);
 
-        }else{
-            newTile.setType(t);
         }
-
+        newTile.setType(t);
         playfield[x][y][z] = newTile;
         objectsOnPlayfield.get(t.ordinal()).add(newTile);
     }
@@ -198,5 +196,33 @@ public class Course {
         return startTile;
     }
 
-    //dimension,
+    public void addRectangle(int x1, int y1, int x2, int y2, int z, Type type) {
+        for (int x = x1; x < x2; x++) {
+            for (int y = y1; y < y2; y++) {
+                setTile(x,y,z,type);
+            }
+        }
+
+    }
+
+    /**
+     *
+     * @param a
+     * @param b
+     * @param r
+     * @param n
+     * @param z
+     * @param t
+     */
+    public void addSquircle(int a, int b, int r, int n, int z, Type t) {
+
+        for (int x = -r+a; x < r+a; x++) {
+            for (int y = -r+b; y < r+b; y++) {
+              if(Math.pow(x-a,n)+Math.pow(y-b,n)<Math.pow(r,n)){
+                  setTile(x,y,z,t);
+              }
+            }
+
+        }
+    }
 }
