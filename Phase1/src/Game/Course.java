@@ -20,8 +20,8 @@ public class Course {
     Tile[][][] copy;
     int[] dimension;
     ArrayList<ArrayList<Tile>> objectsOnPlayfield;
-    Tile startTile;
     int par;
+    private Tile startTile;
 
 
     /**
@@ -63,6 +63,13 @@ public class Course {
                     if (typ!= Type.Empty) objectsOnPlayfield.get(typ.ordinal()).add(t);
             }
         }
+
+        if (startTile == null){
+
+            setTile(20,20,0,Type.Start);
+            startTile = getTile(20,20,0);
+        }
+
         this.par = par;
 
     }
@@ -123,7 +130,9 @@ public class Course {
 
         }
         if (c.startTile == null){
+
             c.setTile(20,20,0,Type.Start);
+            c.startTile = c.getTile(20,20,0);
         }
         return c;
 
@@ -183,6 +192,10 @@ public class Course {
     public int getHeight() {
 
         return dimension[2];
+    }
+
+    public Tile getStartTile() {
+        return startTile;
     }
 
     //dimension,

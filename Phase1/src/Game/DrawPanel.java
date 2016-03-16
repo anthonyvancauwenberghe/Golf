@@ -26,7 +26,9 @@ public class DrawPanel extends JPanel {
     }
 
     public void setCurrentPlayer(Player p) {
+
         this.currentPlayer = p;
+        p.setInPlay(true);
     }
 
     public DrawPanel() {
@@ -102,12 +104,14 @@ public class DrawPanel extends JPanel {
         super.paintComponent(g);
         if (managedBufferedImage != null) g.drawImage(managedBufferedImage, 0, 0, null);
         for (int i = 0; i < players.size(); i++) {
+            if (!players.get(i).isInPlay())
+                continue;
             Ball b = players.get(i).getBall();
-            g.setColor(Color.CYAN);
+            g.setColor(Color.WHITE);
             Coordinate c = b.getCoordinate();
             double radius = b.getRadius();
             //if (c != null)
-                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 2, (int) radius * 2);
+                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 20, (int) radius * 20);
 
         }
 

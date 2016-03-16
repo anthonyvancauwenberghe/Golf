@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Main {
     public static void main(String [] args){
         Course course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
-        Ball ball = new Ball(1, 20);
+
         ArrayList<Player> pp = new ArrayList<>(2);
         Player p = new Player("PlayerEins");
         Player p2 = new Player("PlayerZwei");
@@ -24,7 +24,7 @@ public class Main {
         DrawPanel dp = new DrawPanel();
         frame.add(dp);
 
-
+        p.setBallPosition(course.getStartTile().getCoordinate());
         dp.setPlayers(pp);
         dp.setCurrentPlayer(p);
         dp.setCourse(course);
@@ -33,12 +33,13 @@ public class Main {
 
         PhysicsEngineFinal physics = new PhysicsEngineFinal();
 
-        physics.init(course, ball);
+        physics.init(course, p.getBall());
         while(true){
-            if(ball.isMoving){
+            if(p.getBall().isMoving){
 
             }
             dp.repaint();
+
         }
     }
 }

@@ -4,6 +4,7 @@ package Game;
  * Created by nibbla on 14.03.16.
  */
 public class Player {
+    private boolean inPlay = false;
     String name;
     int id;
     static int idCounter;
@@ -12,8 +13,17 @@ public class Player {
     int currentStrokes;
     int totalStrokes;
 
+
     public Ball getBall(){
         return b;
+    }
+
+
+    public boolean isInPlay(){
+        return inPlay;
+    }
+    public void setInPlay(boolean t) {
+        inPlay = t;
     }
 
     public void shoot(double speedX, double speedY, double speedZ){
@@ -34,6 +44,7 @@ public class Player {
     }
 
     public void resetCurrentStrokes(){
+        inPlay=false;
         currentStrokes = 0;
     }
     public void addStroke(){

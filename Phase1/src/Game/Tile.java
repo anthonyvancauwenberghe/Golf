@@ -11,10 +11,11 @@ public class Tile {
 
 
     int x,y,z;
+    private Coordinate coordinate;
 
 
     public static Tile newTile(Type t, int x, int y, int z){
-        Tile a;;
+        Tile a;
         if (t == Type.Hole) {
             a = new Hole(4, x, y, z);
         }else{
@@ -29,6 +30,7 @@ public class Tile {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.coordinate = new Coordinate(x,y,z);
 
     }
 
@@ -73,5 +75,9 @@ public class Tile {
 
     public void setType(Type type) {
         this.t = type;
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 }

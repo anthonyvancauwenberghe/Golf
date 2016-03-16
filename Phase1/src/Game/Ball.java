@@ -21,6 +21,8 @@ public class Ball {
     }
 
     public void shootBall(double speedX, double speedY, double speedZ) {
+        System.out.println(inPlay());
+        System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             isMoving = true;
             this.speedX = speedX;
