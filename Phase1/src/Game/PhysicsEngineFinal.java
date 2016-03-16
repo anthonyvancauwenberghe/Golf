@@ -55,8 +55,8 @@ public class PhysicsEngineFinal {
         /*********************************/
 
         // check right X border
-        if (ball.getCoordinate().getX() + ball.getSpeedX() >= course.getWidth() - 20*ball.getRadius()) {
-            ball.getCoordinate().setX(course.getWidth() - 20*ball.getRadius());
+        if (ball.getCoordinate().getX() + ball.getSpeedX() >= course.getWidth() - ball.getRadius()) {
+            ball.getCoordinate().setX(course.getWidth() - ball.getRadius());
             ball.speedX *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionX();
             System.out.println("ball hit right border");
@@ -78,8 +78,8 @@ public class PhysicsEngineFinal {
         /*********************************/
 
         // check bottom border
-        if (ball.getCoordinate().getY() + ball.getSpeedY() >= course.getHeight() - 20*ball.getRadius()) {
-            ball.getCoordinate().setY(course.getHeight() - 20*ball.getRadius());
+        if (ball.getCoordinate().getY() + ball.getSpeedY() >= course.getHeight() - ball.getRadius() - 20) {
+            ball.getCoordinate().setY(course.getHeight() - ball.getRadius() - 20);
             ball.speedY *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionY();
             //System.out.println(ball.getRadius() + " ball hit bottom border");

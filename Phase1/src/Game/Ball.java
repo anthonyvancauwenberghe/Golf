@@ -4,7 +4,7 @@ public class Ball {
 
     //Color c;
     double mass = 1;
-    double radius = 1;
+    double radius = Config.getBallRadius();
     double bounciness;
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
