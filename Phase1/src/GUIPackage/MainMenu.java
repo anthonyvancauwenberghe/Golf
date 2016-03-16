@@ -17,7 +17,7 @@ public class MainMenu{
         panel.setBackground((new Color(0, 90, 0)));
         frame.add(panel, BorderLayout.EAST);
         //Button 1(editor)
-        JButton editor = new JButton("Start Editor");
+        JButton editor = new JButton("Start GUIEditor");
         editor.addActionListener(new ClickListener());
         panel.add(editor);
 
