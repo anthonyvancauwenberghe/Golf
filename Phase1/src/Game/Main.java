@@ -36,7 +36,8 @@ public class Main {
         physics.init(course, p.getBall());
         while(true){
             if(p.getBall().isMoving){
-
+            p.getBall().getPhysics().processPhysics();
+                p.getBall().getPhysics().processNaturalForces();
             }
             dp.repaint();
 

@@ -9,6 +9,7 @@ public class Ball {
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
     private Coordinate coordinate = new Coordinate();
+    private PhysicsEngineFinal physics = new PhysicsEngineFinal();
 
 
     public Ball(double mass, double radius) {
@@ -70,4 +71,7 @@ public class Ball {
         return coordinate;
     }
 
+    public PhysicsEngineFinal getPhysics() {
+        return physics;
+    }
 }
