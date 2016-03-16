@@ -45,7 +45,7 @@ public class Course {
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
-                    playfield[x][y][z] = new Tile(Type.Empty,x,y,z);
+                    playfield[x][y][z] = Tile.newTile(Type.Empty,x,y,z);
                 }
             }
         }
@@ -55,7 +55,7 @@ public class Course {
                     Type typ;
                     if (standartType == null) typ = Type.values()[r.nextInt(Type.values().length)];
                     else typ =standartType;
-                    Tile t = new Tile(typ,x,y,0);
+                    Tile t =Tile.newTile(typ,x,y,0);
                     playfield[x][y][0] = t;
 
                     if (typ!= Type.Empty) objectsOnPlayfield.get(typ.ordinal()).add(t);
@@ -165,4 +165,21 @@ public class Course {
 
         return dimension;
     }
+
+    public int getLength() {
+
+        return dimension[0];
+    }
+
+    public int getWidth() {
+
+        return dimension[1];
+    }
+
+    public int getHeight() {
+
+        return dimension[2];
+    }
+
+    //dimension,
 }
