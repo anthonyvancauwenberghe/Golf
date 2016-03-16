@@ -35,14 +35,6 @@ public class PhysicsEgine extends Applet implements Runnable, MouseListener {
     int x = radius;
     int y = getHeight() - radius;
 
-    public static int getTest() {
-        return test;
-    }
-
-    public static void setTest(int test) {
-        PhysicsEgine.test = test;
-    }
-
     public int getFirstXClick() {
         return firstXClick;
     }

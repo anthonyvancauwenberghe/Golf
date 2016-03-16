@@ -3,31 +3,55 @@ package Game;
 public class Ball {
 
     //Color c;
-    double mass;
-    double radius;
+    double mass = 1;
+    double radius = 20;
     double bounciness;
-    double velX, velY, velZ;
+    double speedX, speedY, speedZ;
     double fX, fY, fZ;
+    boolean isMoving = false;
+    private Coordinate coordinate;
 
 
-    public Ball() {
-
+    public Ball(double mass, double radius) {
+        this.mass=mass;
+        this.radius= radius;
     }
 
-    public void shoot(double angle, double speed){
-
+    public boolean isMoving() {
+        return isMoving;
     }
 
-
-    public void magic(long deltaT) {
-
+    public void shootBall(double speedX, double speedY) {
+        if (!isMoving && inPlay()) {
+            isMoving = true;
+            this.speedX = speedX;
+            this.speedY = speedY;
+        } else {
+            System.out.println("ball is still moving or not in play");
+        }
     }
 
-    public void magic(Course c, double angX, double angY, double power) {
+    public void shootBall3D(double speed1, double speed2, double angle) {
 
     }
 
     public boolean inPlay() {
         return true;
+    }
+
+    public double getSpeedY() {
+        return speedY;
+    }
+
+    public double getSpeedX() {
+        return speedX;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 }

@@ -84,15 +84,14 @@ public class PhysicsEngineMarkus extends Applet implements Runnable {
     }
 
     public void checkBallStopped() {
-
         if(dx==0 && y == this.getHeight() - radius - 1)
             System.out.println("speedX  = 0");
 
         if (dx == 0 && getHeight()-y< 30) {
             ballMoving = false;
             System.out.println("ball stopped");
-
         }
+
     }
 
     @Override
@@ -134,13 +133,8 @@ System.out.println("speedX: " + dx);
 
         doubleG.setColor(getForeground());
 
-
-
-
         paint(doubleG);
         g.drawImage(i, 0, 0, this);
-
-
     }
 
     private void paintCourse(Graphics doubleG, Course course) {

@@ -22,7 +22,7 @@ public class Game {
         currentPlayer = 0;
         balls = new ArrayList<>(players.size());
         for (int i = 0; i < players.size(); i++) {
-            balls.add(new Ball());
+            //balls.add(new Ball());
         }
         currentBall = 0;
         time = 0L;
@@ -32,7 +32,7 @@ public class Game {
         
         //TODO how the physics gets implemented.
         time++; //basic idea of this method. needs to be adjusted.
-        balls.get(currentBall).magic(c, angX, angY, power);
+        //balls.get(currentBall).magic(c, angX, angY, power);
         players.get(currentPlayer).addStroke();
 
         //checks if the ball is still in Play and switches players according to that.
