@@ -39,6 +39,7 @@ public class Main {
         PhysicsEngineFinal physics = new PhysicsEngineFinal();
 
         physics.init(course, p.getBall());
+
         while(true){
             if(p.getBall().isMoving){
                 p.getBall().getPhysics().init(course, p.getBall());
@@ -47,14 +48,14 @@ public class Main {
                 p.getBall().checkBallStopped();
                 p.getBall().printBallInfo();
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(33);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
 
 
             }
-            if(!p.getBall().isMoving){
+            else{
                 try {
                     Thread.sleep(100);
                 } catch (InterruptedException e) {

@@ -13,9 +13,6 @@ public class PhysicsEngineFinal {
     private final double WALL_ENERGY_LOSS = 0.7;
     public static boolean enable3D=false;
 
-    public PhysicsEngineFinal() {
-
-    }
 
     public void init(Course course, Ball ball) {
         this.course = course;
@@ -40,7 +37,9 @@ public class PhysicsEngineFinal {
             if(enable3D)
             ball.speedZ *= AIR_FRICTION;
             ball.speedY *= AIR_FRICTION;
-            //ball.speedY -= GRAVITY_FORCE;
+
+            if(enable3D)
+            ball.speedY -= GRAVITY_FORCE;
         }
     }
 

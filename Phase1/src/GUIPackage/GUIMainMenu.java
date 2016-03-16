@@ -26,19 +26,24 @@ public class GUIMainMenu {
     }
 
     public GUIMainMenu() {
+try {
 
-        startDefaultGameButton.setOpaque(false);
-        startDefaultGameButton.setFocusPainted(false);
-        startDefaultGameButton.setBorderPainted(false);
-        startDefaultGameButton.setContentAreaFilled(false);
-        //setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); // Especially important
-        courseEditorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                GUI gui = new GUI();
-                gui.getEditor();
-            }
-        });
+    startDefaultGameButton.setOpaque(false);
+    startDefaultGameButton.setFocusPainted(false);
+    startDefaultGameButton.setBorderPainted(false);
+    startDefaultGameButton.setContentAreaFilled(false);
+    //setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); // Especially important
+    courseEditorButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            GUI gui = new GUI();
+            gui.getEditor();
+        }
+    });
+} catch(Exception e){
+    e.printStackTrace();
+}
+
     }
 
     public void createUIComponents() {
