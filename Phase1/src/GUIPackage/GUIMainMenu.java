@@ -1,9 +1,10 @@
 package GUIPackage;
 
 
+import Game.IntegrationTest;
 import com.sun.glass.ui.Screen;
 import com.sun.prism.Texture;
-
+import Game.Main;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,8 +45,11 @@ try {
     courseEditorButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            GUI gui = new GUI();
-            gui.getEditor();
+            //GUI gui = new GUI();
+            //gui.getEditor();
+            IntegrationTest test = new IntegrationTest();
+
+
         }
     });
 } catch(Exception e){
