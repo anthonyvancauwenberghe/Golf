@@ -5,8 +5,8 @@ package Game;
  */
 public class Config {
 
-    private static final int width=1920;
-    private static final int height = 1080;
+    private static final int width=1024;
+    private static final int height = 768;
     private static final int depth = 1;
 
     public static final double maxSpeedToFallIntoHole = 3;
