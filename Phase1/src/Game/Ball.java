@@ -100,9 +100,9 @@ public class Ball {
 
     public void redirect(Coordinate c, double factor) {
         double redirectSpeed = 0;
-        redirectSpeed += factor *speedX;
-        redirectSpeed += factor *speedY;
-        redirectSpeed += factor *speedZ;
+        redirectSpeed += factor *Math.abs(speedX);
+        redirectSpeed += factor *Math.abs(speedY);
+        redirectSpeed += factor *Math.abs(speedZ);
         speedX*=1-factor;
         speedY*=1-factor;
         speedZ*=1-factor;
