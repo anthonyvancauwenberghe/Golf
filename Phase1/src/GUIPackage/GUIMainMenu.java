@@ -20,8 +20,8 @@ public class GUIMainMenu {
     private JButton courseEditorButton;
     private JButton startDefaultGameButton;
     private JPanel panel2;
-    final private Texture texture = new Texture("grass.jpg");
-    final private Image image = new Image(texture);
+    //final private Texture texture = new Texture("grass.jpg");
+    //final private Image image = new Image(texture);
     //private BufferedImage image2 = new BufferedImage(image);
 
     public static void main(String[] args) {
