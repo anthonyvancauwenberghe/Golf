@@ -1,5 +1,10 @@
 package Game;
 
+/**
+ * @author ??
+ * @author ??
+ */
+
 public class Ball {
 
     //Color c;
@@ -12,16 +17,31 @@ public class Ball {
     private PhysicsEngine physics = new PhysicsEngine();
 
 
-
+    /**
+     * constructor of the class Ball
+     * @param mass the mass of the ball
+     * @param radius the radius of the ball
+     */
     public Ball(double mass, double radius) {
         this.mass = mass;
         this.radius = radius;
     }
 
+    /**
+     * Checks if the ball is moving.
+     * If ball is moving, return true
+     * @return isMoving
+     */
     public boolean isMoving() {
         return isMoving;
     }
 
+    /**
+     * Check if ball is shot
+     * @param speedX speed of ball in X-axis
+     * @param speedY speed of ball in Y-axis
+     * @param speedZ speed of ball in Z-axis
+     */
     public void shootBall(double speedX, double speedY, double speedZ) {
         System.out.println(inPlay());
         System.out.println(isMoving);
@@ -35,46 +55,95 @@ public class Ball {
         }
     }
 
+    /**
+     * What is shootBall3D doing?
+     * @param speed1
+     * @param speed2
+     * @param angle
+     */
     public void shootBall3D(double speed1, double speed2, double angle) {
 
     }
 
+    /**
+     * ??
+     * @return true
+     */
     public boolean inPlay() {
         return true;
     }
 
+    /**
+     * getter to get the speed in the X-axis
+     * @return speedX
+     */
     public double getSpeedX() {
         return speedX;
     }
 
+    /**
+     * getter to get the speed in the Y-axis
+     * @return speedY
+     */
     public double getSpeedY() {
         return speedY;
     }
 
+    /**
+     * getter to get the speed in the Z-axis
+     * @return speedZ
+     */
     public double getSpeedZ() {
         return speedZ;
     }
 
+    /**
+     * getter to get the radius
+     * @return radius
+     */
     public double getRadius() {
         return radius;
     }
 
+    /**
+     * formula to reverse the direction of the ball in X-axis
+     */
     public void reverseBallDirectionX() {
         speedX = -speedX;
     }
+    /**
+     * formula to reverse the direction of the ball in Y-axis
+     */
     public void reverseBallDirectionY() {
         speedY = -speedY;
     }
+    /**
+     * formula to reverse the direction of the ball in Z-axis
+     */
     public void reverseBallDirectionZ() {
         speedZ = -speedZ;
     }
+
+    /**
+     * getter to get the coordinate of the ball of the Coordinate class
+     * @return coordinate
+     */
     public Coordinate getCoordinate() {
         return coordinate;
     }
 
+    /**
+     * getter to get the physics of the PhysicsEngine class
+     * @return physics
+     */
     public PhysicsEngine getPhysics() {
         return physics;
     }
+
+    /**
+     * check if ball is stopped, ball is stopped under following condition
+     * if ball is stopped, isMoving is false
+     */
     public void checkBallStopped(){
         if(Math.abs(speedX)<=0.2 && Math.abs(speedY)<=0.3 && Math.abs(speedZ)<=1){
             isMoving=false;
@@ -82,6 +151,10 @@ public class Ball {
         }
 
     }
+
+    /**
+     * method that prints the information about the ball
+     */
     public void printBallInfo(){
         System.out.println("X: " + getCoordinate().getX());
         System.out.println("Y: " + getCoordinate().getY());
@@ -94,10 +167,19 @@ public class Ball {
             System.out.println("ballStopped");
     }
 
+    /**
+     * getter to get the speed of the ball
+     * @return formula to get the speed (with Pythagoras)
+     */
     public double getSpeed() {
        return Math.sqrt(speedX*speedX+speedY*speedY+speedZ*speedZ);
     }
 
+    /**
+     *
+     * @param c
+     * @param factor
+     */
     public void redirect(Coordinate c, double factor) {
         double redirectSpeed = 0;
         redirectSpeed += factor *Math.abs(speedX);

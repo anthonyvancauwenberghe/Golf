@@ -10,7 +10,7 @@ import java.util.Random;
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
  * A tile is 1cm³
- *
+ * @author ??
  *
  */
 public class Course {
@@ -26,11 +26,15 @@ public class Course {
 
 
     /**
+     * Constructor of the Course class
+     * which creates the new playfield with 3 dimensions
+     * and filles the playfield with empty tiles
+     * and which stores objects in an arraylist of the arraylist of the new playfield
      *
      * @param name Name of the course
-     * @param length
-     * @param width
-     * @param height
+     * @param length length of the new Tile
+     * @param width width of the new Tile
+     * @param height height of the new Tile
      * @param standartType the lowest level of the level will be filled with this tile
      * @param par
      */
@@ -75,7 +79,13 @@ public class Course {
         return objectsOnPlayfield.get(t.ordinal());
     }
 
-
+    /**
+     * setter to set the tiles
+     * @param x
+     * @param y
+     * @param z
+     * @param t
+     */
     public void setTile(int x, int y, int z, Type t){
         Tile originalTile = playfield[x][y][z];
         Tile newTile = originalTile;
@@ -104,13 +114,21 @@ public class Course {
         return playfield[x][y][z];
     }
 
+    /**
+     * getter to get the playfield
+     * @return playfield
+     */
     public Tile[][][] getPlayfield(){
         return playfield;
     }
 
+    /**
+     * method loadCourse created the new course
+     * @return c, the new course
+     */
     public static Course loadCourse(String path){
         String content = Utils.readFile(path);
-       String[] lines = content.split(System.lineSeparator());
+        String[] lines = content.split(System.lineSeparator());
         String name = lines[0];
 
         int par = Integer.parseInt(lines[1].split(":")[1]);
@@ -151,6 +169,9 @@ public class Course {
 
     }
 
+    /**
+     * method saveCourse saves the course as a .txt file
+     */
     public void saveCourse(){
         StringBuilder s = new StringBuilder();
         int length = playfield.length;
@@ -179,38 +200,71 @@ public class Course {
 
     }
 
+    /**
+     * getter to get the name of the course
+     * @return name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * getter to get the objects of the ArrayList of the ArrayList Tile
+     * @return objectsOnPlayfield
+     */
     public ArrayList<ArrayList<Tile>> getObjects() {
         return objectsOnPlayfield;
     }
 
+    /**
+     * getter to get the dimension
+     * @return dimension
+     */
     public int[] getDimension() {
-
         return dimension;
     }
 
+    /**
+     * getter to get the length of the course
+     * @return dimension[2]
+     */
     public int getLength() {
-
         return dimension[2];
     }
 
+    /**
+     * getter to get the width of the course
+     * @return dimension[0]
+     */
     public int getWidth() {
-
         return dimension[0];
     }
 
+    /**
+     * getter to get the height of the course
+     * @return dimension[1]
+     */
     public int getHeight() {
-
         return dimension[1];
     }
 
+    /**
+     * getter to get the StartTile
+     * @return startTile
+     */
     public Tile getStartTile() {
         return startTile;
     }
 
+    /**
+     * method to add a rectangle to the course
+     * To set a tile to an object
+     * @param x1 x coordinate in the course to place the object
+     * @param y1 y coordinate in the course to place the object
+     * @param width of the course
+     * @param height of the course
+     * @param type
+     */
     public void addRectangle(int x1, int y1, int width, int height, Type type) {
         int initialX=x1;
         int initalY=y1;
@@ -223,7 +277,7 @@ public class Course {
     }
 
     /**
-     *
+     * method to add a squircle to the course
      * @param a
      * @param b
      * @param r
@@ -243,11 +297,18 @@ public class Course {
         }
     }
 
-
+    /**
+     * getter to get the hole
+     * @return hole
+     */
     public Hole getHole() {
         return hole;
     }
 
+    /**
+     * setter to set the name of the course
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
