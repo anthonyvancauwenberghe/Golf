@@ -64,6 +64,7 @@ try {
                 frame.pack();
                 frame.setVisible(true);
                 test.start();
+                test.start();
 
             }
         });
