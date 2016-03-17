@@ -39,7 +39,7 @@ public class PhysicsEngineFinal {
             ball.speedY *= AIR_FRICTION;
 
             if(enable3D)
-            ball.speedY -= GRAVITY_FORCE;
+            ball.speedZ -= GRAVITY_FORCE;
         }
     }
 
@@ -48,6 +48,50 @@ public class PhysicsEngineFinal {
         System.out.println(course.getWidth());
         System.out.println(course.getHeight());
         System.out.println(course.getLength());
+
+        double ballSpeed = ball.getSpeed();
+        /*********************************/
+        /** Process Hole **/
+        /*********************************/
+        //t = (2*Rh - R)/vf
+        //Rh = radius of hole
+        //R = radius ball
+        //        vf = speed of ball when it reaches the hole
+        //g*t^2/2 > R
+        //g = gravity = 9.81
+        //or expressed in vf: vf < (2Rh - R)(g / 2R)^1/2
+
+        Hole h = course.getHole();
+        Coordinate b = ball.getCoordinate();
+        if (Math.abs(b.getX()-h.getX())<= ball.getRadius()+h.radius && Math.abs(b.getY()-h.getY())<= ball.getRadius()+h.radius ){
+            double distance = Math.sqrt((b.getX()-h.getX())*(b.getX()-h.getX()) + (b.getY()-h.getY())*(b.getY()-h.getY()));
+
+            if (distance+ ball.getRadius() < +h.radius){
+                //inAir
+                if (ballSpeed < (2*ball.radius - h.radius)*Math.sqrt(10 / 2*h.radius)){
+                    ball.speedX=0;
+                    ball.speedZ=0;
+                    ball.speedY=0;
+                }
+            }else if (distance<= ball.getRadius()/2+h.radius){
+                Coordinate c = new Coordinate(h.getX()-b.getX(),h.getY()-b.getY(),h.getZ()-b.getZ());
+                double factor = 1-distance/(ball.getRadius()+h.radius);
+                c.setX(c.getX() * factor);
+                c.setY(c.getY() * factor);
+
+
+                ball.speedX+=c.getX();
+                ball.speedY+=c.getY();
+                //ball.speedY+=c.getZ();
+                //touches wall
+
+            }
+
+        }
+
+
+
+
 
         /*********************************/
         /** Process Border Colissions X **/
