@@ -211,10 +211,12 @@ public class Course {
         return startTile;
     }
 
-    public void addRectangle(int x1, int y1, int x2, int y2, int z, Type type) {
-        for (int x = x1; x < x2; x++) {
-            for (int y = y1; y < y2; y++) {
-                setTile(x,y,z,type);
+    public void addRectangle(int x1, int y1, int width, int height, Type type) {
+        int initialX=x1;
+        int initalY=y1;
+        for (int x = x1; x < initialX+width; x++) {
+            for (int y = y1; y < initalY+height; y++) {
+                setTile(x,y,0,type);
             }
         }
 

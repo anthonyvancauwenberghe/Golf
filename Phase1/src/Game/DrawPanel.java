@@ -35,14 +35,14 @@ public class DrawPanel extends JPanel {
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getButton()== MouseEvent.BUTTON3){
+                if (e.getButton() == MouseEvent.BUTTON3) {
                     Main.addObject(e.getPoint());
                 }
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if(e.getButton()!= MouseEvent.BUTTON3) {
+                if (e.getButton() != MouseEvent.BUTTON3) {
                     setFirstXClick(e.getX());
                     setFirstYClick(e.getY());
                 }
@@ -50,7 +50,7 @@ public class DrawPanel extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                if(e.getButton()!= MouseEvent.BUTTON3) {
+                if (e.getButton() != MouseEvent.BUTTON3) {
                     System.out.println("first x: " + getFirstXClick());
                     System.out.println("first Y: " + getFirstYClick());
                     System.out.println("second x: " + e.getX());
@@ -58,7 +58,6 @@ public class DrawPanel extends JPanel {
                     System.out.println("deltaX: " + (getFirstXClick() - e.getX()) / 10);
                     System.out.println("deltaY: " + (getFirstYClick() - e.getY()));
                     if (currentPlayer != null)
-
                         currentPlayer.shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
                 }
 
@@ -125,7 +124,7 @@ public class DrawPanel extends JPanel {
             Coordinate c = b.getCoordinate();
             double radius = b.getRadius();
             //if (c != null)
-                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius, (int) radius);
+            g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius, (int) radius);
 
         }
 

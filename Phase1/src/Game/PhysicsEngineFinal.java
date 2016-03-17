@@ -7,7 +7,7 @@ public class PhysicsEngineFinal {
     private Course course;
     private Ball ball;
 
-    private final double GROUND_FRICTION = 0.92;
+    private final double GROUND_FRICTION = 0.90;
     private final double AIR_FRICTION = 0.995;
     private final double GRAVITY_FORCE = 9.81;
     private final double WALL_ENERGY_LOSS = 0.7;
@@ -77,8 +77,8 @@ public class PhysicsEngineFinal {
         /*********************************/
 
         // check bottom border
-        if (ball.getCoordinate().getY() + ball.getSpeedY() >= course.getHeight() - ball.getRadius() - 20) {
-            ball.getCoordinate().setY(course.getHeight() - ball.getRadius() - 20);
+        if (ball.getCoordinate().getY() + ball.getSpeedY() >= course.getHeight() - ball.getRadius() +Main.offsetY) {
+            ball.getCoordinate().setY(course.getHeight() - ball.getRadius()+Main.offsetY);
             ball.speedY *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionY();
             //System.out.println(ball.getRadius() + " ball hit bottom border");

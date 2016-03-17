@@ -14,30 +14,44 @@ public class Main {
     static private int selectedSize = 1;
     static private Course course;
     private static int pensize = 20;
+    public static int offsetX = 0;
+    public static int offsetY = 0;
     static DrawPanel dp;
     public static void main(String [] args){
-        int counter = 0;
 
-        course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
-        course.addRectangle(20, 40, 30, 50, 0, Type.Sand);
-        course.addSquircle(20,60,20,4,0,Type.Water);
+        dp = new DrawPanel();
+        JFrame frame = new JFrame();
+
+        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1 );
+        //course.addRectangle(20, 40, 30, 50, 0, Type.Sand);
+        //course.addSquircle(20,60,20,4,0,Type.Water);
         course.setTile(400,400,0,Type.Hole);
         course.setTile(20,20,0,Type.Start);
+        //course.addRectangle(0,0,Config.getWidth(),10,Type.OBJECT);
+        //course.addRectangle(0,Config.getHeight()-10,200,10,Type.OBJECT);
+        //course.addRectangle(0,0,Config.getWidth(),10,Type.OBJECT);
+        //course.addRectangle(0,0,Config.getWidth(),10,Type.OBJECT);
+
         ArrayList<Player> pp = new ArrayList<>(2);
         Player p = new Player("PlayerEins");
         Player p2 = new Player("PlayerZwei");
         pp.add(p);
         pp.add(p2);
 
-        JFrame frame = new JFrame();
+
         addMenues(frame);
+
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         frame.setVisible(true);
-        frame.setSize(800, 600);
+        frame.setSize(Config.getWidth()+offsetX, Config.getHeight()+offsetY);
+        //frame.setResizable(false);
 
-         dp = new DrawPanel();
-        frame.add(dp);
+
+        dp.setLayout( new BorderLayout());
+
+
+        frame.add(dp, BorderLayout.CENTER);
+
 
         p.setBallPosition(course.getStartTile().getCoordinate());
         dp.setPlayers(pp);
