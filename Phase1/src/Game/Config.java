@@ -18,7 +18,7 @@ public class Config {
     public static final double GRAVITY_FORCE = 9.81;
     public static final double WALL_ENERGY_LOSS = 0.7;
     public static final int OFFSET_X_GAME=16;
-    public static final int OFFSET_Y_GAME=62;
+    public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;
     public static final int OFFSET_Y_EDITOR=62;
 

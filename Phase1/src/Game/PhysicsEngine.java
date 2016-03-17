@@ -53,6 +53,14 @@ public class PhysicsEngine {
         /*********************************/
         /** Process Hole **/
         /*********************************/
+        //t = (2*Rh - R)/vf
+        //Rh = radius of hole
+        //R = radius ball
+        //        vf = speed of ball when it reaches the hole
+        //g*t^2/2 > R
+        //g = gravity = 9.81
+        //or expressed in vf: vf < (2Rh - R)(g / 2R)^1/2
+
         Hole h = course.getHole();
         Coordinate b = ball.getCoordinate();
         if (Math.abs(b.getX() - h.getX()) <= ball.getRadius() + h.radius && Math.abs(b.getY() - h.getY()) <= ball.getRadius() + h.radius) {
