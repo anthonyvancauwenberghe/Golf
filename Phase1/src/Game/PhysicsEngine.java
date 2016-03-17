@@ -14,7 +14,6 @@ public class PhysicsEngine {
 
     public static boolean enable3D = Config.ENABLED3D;
 
-
     public void init(Course course, Ball ball) {
         this.course = course;
         this.ball = ball;
@@ -74,11 +73,10 @@ public class PhysicsEngine {
                     ball.speedZ = 0;
                     ball.speedY = 0;
                 }
-            } else if (distance <= ball.getRadius() / 2 + h.radius) {
-                Coordinate c = new Coordinate(h.getX() - b.getX(), h.getY() - b.getY(), h.getZ() - b.getZ());
-                double factor = 1 - distance / (ball.getRadius() + h.radius);
-                c.setX(c.getX() * factor);
-                c.setY(c.getY() * factor);
+            }else if (distance<= ball.getRadius()+h.radius){
+                Coordinate c = new Coordinate(h.getX()-b.getX(),h.getY()-b.getY(),h.getZ()-b.getZ());
+                double factor = (1-distance/(ball.getRadius()+h.radius))*h.getFriction();
+                ball.redirect(c,factor);
 
 
                 ball.speedX += c.getX();
@@ -89,6 +87,9 @@ public class PhysicsEngine {
             }
 
         }
+
+
+
 
 
         /*********************************/

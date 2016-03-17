@@ -97,4 +97,18 @@ public class Ball {
     public double getSpeed() {
        return Math.sqrt(speedX*speedX+speedY*speedY+speedZ*speedZ);
     }
+
+    public void redirect(Coordinate c, double factor) {
+        double redirectSpeed = 0;
+        redirectSpeed += factor *speedX;
+        redirectSpeed += factor *speedY;
+        redirectSpeed += factor *speedZ;
+        speedX*=1-factor;
+        speedY*=1-factor;
+        speedZ*=1-factor;
+
+
+
+
+    }
 }
