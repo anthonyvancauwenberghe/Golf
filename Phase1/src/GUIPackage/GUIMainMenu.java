@@ -1,7 +1,7 @@
 package GUIPackage;
 
 
-import Game.IntegrationTest;
+
 import com.sun.glass.ui.Screen;
 import com.sun.prism.Texture;
 import Game.Main;
@@ -45,9 +45,9 @@ try {
     courseEditorButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-            //GUI gui = new GUI();
-            //gui.getEditor();
-            IntegrationTest test = new IntegrationTest();
+            GUI gui = new GUI();
+            gui.getEditor();
+
 
 
         }
@@ -56,6 +56,13 @@ try {
     e.printStackTrace();
 }
 
+        startDefaultGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+            }
+        });
     }
 
     public void createUIComponents() {

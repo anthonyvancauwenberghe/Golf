@@ -37,7 +37,7 @@ public class Tile {
     double getFriction(){
         return t.getFriction();
     }
-    Color getColor(){
+    public Color getColor(){
         return t.getColor();
     }
 
