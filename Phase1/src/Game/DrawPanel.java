@@ -30,6 +30,9 @@ public class DrawPanel extends JPanel {
     private HashMap<Point, Color> SandText= new HashMap<>();
     private HashMap<Point, Color> WaterText= new HashMap<>();
 
+    private BufferedImage holeTexture;
+    private HashMap<Point, Color> HoleText= new HashMap<>();
+
 
     public void setPlayers(ArrayList<Player> p) {
         this.players = p;
@@ -97,6 +100,7 @@ public class DrawPanel extends JPanel {
             grassTexture = ImageIO.read(f);
             sandTexture = ImageIO.read(new File("Phase1/src/Game/textures/sand.jpg"));
             waterTexture = ImageIO.read(new File("Phase1/src/Game/textures/water.jpg"));
+            holeTexture = ImageIO.read(new File("Phase1/src/Game/textures/hole.jpg"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -132,6 +136,7 @@ public class DrawPanel extends JPanel {
                     if (t.getType() == Type.Water) g.setColor(WaterText.get(p));
 
                     g.fillRect(x, y, 10, 10);
+
                 }
             }
 
