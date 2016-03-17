@@ -23,9 +23,6 @@ public class GUIEditor {
 
     public GUIEditor() {
 
-
-
-
         butBackMain.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -44,7 +41,6 @@ public class GUIEditor {
     public JFrame getFrame() {
         JFrame frame = new JFrame("GUIEditor");
         frame.setContentPane(new GUIEditor().panel1);
-
 
         return frame;
     }

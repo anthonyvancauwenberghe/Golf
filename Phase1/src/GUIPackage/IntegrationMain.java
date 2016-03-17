@@ -30,7 +30,7 @@ public class IntegrationMain {
         int counter = 0;
 
         course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
-        course.addRectangle(20, 40, 30, 50, 0, Type.Sand);
+        course.addRectangle(40, 30, 50, 0, Type.Sand);
         course.addSquircle(20,60,20,4,0,Type.Water);
         course.setTile(400,400,0,Type.Hole);
         course.setTile(300,400,0,Type.Start);
@@ -56,7 +56,7 @@ public class IntegrationMain {
         dp.setCourse(course);
         dp.repaint();
 
-        PhysicsEngineFinal physics = new PhysicsEngineFinal();
+        PhysicsEngine physics = new PhysicsEngine();
 
         physics.init(course, p.getBall());
         dp.repaint();
