@@ -5,6 +5,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -144,13 +146,16 @@ public class Editor {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String path = "";
+
                 JFileChooser chooser = new JFileChooser();
-                chooser.setCurrentDirectory(new File(""));
+                File projectDir = new File(System.getProperty("user.dir"));
+                chooser.setCurrentDirectory(projectDir);
                 int returnVal = chooser.showOpenDialog(frame);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     path = chooser.getSelectedFile().getAbsolutePath();
-                    course.loadCourse(path);
+                    course = Course.loadCourse(path);
                     dp.setCourse(course);
+                    dp.repaint();
                 }
 
             }
