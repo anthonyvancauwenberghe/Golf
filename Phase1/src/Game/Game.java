@@ -35,6 +35,7 @@ public class Game {
 
         course.setTile(400, 400, 0, Type.Hole);
         course.setTile(300, 400, 0, Type.Start);
+        course.addRectangle(600, 400, 50, 100, Type.OBJECT);
 
         pp.add(p);
         pp.add(p2);
@@ -44,6 +45,7 @@ public class Game {
         frame.setVisible(true);
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
         frame.add(dp);
+        frame.setResizable(false);
 
 
         p.setBallPosition(course.getStartTile().getCoordinate());
@@ -61,7 +63,7 @@ public class Game {
                 p.getBall().getPhysics().processPhysics();
                 p.getBall().getPhysics().processNaturalForces();
                 p.getBall().checkBallStopped();
-                p.getBall().printBallInfo();
+                //p.getBall().printBallInfo();
                 try {
                     dp.repaint();
                     Thread.sleep(REFRESH_RATE);
