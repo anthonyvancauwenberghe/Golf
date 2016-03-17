@@ -18,6 +18,7 @@ public class Main {
     public static int offsetY = 0;
     static DrawPanel dp;
     public static void main(String [] args){
+        int counter = 0;
 
         dp = new DrawPanel();
         JFrame frame = new JFrame();
@@ -38,7 +39,6 @@ public class Main {
         pp.add(p);
         pp.add(p2);
 
-
         addMenues(frame);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,8 +48,6 @@ public class Main {
 
 
         dp.setLayout( new BorderLayout());
-
-
         frame.add(dp, BorderLayout.CENTER);
 
 
