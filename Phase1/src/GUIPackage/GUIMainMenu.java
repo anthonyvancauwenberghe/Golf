@@ -32,6 +32,7 @@ public class GUIMainMenu {
 
     public GUIMainMenu() {
 
+
         BufferedImage img = null;
 
         try
