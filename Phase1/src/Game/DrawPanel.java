@@ -116,7 +116,7 @@ public class DrawPanel extends JPanel {
 
         Hole t = course.getHole();
 
-        g.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) t.radius, (int) t.radius);
+        g.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) (t.radius*2), (int) (t.radius*2));
         for (int i = 0; i < players.size(); i++) {
             if (!players.get(i).isInPlay())
                 continue;
@@ -125,7 +125,7 @@ public class DrawPanel extends JPanel {
             Coordinate c = b.getCoordinate();
             double radius = b.getRadius();
             //if (c != null)
-                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius, (int) radius);
+                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius*2, (int) radius*2);
 
         }
 
