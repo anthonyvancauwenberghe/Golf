@@ -12,6 +12,7 @@ public class Ball {
     private PhysicsEngineFinal physics = new PhysicsEngineFinal();
 
 
+
     public Ball(double mass, double radius) {
         this.mass = mass;
         this.radius = radius;
@@ -91,5 +92,9 @@ public class Ball {
         System.out.println("ball radius: " + getRadius());
         if(!isMoving)
             System.out.println("ballStopped");
+    }
+
+    public double getSpeed() {
+       return Math.sqrt(speedX*speedX+speedY*speedY+speedZ*speedZ);
     }
 }
