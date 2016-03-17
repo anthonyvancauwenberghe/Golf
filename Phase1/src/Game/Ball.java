@@ -106,6 +106,11 @@ public class Ball {
         speedX*=1-factor;
         speedY*=1-factor;
         speedZ*=1-factor;
+        double length = Math.sqrt(c.getX()*c.getX()+c.getY()*c.getY()+c.getZ()*c.getZ());
+        speedX+=(c.getX()/length*redirectSpeed);
+        speedY+=(c.getY()/length*redirectSpeed);
+        speedZ+=(c.getZ() / length * redirectSpeed);
+
 
 
 
