@@ -83,6 +83,7 @@ public class PhysicsEngine {
 
                 ball.speedX += c.getX();
                 ball.speedY += c.getY();
+
                 //ball.speedY+=c.getZ();
                 //touches wall
 
