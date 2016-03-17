@@ -3,6 +3,7 @@ package Game; /**
  */
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,6 +24,7 @@ public class Course {
     int par;
     private Tile startTile;
     private Hole hole;
+    private ArrayList<ArrayList<Tile>> oldTiles = new ArrayList<>(8);
 
 
     /**
@@ -212,10 +214,13 @@ public class Course {
     }
 
     public void addRectangle(int x1, int y1, int width, int height, Type type) {
+        ArrayList<Tile> newOldTile = new ArrayList<Tile>(2 * width * 2 * height);
+        oldTiles.add(newOldTile);
         int initialX=x1;
         int initalY=y1;
         for (int x = x1; x < initialX+width; x++) {
             for (int y = y1; y < initalY+height; y++) {
+                newOldTile.add(new Tile(getTile(x, y, 0).getType(), x, y, 0));
                 setTile(x,y,0,type);
             }
         }
@@ -232,11 +237,13 @@ public class Course {
      * @param t
      */
     public void addSquircle(int a, int b, int r, int n, int z, Type t) {
-
+        ArrayList<Tile> newOldTile = new ArrayList<Tile>(4*r*r);
+        oldTiles.add(newOldTile);
         for (int x = -r+a; x < r+a; x++) {
             for (int y = -r+b; y < r+b; y++) {
               if(Math.pow(x-a,n)+Math.pow(y-b,n)<Math.pow(r,n)){
-                  setTile(x,y,z,t);
+                  newOldTile.add(new Tile(getTile(x,y,z).getType(),x,y,z));
+                  setTile(x, y, z, t);
               }
             }
 
@@ -250,5 +257,16 @@ public class Course {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void removeLastObject() {
+        if (oldTiles.size()==0)return;
+        ArrayList<Tile> od = oldTiles.get(oldTiles.size() - 1);
+        oldTiles.remove(oldTiles.size() - 1);
+        int s = od.size();
+        for (int i = 0; i < s; i++) {
+            Tile t = od.get(i);
+            this.setTile(t.getX(),t.getY(),t.getZ(),t.getType());
+        }
     }
 }

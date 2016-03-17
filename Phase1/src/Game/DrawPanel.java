@@ -1,12 +1,16 @@
 package Game;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -19,6 +23,12 @@ public class DrawPanel extends JPanel {
     private int firstXClick = 0;
     private int firstYClick = 0;
     private Player currentPlayer;
+    private BufferedImage grassTexture;
+    private BufferedImage sandTexture;
+    private BufferedImage waterTexture;
+    private HashMap<Point, Color> GrassText = new HashMap<>();
+    private HashMap<Point, Color> SandText= new HashMap<>();
+    private HashMap<Point, Color> WaterText= new HashMap<>();
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -32,6 +42,7 @@ public class DrawPanel extends JPanel {
     }
 
     public DrawPanel() {
+        loadTextures();
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -77,6 +88,30 @@ public class DrawPanel extends JPanel {
         });
     }
 
+    private void loadTextures() {
+
+
+
+        try {
+            File f =new File("Phase1/src/Game/textures/grass.jpg");
+            grassTexture = ImageIO.read(f);
+            sandTexture = ImageIO.read(new File("Phase1/src/Game/textures/sand.jpg"));
+            waterTexture = ImageIO.read(new File("Phase1/src/Game/textures/water.jpg"));
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        for (int x = 0; x < 32; x++) {
+            for (int y = 0; y < 32; y++) {
+                Point p = new Point(x,y);
+                GrassText.put(p,new Color(grassTexture.getRGB(x , y )));
+                SandText.put(p,new Color(sandTexture.getRGB(x, y )));
+                WaterText.put(p,new Color(waterTexture.getRGB(x , y)));
+            }
+        }
+
+    }
+
     private BufferedImage createImage() {
         Tile[][][] pf = course.getPlayfield();
         int[] d = course.getDimension();
@@ -91,9 +126,11 @@ public class DrawPanel extends JPanel {
                 for (int z = 0; z < d[2]; z++) {
                     Tile t = pf[x][y][z];
                     if (t.getType() == Type.Empty) continue;
+                    Point p = new Point(x%32,y%32);
+                    if (t.getType() == Type.Grass) g.setColor(GrassText.get(p));
+                    if (t.getType() == Type.Sand) g.setColor(SandText.get(p));
+                    if (t.getType() == Type.Water) g.setColor(WaterText.get(p));
 
-
-                    g.setColor(t.getColor());
                     g.fillRect(x, y, 10, 10);
                 }
             }
@@ -102,6 +139,7 @@ public class DrawPanel extends JPanel {
         g.dispose();
         return bufferedImage;
     }
+
 
     public void setCourse(Course c) {
         this.course = c;

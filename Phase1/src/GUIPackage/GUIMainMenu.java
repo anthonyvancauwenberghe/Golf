@@ -5,72 +5,77 @@ package GUIPackage;
 import com.sun.glass.ui.Screen;
 import com.sun.prism.Texture;
 import Game.Main;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
  * Created by lukas on 16/03/16.
  */
 public class GUIMainMenu {
+    static JFrame frame;
     private JPanel panel1;
     private JButton EXITButton;
     private JButton courseEditorButton;
     private JButton startDefaultGameButton;
     private JPanel panel2;
-    //final private Texture texture = new Texture("grass.jpg");
-    //final private Image image = new Image(texture);
-    //private BufferedImage image2 = new BufferedImage(image);
+    private JPanel panelwithIMG;
+    private BufferedImage img;
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("GUIMainMenu");
-        frame.setContentPane(new GUIMainMenu().panel1);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
-
-    }
 
     public GUIMainMenu() {
-try {
 
-    startDefaultGameButton.setOpaque(false);
-    startDefaultGameButton.setFocusPainted(false);
-    startDefaultGameButton.setBorderPainted(false);
-    startDefaultGameButton.setContentAreaFilled(false);
-    //setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); // Especially important
-    courseEditorButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            GUI gui = new GUI();
-            gui.getEditor();
 
+        BufferedImage img = null;
+
+        try
+        {
+            img = ImageIO.read(new File("C:/ImageTest/pic2.jpg")); // eventually C:\\ImageTest\\pic2.jpg
         }
-    });
-} catch(Exception e){
-    e.printStackTrace();
-}
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        try {
+
+        startDefaultGameButton.setOpaque(false);
+        startDefaultGameButton.setFocusPainted(false);
+        startDefaultGameButton.setBorderPainted(false);
+        startDefaultGameButton.setContentAreaFilled(false);
+        //setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); // Especially important
+        courseEditorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUI gui = new GUI();
+                gui.getEditor();
+
+            }
+        });
+        } catch(Exception e){
+            e.printStackTrace();
+        }
 
         startDefaultGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                IntegrationMain test = new IntegrationMain();
-                JFrame frame = test.getFrame();
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                frame.pack();
-                frame.setVisible(true);
-                test.start();
-                test.start();
+                IntegrationMain main = new IntegrationMain();
 
             }
         });
     }
 
     public void createUIComponents() {
+
+
 
     }
 
@@ -80,4 +85,8 @@ try {
 
         return frame;
     }
+
+
 }
+
+
