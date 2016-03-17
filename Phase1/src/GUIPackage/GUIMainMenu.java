@@ -48,8 +48,6 @@ try {
             GUI gui = new GUI();
             gui.getEditor();
 
-
-
         }
     });
 } catch(Exception e){
@@ -60,6 +58,12 @@ try {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+                IntegrationMain test = new IntegrationMain();
+                JFrame frame = test.getFrame();
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                frame.pack();
+                frame.setVisible(true);
+                test.start();
 
             }
         });

@@ -76,7 +76,7 @@ public class Course {
     }
 
 
-    void setTile(int x, int y, int z, Type t){
+    public void setTile(int x, int y, int z, Type t){
         Tile originalTile = playfield[x][y][z];
         Tile newTile = originalTile;
         if (originalTile.getType()!=Type.Empty){
@@ -108,7 +108,7 @@ public class Course {
         return playfield;
     }
 
-    static Course loadCourse(String path){
+    public static Course loadCourse(String path){
         String content = Utils.readFile(path);
        String[] lines = content.split(System.lineSeparator());
         String name = lines[0];
