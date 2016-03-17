@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -14,7 +15,9 @@ public class Editor {
     private static Course course;
     public static JFrame frame;
     public static DrawPanel dp;
-    private static int pensize = 20;
+    private static int penWidth = 20;
+    private static int penHeight = 20;
+    private static shapeType selectedShape = shapeType.Squircle;
     private static Type selectedType = Type.Grass;
 
     public static void main(String[] args) {
@@ -53,7 +56,7 @@ public class Editor {
 
             try {
                 dp.repaint();
-                Thread.sleep(1);
+                Thread.sleep(33);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -69,21 +72,27 @@ public class Editor {
         JMenuItem saveCourse = new JMenuItem("Save Course");
         JMenuItem loadCourse = new JMenuItem("Load Course");
         JMenu selectType = new JMenu("Select Type");
-        JMenuItem selectSize = new JMenuItem("Select Size");
+        JMenu selectShape = new JMenu("Select Shape");
+        JMenuItem selectWidth = new JMenuItem("Select Width or Diameter");
+        JMenuItem selectHeight = new JMenuItem("Select Height");
 
+
+        selectShapeAddStuff(selectShape);
         frame.setJMenuBar(jmb);
         jmb.add(jm);
         jmb.add(jm2);
         jm2.add(saveCourse);
         jm2.add(loadCourse);
         jm.add(selectType);
-        jm.add(selectSize);
-        selectSize.addActionListener(new ActionListener() {
+
+        jm.add(selectWidth);
+        jm.add(selectHeight);
+        selectHeight.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Object[] possibilities = null;
                 try {
-                    pensize = Integer.parseInt((String) JOptionPane.showInputDialog(
+                    penHeight = Integer.parseInt((String) JOptionPane.showInputDialog(
                             frame,
                             "Set Size", "Woop",
                             JOptionPane.PLAIN_MESSAGE,
@@ -91,7 +100,25 @@ public class Editor {
                             possibilities,
                             "10"));
                 } catch (NumberFormatException esd) {
-                    pensize = 10;
+                    penHeight = 10;
+                }
+            }
+        });
+        jm.add(selectShape);
+        selectWidth.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Object[] possibilities = null;
+                try {
+                    penWidth = Integer.parseInt((String) JOptionPane.showInputDialog(
+                            frame,
+                            "Set Size", "Woop",
+                            JOptionPane.PLAIN_MESSAGE,
+                            null,
+                            possibilities,
+                            "10"));
+                } catch (NumberFormatException esd) {
+                    penWidth = 10;
                 }
 
 
@@ -118,11 +145,12 @@ public class Editor {
             public void actionPerformed(ActionEvent e) {
                 String path = "";
                 JFileChooser chooser = new JFileChooser();
-
+                chooser.setCurrentDirectory(new File(""));
                 int returnVal = chooser.showOpenDialog(frame);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     path = chooser.getSelectedFile().getAbsolutePath();
                     course.loadCourse(path);
+                    dp.setCourse(course);
                 }
 
             }
@@ -139,16 +167,70 @@ public class Editor {
             });
         }
 
-        //jmb.add()
-        //frame.add(new)
+        JMenuItem removeLast = new JMenuItem("Remove Last Object");
+        jmb.add(removeLast);
+        removeLast.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                course.removeLastObject();
+                dp.setCourse(course);
+            }
+        });
+    }
+
+    private static void selectShapeAddStuff(JMenu selectType) {
+
+        JMenuItem selectCircle = new JMenuItem("Circle");
+        JMenuItem selectSquircle = new JMenuItem("Squircle");
+        JMenuItem selectRectangle = new JMenuItem("Rectangle");
+
+        selectType.add(selectCircle);
+        selectType.add(selectSquircle);
+        selectType.add(selectRectangle);
+
+        selectCircle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedShape = shapeType.Circle;
+            }
+        });
+        selectSquircle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedShape = shapeType.Squircle;
+            }
+        });
+        selectRectangle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectedShape = shapeType.Rectangle;
+            }
+        });
     }
 
     public static void addObject(Point point) {
+        switch (selectedShape) {
+            case Rectangle:
+                course.addRectangle(point.x, point.y, penWidth, penHeight, selectedType);
+                break;
+            case Squircle:
+                course.addSquircle(point.x, point.y, penWidth, 4, 0, selectedType);
+                break;
+            case Circle:
+                course.addSquircle(point.x, point.y, penWidth, 2, 0, selectedType);
+                break;
+        }
 
-        course.addSquircle(point.x, point.y, pensize, 4, 0, selectedType);
+
 
         dp.setCourse(course);
         dp.repaint();
+    }
+
+    public enum shapeType{
+        Rectangle(),
+        Squircle(),
+        Circle()
     }
 }
 
