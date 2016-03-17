@@ -9,7 +9,7 @@ public class Ball {
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
     private Coordinate coordinate = new Coordinate();
-    private PhysicsEngineFinal physics = new PhysicsEngineFinal();
+    private PhysicsEngine physics = new PhysicsEngine();
 
 
 
@@ -72,7 +72,7 @@ public class Ball {
         return coordinate;
     }
 
-    public PhysicsEngineFinal getPhysics() {
+    public PhysicsEngine getPhysics() {
         return physics;
     }
     public void checkBallStopped(){
@@ -96,5 +96,24 @@ public class Ball {
 
     public double getSpeed() {
        return Math.sqrt(speedX*speedX+speedY*speedY+speedZ*speedZ);
+    }
+
+    public void redirect(Coordinate c, double factor) {
+        double redirectSpeed = 0;
+        redirectSpeed += factor *speedX;
+        redirectSpeed += factor *speedY;
+        redirectSpeed += factor *speedZ;
+        speedX*=1-factor;
+        speedY*=1-factor;
+        speedZ*=1-factor;
+        double length = Math.sqrt(c.getX()*c.getX()+c.getY()*c.getY()+c.getZ()*c.getZ());
+        speedX+=(c.getX()/length*redirectSpeed);
+        speedY+=(c.getY()/length*redirectSpeed);
+        speedZ+=(c.getZ() / length * redirectSpeed);
+
+
+
+
+
     }
 }

@@ -36,7 +36,7 @@ public class DrawPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton()== MouseEvent.BUTTON3){
-                    Main.addObject(e.getPoint());
+                    Editor.addObject(e.getPoint());
                 }
             }
 

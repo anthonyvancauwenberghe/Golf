@@ -3,16 +3,16 @@ package Game;
 /**
  * Created by tony on 16/03/2016.
  */
-public class PhysicsEngineFinal {
+public class PhysicsEngine {
     private Course course;
     private Ball ball;
 
-    private final double GROUND_FRICTION = 0.92;
-    private final double AIR_FRICTION = 0.995;
-    private final double GRAVITY_FORCE = 9.81;
-    private final double WALL_ENERGY_LOSS = 0.7;
-    public static boolean enable3D=false;
+    private final double GROUND_FRICTION = Config.GROUND_FRICTION;
+    private final double AIR_FRICTION = Config.AIR_FRICTION;
+    private final double GRAVITY_FORCE = Config.GRAVITY_FORCE;
+    private final double WALL_ENERGY_LOSS = Config.WALL_ENERGY_LOSS;
 
+    public static boolean enable3D = Config.ENABLED3D;
 
     public void init(Course course, Ball ball) {
         this.course = course;
@@ -29,17 +29,17 @@ public class PhysicsEngineFinal {
         if (ball.getCoordinate().getZ() <= 1) {
             ball.speedX *= GROUND_FRICTION;
             ball.speedY *= GROUND_FRICTION;
-            if(enable3D)
-            ball.speedZ *= GROUND_FRICTION;
+            if (enable3D)
+                ball.speedZ *= GROUND_FRICTION;
             System.out.println("ball is on the ground");
         } else {
             ball.speedX *= AIR_FRICTION;
-            if(enable3D)
-            ball.speedZ *= AIR_FRICTION;
+            if (enable3D)
+                ball.speedZ *= AIR_FRICTION;
             ball.speedY *= AIR_FRICTION;
 
-            if(enable3D)
-            ball.speedZ -= GRAVITY_FORCE;
+            if (enable3D)
+                ball.speedZ -= GRAVITY_FORCE;
         }
     }
 
@@ -63,25 +63,25 @@ public class PhysicsEngineFinal {
 
         Hole h = course.getHole();
         Coordinate b = ball.getCoordinate();
-        if (Math.abs(b.getX()-h.getX())<= ball.getRadius()+h.radius && Math.abs(b.getY()-h.getY())<= ball.getRadius()+h.radius ){
-            double distance = Math.sqrt((b.getX()-h.getX())*(b.getX()-h.getX()) + (b.getY()-h.getY())*(b.getY()-h.getY()));
+        if (Math.abs(b.getX() - h.getX()) <= ball.getRadius() + h.radius && Math.abs(b.getY() - h.getY()) <= ball.getRadius() + h.radius) {
+            double distance = Math.sqrt((b.getX() - h.getX()) * (b.getX() - h.getX()) + (b.getY() - h.getY()) * (b.getY() - h.getY()));
 
-            if (distance+ ball.getRadius() < +h.radius){
+            if (distance + ball.getRadius() < +h.radius) {
                 //inAir
-                if (ballSpeed < (2*ball.radius - h.radius)*Math.sqrt(10 / 2*h.radius)){
-                    ball.speedX=0;
-                    ball.speedZ=0;
-                    ball.speedY=0;
+                if (ballSpeed < (2 * ball.radius - h.radius) * Math.sqrt(10 / 2 * h.radius)) {
+                    ball.speedX = 0;
+                    ball.speedZ = 0;
+                    ball.speedY = 0;
                 }
-            }else if (distance<= ball.getRadius()/2+h.radius){
+            }else if (distance<= ball.getRadius()+h.radius){
                 Coordinate c = new Coordinate(h.getX()-b.getX(),h.getY()-b.getY(),h.getZ()-b.getZ());
-                double factor = 1-distance/(ball.getRadius()+h.radius);
-                c.setX(c.getX() * factor);
-                c.setY(c.getY() * factor);
+                double factor = (1-distance/(ball.getRadius()+h.radius))*h.getFriction();
+                ball.redirect(c,factor);
 
 
-                ball.speedX+=c.getX();
-                ball.speedY+=c.getY();
+                ball.speedX += c.getX();
+                ball.speedY += c.getY();
+
                 //ball.speedY+=c.getZ();
                 //touches wall
 
@@ -121,8 +121,8 @@ public class PhysicsEngineFinal {
         /*********************************/
 
         // check bottom border
-        if (ball.getCoordinate().getY() + ball.getSpeedY() >= course.getHeight() - ball.getRadius() - 20) {
-            ball.getCoordinate().setY(course.getHeight() - ball.getRadius() - 20);
+        if (ball.getCoordinate().getY() + ball.getSpeedY() >= course.getHeight() - ball.getRadius()) {
+            ball.getCoordinate().setY(course.getHeight() - ball.getRadius());
             ball.speedY *= WALL_ENERGY_LOSS;
             ball.reverseBallDirectionY();
             //System.out.println(ball.getRadius() + " ball hit bottom border");
