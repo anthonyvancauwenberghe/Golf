@@ -5,11 +5,15 @@ package GUIPackage;
 import com.sun.glass.ui.Screen;
 import com.sun.prism.Texture;
 import Game.Main;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 /**
@@ -22,14 +26,22 @@ public class GUIMainMenu {
     private JButton courseEditorButton;
     private JButton startDefaultGameButton;
     private JPanel panel2;
-    //final private Texture texture = new Texture("grass.jpg");
-    //final private Image image = new Image(texture);
-    //private BufferedImage image2 = new BufferedImage(image);
-
+    private JPanel panelwithIMG;
+    private BufferedImage img;
 
 
     public GUIMainMenu() {
 
+        BufferedImage img = null;
+
+        try
+        {
+            img = ImageIO.read(new File("C:/ImageTest/pic2.jpg")); // eventually C:\\ImageTest\\pic2.jpg
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
 
         try {
 
@@ -54,14 +66,15 @@ public class GUIMainMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Testing test = new Testing();
-                test.go();
+                IntegrationMain main = new IntegrationMain();
 
             }
         });
     }
 
     public void createUIComponents() {
+
+
 
     }
 
@@ -71,4 +84,8 @@ public class GUIMainMenu {
 
         return frame;
     }
+
+
 }
+
+
