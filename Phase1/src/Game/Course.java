@@ -104,7 +104,7 @@ public class Course {
         return playfield[x][y][z];
     }
 
-    Tile[][][] getPlayfield(){
+    public Tile[][][] getPlayfield(){
         return playfield;
     }
 
@@ -151,7 +151,7 @@ public class Course {
 
     }
 
-    void saveCourse(){
+    public void saveCourse(){
         StringBuilder s = new StringBuilder();
         int length = playfield.length;
         int width = playfield[0].length;
