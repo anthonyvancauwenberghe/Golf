@@ -36,7 +36,7 @@ public class Main {
         frame.setVisible(true);
         frame.setSize(800, 600);
 
-         dp = new DrawPanel();
+        dp = new DrawPanel();
         frame.add(dp);
 
         p.setBallPosition(course.getStartTile().getCoordinate());
