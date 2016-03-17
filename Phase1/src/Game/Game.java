@@ -1,45 +1,86 @@
 package Game;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+/**
+ * Created by tony on 16/03/2016.
+ */
 public class Game {
-    ArrayList<Player> players;
-    int currentPlayer;
-    Course c;
+    private static Type selectedType = Type.Grass;
+    private static Course course;
+    private static int pensize = 20;
+    public static JFrame frame;
+    private static PhysicsEngine physics;
 
-    Long time;
-    private boolean gameFinished = false;
+    public static DrawPanel dp;
 
-    public boolean isGameFinished() {
-        return gameFinished;
-    }
-
-
-
-    public Game(Course course, ArrayList<Player> players) {
-        this.players = players;
-        currentPlayer = 0;
-        time = 0L;
-    }
-
+    final static private int REFRESH_RATE = 33;
 
     public static void main(String[] args) {
-        System.out.println("golf game: whazzaa");
-    }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
-    }
+        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);
+        physics = new PhysicsEngine();
+        frame = new JFrame();
+        dp = new DrawPanel();
 
-    public Player getCurrentPlayer() {
-        return players.get(currentPlayer);
-    }
+        ArrayList<Player> pp = new ArrayList<>(2);
 
-    public Course getCourse() {
-        return c;
-    }
+        Player p = new Player("Player 1");
+        Player p2 = new Player("Player 2");
 
-    public Long getTime() {
-        return time;
+
+        course.setTile(400, 400, 0, Type.Hole);
+        course.setTile(300, 400, 0, Type.Start);
+
+        pp.add(p);
+        pp.add(p2);
+
+
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+        frame.add(dp);
+
+
+        p.setBallPosition(course.getStartTile().getCoordinate());
+
+        dp.setPlayers(pp);
+        dp.setCurrentPlayer(p);
+        dp.setCourse(course);
+
+        physics.init(course, p.getBall());
+        dp.repaint();
+
+        while (true) {
+            if (p.getBall().isMoving) {
+                p.getBall().getPhysics().init(course, p.getBall());
+                p.getBall().getPhysics().processPhysics();
+                p.getBall().getPhysics().processNaturalForces();
+                p.getBall().checkBallStopped();
+                p.getBall().printBallInfo();
+                try {
+                    dp.repaint();
+                    Thread.sleep(REFRESH_RATE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+            } else {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
     }
 }
+

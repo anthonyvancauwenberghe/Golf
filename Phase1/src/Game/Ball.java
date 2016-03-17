@@ -9,7 +9,7 @@ public class Ball {
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
     private Coordinate coordinate = new Coordinate();
-    private PhysicsEngineFinal physics = new PhysicsEngineFinal();
+    private PhysicsEngine physics = new PhysicsEngine();
 
 
 
@@ -72,7 +72,7 @@ public class Ball {
         return coordinate;
     }
 
-    public PhysicsEngineFinal getPhysics() {
+    public PhysicsEngine getPhysics() {
         return physics;
     }
     public void checkBallStopped(){
