@@ -2,6 +2,7 @@ package Game;
 
 /** All the variables are static and used to determine the game flow
  * Created by nibbla on 16.03.16.
+ * @author ??
  */
 public class Config {
 
@@ -29,26 +30,50 @@ public class Config {
     public static final boolean ENABLED3D=false;
     public static final float POWERLINEWIDTH = 3.f;
 
+    /**
+     * getter to get the mass of the ball
+     * @return ballMass
+     */
     public static double getBallMass() {
         return ballMass;
     }
 
+    /**
+     * getter to get the radius of the ball
+     * @return ballRadius
+     */
     public static double getBallRadius() {
         return ballRadius;
     }
 
+    /**
+     * getter to get the radius of the hole
+     * @return holeRadius
+     */
     public static double getHoleRadius() {
         return holeRadius;
     }
 
+    /**
+     * getter to get width of ??
+     * @return width
+     */
     public static int getWidth() {
         return width;
     }
 
+    /**
+     * getter to get height of ??
+     * @return height
+     */
     public static int getHeight() {
         return height;
     }
 
+    /**
+     * getter to get depth of ??
+     * @return depth
+     */
     public static int getDepth() {
         return depth;
     }

@@ -11,15 +11,15 @@ import Game.*;
  * Created by tony on 16/03/2016.
  */
 public class IntegrationMain extends JPanel{
-    private Type selectedType = Type.Grass;
-    private int selectedSize = 1;
-    private Course course;
-    private int pensize = 20;
+    public Type selectedType = Type.Grass;
+    public int selectedSize = 1;
+    public Course course;
+    public int pensize = 20;
     DrawPanel dp;
     JFrame frame;
 
     public IntegrationMain() {
-
+        start();
     }
 
     JFrame getFrame(){

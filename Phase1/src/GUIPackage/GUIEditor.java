@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class GUIEditor {
+public class GUIEditor extends JFrame{
     public JFrame frame;
     private JPanel panel1;
     private JPanel mainPane;
