@@ -11,7 +11,7 @@ public class Tile {
 
 
     int x,y,z;
-    private Coordinate coordinate;
+    public Coordinate coordinate;
 
 
     public static Tile newTile(Type t, int x, int y, int z){

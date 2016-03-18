@@ -22,9 +22,9 @@ public class Course {
     int[] dimension;
     ArrayList<ArrayList<Tile>> objectsOnPlayfield;
     int par;
-    private Tile startTile;
-    private Hole hole;
-    private ArrayList<ArrayList<Tile>> oldTiles = new ArrayList<>(8);
+    public Tile startTile;
+    public Hole hole;
+    public ArrayList<ArrayList<Tile>> oldTiles = new ArrayList<>(8);
 
 
     /**
