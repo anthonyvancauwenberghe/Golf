@@ -15,9 +15,9 @@ public class Middleman {
     public Middleman() {
 
 
-        DrawPanel ddp = new DrawPanel();
+        IntegrationMain main = new IntegrationMain();
         frame = new JFrame();
-        frame.add(ddp);
+        frame.add(main);
         frame.setSize(900,688);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);

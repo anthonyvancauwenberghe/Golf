@@ -20,25 +20,25 @@ import java.util.Random;
 public class DrawPanel extends JPanel {
     BufferedImage managedBufferedImage;
     Course course;
-    private ArrayList<Player> players = new ArrayList<>();
-    private int firstXClick = 0;
-    private int firstYClick = 0;
-    private Player currentPlayer;
-    private BufferedImage grassTexture;
-    private BufferedImage sandTexture;
-    private BufferedImage waterTexture;
-    private HashMap<Point, Color> GrassText = new HashMap<>();
-    private HashMap<Point, Color> SandText= new HashMap<>();
-    private HashMap<Point, Color> WaterText= new HashMap<>();
+    public ArrayList<Player> players = new ArrayList<>();
+    public int firstXClick = 0;
+    public int firstYClick = 0;
+    public Player currentPlayer;
+    public BufferedImage grassTexture;
+    public BufferedImage sandTexture;
+    public BufferedImage waterTexture;
+    public HashMap<Point, Color> GrassText = new HashMap<>();
+    public HashMap<Point, Color> SandText= new HashMap<>();
+    public HashMap<Point, Color> WaterText= new HashMap<>();
 
-    private BufferedImage holeTexture;
-    private BufferedImage objectTexture;
-    private HashMap<Point, Color> HoleText= new HashMap<>();
-    private HashMap<Point, Color> ObjectText = new HashMap<>();
-    private TexturePaint holeP;
-    private TexturePaint ballP;
-    private BufferedImage ballTexture;
-    private boolean prepareShoot;
+    public BufferedImage holeTexture;
+    public BufferedImage objectTexture;
+    public HashMap<Point, Color> HoleText= new HashMap<>();
+    public HashMap<Point, Color> ObjectText = new HashMap<>();
+    public TexturePaint holeP;
+    public TexturePaint ballP;
+    public BufferedImage ballTexture;
+    public boolean prepareShoot;
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -112,7 +112,7 @@ public class DrawPanel extends JPanel {
         });
     }
 
-    private void loadTextures() {
+    public void loadTextures() {
 
 
 
@@ -144,7 +144,7 @@ public class DrawPanel extends JPanel {
 
     }
 
-    private BufferedImage createImage() {
+    public BufferedImage createImage() {
         Tile[][][] pf = course.getPlayfield();
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
@@ -201,7 +201,7 @@ public class DrawPanel extends JPanel {
 
     }
 
-    private void drawPowerLine(Graphics g, Ball b) {
+    public void drawPowerLine(Graphics g, Ball b) {
         if (!prepareShoot) return;
 
         Point mp = MouseInfo.getPointerInfo().getLocation();
@@ -220,7 +220,7 @@ public class DrawPanel extends JPanel {
 
     }
 
-    private void drawBall(Graphics g, Ball b) {
+    public void drawBall(Graphics g, Ball b) {
         Graphics2D g2 = (Graphics2D) g;
 
         Coordinate c = b.getCoordinate();
@@ -231,7 +231,7 @@ public class DrawPanel extends JPanel {
 
     }
 
-    private void drawHole(Graphics g) {
+    public void drawHole(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         Hole t = course.getHole();
 

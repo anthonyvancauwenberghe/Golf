@@ -19,6 +19,19 @@ public class IntegrationMain extends JPanel{
     JFrame frame;
 
     public IntegrationMain() {
+
+    }
+
+    JFrame getFrame(){
+        return frame;
+    }
+
+    JPanel getPanel(){
+        return
+    }
+
+    public void start(){
+
         int counter = 0;
 
         course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
@@ -74,18 +87,8 @@ public class IntegrationMain extends JPanel{
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-
         }
-    }
-
-    JFrame getFrame(){
-        return frame;
-    }
-
-    public void start(){
-
     }
 
     private void addMenues(JFrame frame) {

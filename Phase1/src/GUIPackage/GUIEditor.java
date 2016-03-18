@@ -69,7 +69,8 @@ public class GUIEditor {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        testPane = getComboPanel(100);
+        Game.Main main = new Game.Main();
+        testPane = new Game.Main();
 
     }
 }
