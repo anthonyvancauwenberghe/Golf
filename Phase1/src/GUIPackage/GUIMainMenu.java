@@ -2,6 +2,8 @@ package GUIPackage;
 
 
 
+import Game.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -67,8 +69,11 @@ public class GUIMainMenu extends JFrame {
 
                 //IntegrationMain main = new IntegrationMain();
                 //Middleman dude = new Middleman();
-                frame.getContentPane().removeAll();
-                frame.getContentPane().add(new IntegrationMain());
+                //frame.getContentPane().removeAll();
+                //frame.getContentPane().add(new IntegrationMain());
+                Game.main(null);
+
+                frame = Game.frame;
 
 
             }
