@@ -27,6 +27,7 @@ public class Config {
     public static final double speedSlower=1;
 
     public static final boolean ENABLED3D=false;
+    public static final float POWERLINEWIDTH = 3.f;
 
     public static double getBallMass() {
         return ballMass;
