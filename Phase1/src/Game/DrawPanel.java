@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
 import java.io.File;
@@ -52,6 +53,17 @@ public class DrawPanel extends JPanel {
 
     public DrawPanel() {
         loadTextures();
+        this.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                repaint();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        });
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -191,14 +203,18 @@ public class DrawPanel extends JPanel {
 
     private void drawPowerLine(Graphics g, Ball b) {
         if (!prepareShoot) return;
-        Point mousePosition = this.getMousePosition();
-        if (mousePosition == null) return;
+
+        Point mp = MouseInfo.getPointerInfo().getLocation();
+        Point pp = this.getLocationOnScreen();
+
+        Point mousePosition = new Point(mp.x-pp.x,mp.y-pp.y);
+
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setStroke(new BasicStroke(Config.POWERLINEWIDTH));
         g2.setColor(Color.red);
         Coordinate c = b.getCoordinate();
-        g2.drawLine((int)c.getX(),(int)c.getY(), mousePosition.x,mousePosition.y);
+        g2.drawLine(firstXClick,firstYClick, mousePosition.x,mousePosition.y);
 
 
 
