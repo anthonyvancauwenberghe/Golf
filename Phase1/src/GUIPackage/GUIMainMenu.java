@@ -3,6 +3,7 @@ package GUIPackage;
 
 
 import Game.Game;
+import Game.Editor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,17 +26,17 @@ public class GUIMainMenu extends JFrame {
     private JPanel panelwithIMG;
     private BufferedImage img;
 
-    Icon start1 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/start1.png");
-    Icon start2 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/start2.png");
-    Icon editor1 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/editor1.png");
-    Icon editor2 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/editor2.png");
-    Icon exit1 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/exit1.png");
-    Icon exit2 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/exit2.png");
+    Icon start1 = new ImageIcon("Phase1/src/GUIPackage/media/start1.png");
+    Icon start2 = new ImageIcon("Phase1/src/GUIPackage/media/start2.png");
+    Icon editor1 = new ImageIcon("Phase1/src/GUIPackage/media/editor1.png");
+    Icon editor2 = new ImageIcon("Phase1/src/GUIPackage/media/editor2.png");
+    Icon exit1 = new ImageIcon("Phase1/src/GUIPackage/media/exit1.png");
+    Icon exit2 = new ImageIcon("Phase1/src/GUIPackage/media/exit2.png");
 
-
+    static GUIMainMenu g;
     public GUIMainMenu() {
 
-
+        g = this;
         this.getContentPane().add(panel1);
 
         startB.setOpaque(false);
@@ -58,8 +59,8 @@ public class GUIMainMenu extends JFrame {
         editorB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI gui = new GUI();
-                gui.getEditor();
+                Editor.main(null);
+
 
             }
         });
@@ -71,9 +72,11 @@ public class GUIMainMenu extends JFrame {
                 //Middleman dude = new Middleman();
                 //frame.getContentPane().removeAll();
                 //frame.getContentPane().add(new IntegrationMain());
-                Game.main(null);
+                    Game g = new Game();
 
-                frame = Game.frame;
+
+                    //this.getContentPane().add(panel1);
+
 
 
             }
@@ -126,7 +129,7 @@ public class GUIMainMenu extends JFrame {
 
 
 
-        panelwithIMG = new JPanelIMG(new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/caddy.jpg").getImage());
+        panelwithIMG = new JPanelIMG(new ImageIcon("Phase1/src/GUIPackage/media/caddy.jpg").getImage());
 
 
         //b.setIcon(Icon x);

@@ -37,9 +37,6 @@ public class Ball {
 
     /**
      * Check if ball is shot
-     * @param speedX speed of ball in X-axis
-     * @param speedY speed of ball in Y-axis
-     * @param speedZ speed of ball in Z-axis
      */
     public double getSign(double number){
         if(number>=0)
@@ -159,13 +156,13 @@ public class Ball {
     public PhysicsEngine getPhysics() {
         return physics;
     }
-    public boolean checkBallStopped(){
+
 
     /**
      * check if ball is stopped, ball is stopped under following condition
      * if ball is stopped, isMoving is false
      */
-    public void checkBallStopped(){
+    public boolean checkBallStopped(){
         if(Math.abs(speedX)<=0.2 && Math.abs(speedY)<=0.3 && Math.abs(speedZ)<=1){
             isMoving=false;
             System.out.println("ballStopped");

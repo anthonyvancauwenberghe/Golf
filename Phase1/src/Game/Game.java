@@ -23,13 +23,107 @@ public class Game {
 
 
 
+
+    public Game(){
+        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);
+        physics = new PhysicsEngine();
+        frame = new JFrame();
+        dp = new DrawPanel();
+        Thread thread = new Thread();
+
+        pp = new ArrayList<Player>(2);
+
+        Player p = new Player("Player 1");
+        Player p2 = new Player("Player 2");
+
+
+        course.setTile(400, 400, 0, Type.Hole);
+        course.setTile(300, 400, 0, Type.Start);
+        course.addRectangle(600, 400, 50, 100, Type.OBJECT);
+
+
+
+
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+        frame.add(dp);
+        addMenues(frame);
+
+
+
+        pp.add(p);
+        pp.add(p2);
+
+        loadCourse(course);
+
+
+        dp.setPlayers(pp);
+        dp.setCurrentPlayer(p);
+        dp.setCourse(course);
+
+        physics.init(course, p.getBall());
+        frame.setVisible(true);
+        dp.repaint();
+        Thread gameThread = new Thread(){
+            public void run(){
+                while (true) {
+                    if (pp.get(currentPlayer).getBall().isMoving) {
+                        Player cp = pp.get(currentPlayer);
+
+                        selectNextPlayer=true;
+                        cp.getBall().getPhysics().init(course, cp.getBall());
+                        cp.getBall().getPhysics().processPhysics();
+                        cp.getBall().getPhysics().processNaturalForces();
+                        cp.getBall().checkBallStopped();
+                        cp.getBall().printBallInfo();
+                        try {
+                            dp.repaint();
+                            Thread.sleep(REFRESH_RATE);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    } else {
+                        if (selectNextPlayer){
+                            if (!IsGameStillOn()){
+                                selectNextPlayer = false;
+                                JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
+                                showScoreOnScreen();
+                            }
+                            selectNextPlayer = false;
+
+                            do {
+                                currentPlayer=(currentPlayer+1)%(pp.size());
+                            }while (!pp.get(currentPlayer).getBall().inPlay);
+
+                            pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
+                            dp.setCurrentPlayer(pp.get(currentPlayer));
+                            JOptionPane.showMessageDialog(null, "It is " +  pp.get(currentPlayer).getName() + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
+                            dp.repaint();
+                        }
+                        try {
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+
+                }
+            }
+        };
+        gameThread.start();
+
+
+    }
     public static void main(String[] args) {
 
         course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);
         physics = new PhysicsEngine();
         frame = new JFrame();
         dp = new DrawPanel();
-        Thread thread = new Thread();
 
         pp = new ArrayList<Player>(2);
 
@@ -122,10 +216,10 @@ public class Game {
     }
 
     private static void addMenues(JFrame frame) {
-        JMenuBar jmb = new JMenuBar();
-        frame.setJMenuBar(jmb);
+        JMenuBar JMB = new JMenuBar();
+        frame.setJMenuBar(JMB);
         JMenu setting = new JMenu("Players");
-        jmb.add(setting);
+        JMB.add(setting);
         JMenuItem addPlayer = new JMenuItem("Add Player");
         JMenuItem removePlayer = new JMenuItem("Remove Player");
         JMenuItem selectCourse = new JMenuItem("Select Course");
@@ -272,5 +366,7 @@ public class Game {
             }
         });
     }
+
+
 }
 

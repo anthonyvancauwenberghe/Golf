@@ -45,7 +45,7 @@ public class Editor {
 
 
         addMenues(frame);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setSize(Config.getWidth() + Config.OFFSET_X_EDITOR, Config.getHeight() + Config.OFFSET_Y_EDITOR);
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
@@ -55,17 +55,22 @@ public class Editor {
         dp.setCourse(course);
         dp.repaint();
 
+        Thread editorThread = new Thread(){
+            public void run(){
+                while (true) {
 
-        while (true) {
+                    try {
+                        dp.repaint();
+                        Thread.sleep(33);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-            try {
-                dp.repaint();
-                Thread.sleep(33);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                }
             }
+        };
+        editorThread.start();
 
-        }
 
     }
 

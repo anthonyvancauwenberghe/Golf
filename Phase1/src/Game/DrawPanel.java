@@ -197,7 +197,14 @@ public class DrawPanel extends JPanel {
 
 
         }
-        if (currentPlayer != null) drawPowerLine(g,currentPlayer.getBall());
+        if (currentPlayer != null){
+            drawPowerLine(g,currentPlayer.getBall());
+            Coordinate c = currentPlayer.getBall().getCoordinate();
+            double radius = currentPlayer.getBall().getRadius();
+            //if (c != null)
+            g.setColor(Color.BLACK);
+            g.drawOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 2, (int) radius * 2);
+        }
 
     }
 
