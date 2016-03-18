@@ -11,9 +11,9 @@ public class Config {
 
     public static final double maxSpeedToFallIntoHole = 3;
     private static final double ballMass = 1;
-    private static final double ballRadius = 10;
+    private static final double ballRadius = 14;
     private static final double holeRadius = 24;
-    public static final double GROUND_FRICTION = 0.92;
+    public static final double GROUND_FRICTION = 0.88;
     public static final double AIR_FRICTION = 0.995;
     public static final double GRAVITY_FORCE = 9.81;
     public static final double WALL_ENERGY_LOSS = 0.7;
@@ -23,8 +23,8 @@ public class Config {
     public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;
     public static final int OFFSET_Y_EDITOR=62;
-    public static final int speedLimiter=120;
-    public static final double speedSlower=1;
+    public static final int speedLimiter=160;
+    public static final double speedSlower=1.3;
 
     public static final boolean ENABLED3D=false;
     public static final float POWERLINEWIDTH = 3.f;
