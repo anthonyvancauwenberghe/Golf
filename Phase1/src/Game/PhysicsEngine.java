@@ -5,6 +5,11 @@ package Game;
  */
 public class PhysicsEngine {
     private Course course;
+
+    public void setBall(Ball ball) {
+        this.ball = ball;
+    }
+
     private Ball ball;
 
     private final double GROUND_FRICTION = Config.GROUND_FRICTION;

@@ -48,7 +48,7 @@ public class DrawPanel extends JPanel {
     public void setCurrentPlayer(Player p) {
 
         this.currentPlayer = p;
-        p.setInPlay(true);
+
     }
 
     public DrawPanel() {

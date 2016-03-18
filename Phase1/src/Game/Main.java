@@ -6,8 +6,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+
 /**
  * Created by tony on 16/03/2016.
+ * @deprecated
  */
 public class Main {
     private static Type selectedType = Type.Grass;
