@@ -29,6 +29,7 @@ public class Game {
         physics = new PhysicsEngine();
         frame = new JFrame();
         dp = new DrawPanel();
+        Thread thread = new Thread();
 
         pp = new ArrayList<Player>(2);
 
