@@ -31,7 +31,12 @@ public class DrawPanel extends JPanel {
     private HashMap<Point, Color> WaterText= new HashMap<>();
 
     private BufferedImage holeTexture;
+    private BufferedImage objectTexture;
     private HashMap<Point, Color> HoleText= new HashMap<>();
+    private HashMap<Point, Color> ObjectText = new HashMap<>();
+    private TexturePaint holeP;
+    private TexturePaint ballP;
+    private BufferedImage ballTexture;
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -101,6 +106,8 @@ public class DrawPanel extends JPanel {
             sandTexture = ImageIO.read(new File("Phase1/src/Game/textures/sand.jpg"));
             waterTexture = ImageIO.read(new File("Phase1/src/Game/textures/water.jpg"));
             holeTexture = ImageIO.read(new File("Phase1/src/Game/textures/hole.jpg"));
+            objectTexture = ImageIO.read(new File("Phase1/src/Game/textures/object.jpg"));
+            ballTexture = ImageIO.read(new File("Phase1/src/Game/textures/ball.jpg"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -111,8 +118,13 @@ public class DrawPanel extends JPanel {
                 GrassText.put(p,new Color(grassTexture.getRGB(x , y )));
                 SandText.put(p,new Color(sandTexture.getRGB(x, y )));
                 WaterText.put(p,new Color(waterTexture.getRGB(x , y)));
+                ObjectText.put(p,new Color(objectTexture.getRGB(x , y)));
+
             }
         }
+
+        holeP = new TexturePaint(holeTexture,new Rectangle(0,0,32,32));
+        ballP = new TexturePaint(ballTexture,new Rectangle(0,0,32,32));
 
     }
 
@@ -134,6 +146,7 @@ public class DrawPanel extends JPanel {
                     if (t.getType() == Type.Grass) g.setColor(GrassText.get(p));
                     if (t.getType() == Type.Sand) g.setColor(SandText.get(p));
                     if (t.getType() == Type.Water) g.setColor(WaterText.get(p));
+                    if (t.getType() == Type.OBJECT) g.setColor(ObjectText.get(p));
 
                     g.fillRect(x, y, 10, 10);
 
@@ -157,21 +170,41 @@ public class DrawPanel extends JPanel {
 
         super.paintComponent(g);
         if (managedBufferedImage != null) g.drawImage(managedBufferedImage, 0, 0, null);
+        drawHole(g);
 
-        Hole t = course.getHole();
-
-        g.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) (t.radius*2), (int) (t.radius*2));
         for (int i = 0; i < players.size(); i++) {
             if (!players.get(i).isInPlay())
                 continue;
+
             Ball b = players.get(i).getBall();
-            g.setColor(Color.WHITE);
-            Coordinate c = b.getCoordinate();
-            double radius = b.getRadius();
-            //if (c != null)
-                g.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius*2, (int) radius*2);
+            drawBall(g,b);
+
 
         }
+
+    }
+
+    private void drawBall(Graphics g, Ball b) {
+        Graphics2D g2 = (Graphics2D) g;
+
+        Coordinate c = b.getCoordinate();
+        double radius = b.getRadius();
+        //if (c != null)
+        g2.setPaint(ballP);
+        g2.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius*2, (int) radius*2);
+
+    }
+
+    private void drawHole(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        Hole t = course.getHole();
+
+
+
+
+        g2.setPaint(holeP);
+        g2.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) (t.radius*2), (int) (t.radius*2));
+
 
     }
 
