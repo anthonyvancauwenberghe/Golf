@@ -28,6 +28,7 @@ public class Player {
 
     public void shoot(double speedX, double speedY, double speedZ){
         b.shootBall(speedX,speedY,speedZ);
+        addStroke();
     }
 
     public void setBallPosition(Coordinate c){
@@ -61,7 +62,7 @@ public class Player {
     }
 
     public void shootBall(int x, int y, int z) {
-        currentStrokes++;
         b.shootBall(x,y,z);
+        addStroke();
     }
 }

@@ -8,6 +8,7 @@ public class Ball {
     double bounciness;
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
+    public boolean inHole = false;
     private Coordinate coordinate = new Coordinate();
     private PhysicsEngine physics = new PhysicsEngine();
     private int speedLimiter = Config.speedLimiter;
@@ -57,6 +58,14 @@ public class Ball {
         return true;
     }
 
+    public boolean isInHole() {
+        return inHole;
+    }
+
+    public void setInHole(boolean inHole) {
+        this.inHole = inHole;
+    }
+
     public double getSpeedX() {
         return speedX;
     }
@@ -96,6 +105,7 @@ public class Ball {
         }
 
     }
+
     public void printBallInfo(){
         System.out.println("X: " + getCoordinate().getX());
         System.out.println("Y: " + getCoordinate().getY());

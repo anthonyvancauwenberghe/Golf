@@ -156,10 +156,12 @@ public class PhysicsEngine {
 
 
     public void processPhysics() {
+
         Type ballCoordinateType = null;
         Coordinate b = ball.getCoordinate();
         double ballSpeed = ball.getSpeed();
         Hole h = course.getHole();
+
         /*********************************/
         /** Process Hole **/
         /*********************************/
@@ -171,7 +173,6 @@ public class PhysicsEngine {
         //g = gravity = 9.81
         //or expressed in vf: vf < (2Rh - R)(g / 2R)^1/2
 
-        // checkColission();
 
         if (Math.abs(b.getX() - h.getX()) <= ball.getRadius() + h.radius && Math.abs(b.getY() - h.getY()) <= ball.getRadius() + h.radius) {
             double distance = Math.sqrt((b.getX() - h.getX()) * (b.getX() - h.getX()) + (b.getY() - h.getY()) * (b.getY() - h.getY()));
@@ -182,11 +183,13 @@ public class PhysicsEngine {
                     ball.speedX = 0;
                     ball.speedZ = 0;
                     ball.speedY = 0;
+                    ball.setInHole(true);
                 }
             } else if (distance <= ball.getRadius() + h.radius) {
                 Coordinate c = new Coordinate(h.getX() - b.getX(), h.getY() - b.getY(), h.getZ() - b.getZ());
                 double factor = (1 - distance / (ball.getRadius() + h.radius)) * h.getFriction();
                 ball.redirect(c, factor);
+
 
             }
 
@@ -275,6 +278,7 @@ public class PhysicsEngine {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
+
                 if (ballCoordinateType == Type.OBJECT) {
                     ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
                     ball.getCoordinate().setY(ball.getCoordinate().getY() - ball.getSpeedY());
@@ -300,7 +304,6 @@ public class PhysicsEngine {
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
-                ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
 
                 if (ballCoordinateType == Type.OBJECT) {
                     ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
