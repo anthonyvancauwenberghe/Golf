@@ -20,10 +20,11 @@ public class Player {
 
 
     public boolean isInPlay(){
-        return inPlay;
+        return b.inPlay;
     }
     public void setInPlay(boolean t) {
-        inPlay = t;
+        b.inPlay = t;
+
 
     }
 

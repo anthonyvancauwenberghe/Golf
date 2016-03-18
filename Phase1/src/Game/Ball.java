@@ -100,11 +100,14 @@ public class Ball {
     public PhysicsEngine getPhysics() {
         return physics;
     }
-    public void checkBallStopped(){
+    public boolean checkBallStopped(){
         if(Math.abs(speedX)<=0.2 && Math.abs(speedY)<=0.3 && Math.abs(speedZ)<=1){
             isMoving=false;
             System.out.println("ballStopped");
+            return true;
+
         }
+        return false;
 
     }
 

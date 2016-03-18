@@ -18,6 +18,10 @@ public class Game {
 
     final static private int REFRESH_RATE = 33;
     private static ArrayList<Player> pp;
+    private static boolean selectNextPlayer;
+    private static int currentPlayer=0;
+
+
 
     public static void main(String[] args) {
 
@@ -26,7 +30,7 @@ public class Game {
         frame = new JFrame();
         dp = new DrawPanel();
 
-       pp = new ArrayList<Player>(2);
+        pp = new ArrayList<Player>(2);
 
         Player p = new Player("Player 1");
         Player p2 = new Player("Player 2");
@@ -61,12 +65,15 @@ public class Game {
         dp.repaint();
 
         while (true) {
-            if (p.getBall().isMoving) {
-                p.getBall().getPhysics().init(course, p.getBall());
-                p.getBall().getPhysics().processPhysics();
-                p.getBall().getPhysics().processNaturalForces();
-                p.getBall().checkBallStopped();
-                p.getBall().printBallInfo();
+            if (pp.get(currentPlayer).getBall().isMoving) {
+                Player cp = pp.get(currentPlayer);
+
+                selectNextPlayer=true;
+                cp.getBall().getPhysics().init(course, cp.getBall());
+                cp.getBall().getPhysics().processPhysics();
+                cp.getBall().getPhysics().processNaturalForces();
+                cp.getBall().checkBallStopped();
+                cp.getBall().printBallInfo();
                 try {
                     dp.repaint();
                     Thread.sleep(REFRESH_RATE);
@@ -76,6 +83,23 @@ public class Game {
 
 
             } else {
+                if (selectNextPlayer){
+                    if (!IsGameStillOn()){
+                        selectNextPlayer = false;
+                        JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
+                        showScoreOnScreen();
+                    }
+                    selectNextPlayer = false;
+
+                    do {
+                        currentPlayer=(currentPlayer+1)%(pp.size());
+                    }while (!pp.get(currentPlayer).getBall().inPlay);
+
+                    pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
+                    dp.setCurrentPlayer(pp.get(currentPlayer));
+                    JOptionPane.showMessageDialog(null, "It is " +  pp.get(currentPlayer).getName() + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
+                    dp.repaint();
+                }
                 try {
                     Thread.sleep(1);
                 } catch (InterruptedException e) {
@@ -86,6 +110,14 @@ public class Game {
 
         }
 
+    }
+
+    private static boolean IsGameStillOn() {
+
+        for (int i = 0; i < pp.size(); i++) {
+            if (pp.get(i).isInPlay()) return true;
+        }
+        return false;
     }
 
     private static void addMenues(JFrame frame) {
@@ -117,23 +149,35 @@ public class Game {
         showScore.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                StringBuilder scores = new StringBuilder();
-                for (int i = 0; i < pp.size(); i++) {
-                    Player p = pp.get(i);
-                    scores.append("Player: " + p.getName() + "  Total Strokes: " + p.getTotalStrokes() + " Current Strokes: "  + p.getCurrentStrokes() + System.lineSeparator());
-                }
-                JOptionPane.showMessageDialog(null, scores.toString(), "Scores", JOptionPane.INFORMATION_MESSAGE);
+                showScoreOnScreen();
 
             }
         });
 
     }
 
-    private static void addListenerToResetStrokes(JMenuItem resetStrokes) {
+    private static void showScoreOnScreen() {
+        StringBuilder scores = new StringBuilder();
         for (int i = 0; i < pp.size(); i++) {
-            pp.get(i).resetStrokes();
-
+            Player p = pp.get(i);
+            scores.append("Player: " + p.getName() + "  Total Strokes: " + p.getTotalStrokes() + " Current Strokes: "  + p.getCurrentStrokes() + System.lineSeparator());
         }
+        JOptionPane.showMessageDialog(null, scores.toString(), "Scores", JOptionPane.INFORMATION_MESSAGE);
+
+
+    }
+
+    private static void addListenerToResetStrokes(JMenuItem resetStrokes) {
+        resetStrokes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int i = 0; i < pp.size(); i++) {
+                    pp.get(i).resetStrokes();
+
+                }
+            }
+        });
+
     }
 
     private static void addListenerToSelectCourse(JMenuItem selectCourse) {
@@ -173,6 +217,7 @@ public class Game {
         physics.init(course, pp.get(0).getBall());
         dp.setCourse(course);
         dp.setCurrentPlayer(pp.get(0));
+        currentPlayer=0;
         dp.repaint();
     }
 
@@ -221,6 +266,7 @@ public class Game {
 
 
                 Player p = new Player(s);
+                p.setBallPosition(course.getStartTile().getCoordinate());
                 pp.add(p);
             }
         });
