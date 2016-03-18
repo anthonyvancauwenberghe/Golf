@@ -22,6 +22,8 @@ public class Editor {
     private static shapeType selectedShape = shapeType.Squircle;
     private static Type selectedType = Type.Grass;
 
+
+
     public static void main(String[] args) {
 
         course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);

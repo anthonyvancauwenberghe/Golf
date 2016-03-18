@@ -27,7 +27,7 @@ public class IntegrationMain extends JPanel{
     }
 
     JPanel getPanel(){
-        return
+        return dp;
     }
 
     public void start(){

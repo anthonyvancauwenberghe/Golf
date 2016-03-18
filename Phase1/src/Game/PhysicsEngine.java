@@ -1,5 +1,10 @@
 package Game;
 
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 /**
  * Created by tony on 16/03/2016.
  */
@@ -134,6 +139,123 @@ public class PhysicsEngine {
 
             }
         }
+    }
+    public void checkColissionMarkus() {
+        double angle = calculateAngle(ball.getSpeedX(), ball.getSpeedY());
+        double speed = ball.getSpeed();
+
+        int coordinateX, coordinateY, futureXCoordinate, futureYCoordinate;
+        coordinateX = (int) ball.getCoordinate().getX();
+        coordinateY = (int) ball.getCoordinate().getY();
+        futureXCoordinate = (int) (ball.getCoordinate().getX() + ball.getSpeedX());
+        futureYCoordinate = (int) (ball.getCoordinate().getY() + ball.getSpeedY());
+
+
+        checkIfObjectIsBetweenBallAndFutureBall(coordinateX,coordinateY,futureXCoordinate,futureYCoordinate,ball.radius,angle,speed);
+
+        Type nextBallCoordinateType = null;
+
+        if (Math.abs(ball.getSpeedX()) > Math.abs(ball.getSpeedY())) {
+            System.out.println("SpeedX bigger");
+            forloop:
+            for (int i = 0; i <= Math.abs(ball.getSpeedX()); i += 5) {
+                //futureXCoordinate = (ball.getCoordinate().getX() + coordinateX);
+                //futureYCoordinate = (ball.getCoordinate().getY() + coordinateY);
+                //coordinateX = i;
+                //coordinateY = (i * Math.tan(angle));
+
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (futureXCoordinate + ball.getRadius() >= Config.getWidth() || futureXCoordinate - ball.getRadius() <= 0 && futureYCoordinate + ball.getRadius() >= Config.getHeight() || futureYCoordinate - ball.getRadius() <= 0) {
+
+                    System.out.println("bigger!!!!!");
+                    break forloop;
+                } else {
+
+                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate - ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    System.out.println(1 + (i / 5) + ". coordinateX: " + futureXCoordinate + " coordinateY: " + futureYCoordinate);
+                    if (nextBallCoordinateType == Type.OBJECT) {
+                        ball.getCoordinate().setX(futureXCoordinate);
+                        ball.getCoordinate().setX(futureYCoordinate);
+                        System.out.println("colission!");
+                        ball.speedX *= WALL_ENERGY_LOSS;
+                        ball.reverseBallDirectionX();
+                        ball.speedY *= WALL_ENERGY_LOSS;
+                        ball.reverseBallDirectionY();
+
+                        break forloop;
+                    }
+                }
+
+            }
+
+        }
+        }
+
+    private void checkIfObjectIsBetweenBallAndFutureBall(int coordinateX, int coordinateY, int futureXCoordinate, int futureYCoordinate, double v, double angle, double radius) {
+        int collisionX=-6666666;
+        int collisionY=-6666666;
+        ArrayList<int[]> pp = getPointsBetween(coordinateX,coordinateY,futureXCoordinate,futureYCoordinate);
+        Point2D p = new Point();
+        boolean collisionHappened = false;
+
+        int ss = pp.size();
+        loop:for (int i = 0; i < ss; i++) {
+            if (course.getTile(pp.get(i)[0],pp.get(i)[1],0).getType()==Type.OBJECT){
+                collisionX=pp.get(i)[0];
+                collisionY= pp.get(i)[1];
+                collisionHappened = true;
+                break loop;
+            }
+        }
+
+        if (collisionHappened){
+            for (int i = 0; i < 1000; i++) {
+                System.out.println("Coolision happened at: " + collisionX +" " + collisionY);
+            }
+        }
+
+
+    }
+
+    private ArrayList<int[]> getPointsBetween(int x, int y, int x2, int y2) {
+        ArrayList<int[]> p = new ArrayList<>(200);
+
+            int w = x2 - x ;
+            int h = y2 - y ;
+            int dx1 = 0, dy1 = 0, dx2 = 0, dy2 = 0 ;
+            if (w<0) dx1 = -1 ; else if (w>0) dx1 = 1 ;
+            if (h<0) dy1 = -1 ; else if (h>0) dy1 = 1 ;
+            if (w<0) dx2 = -1 ; else if (w>0) dx2 = 1 ;
+            int longest = Math.abs(w) ;
+            int shortest = Math.abs(h) ;
+            if (!(longest>shortest)) {
+                longest = Math.abs(h) ;
+                shortest = Math.abs(w) ;
+                if (h<0) dy2 = -1 ; else if (h>0) dy2 = 1 ;
+                dx2 = 0 ;
+            }
+            int numerator = longest >> 1 ;
+            for (int i=0;i<=longest;i++) {
+                p.add(new int[]{x, y}) ;
+                numerator += shortest ;
+                if (!(numerator<longest)) {
+                    numerator -= longest ;
+                    x += dx1 ;
+                    y += dy1 ;
+                } else {
+                    x += dx2 ;
+                    y += dy2 ;
+                }
+            }
+        return p;
+        }
+
+
         /*
         try {
             Type nextBallCoordinateType = null;
@@ -157,7 +279,7 @@ public class PhysicsEngine {
         }
         */
 
-    }
+
 
 
     public void processPhysics() {
@@ -275,6 +397,7 @@ public class PhysicsEngine {
         /*************************************************/
         /** Process Object Colissions & Object Friction **/
         /************************************************/
+        checkColissionMarkus();
         if (Math.abs(ball.getSpeedX()) >= Math.abs(ball.getSpeedY())) {
             if (ball.getSpeedX() > 0) {
                 try{
@@ -285,11 +408,11 @@ public class PhysicsEngine {
                 }
 
                 if (ballCoordinateType == Type.OBJECT) {
-                    ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
+                    /*ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
                     ball.getCoordinate().setY(ball.getCoordinate().getY() - ball.getSpeedY());
                     ball.reverseBallDirectionX();
                     ball.reverseBallDirectionY();
-                    System.out.println("ball hit OBJECT from the left");
+                    System.out.println("ball hit OBJECT from the left");*/
                 }
                 if(ballCoordinateType == Type.Water){
                     ball.speedX *= WATER_ENERGY_LOSS;
@@ -311,11 +434,11 @@ public class PhysicsEngine {
                 }
 
                 if (ballCoordinateType == Type.OBJECT) {
-                    ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
+                    /*ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
                     ball.getCoordinate().setY(ball.getCoordinate().getY() - ball.getSpeedY());
                     ball.reverseBallDirectionX();
                     ball.reverseBallDirectionY();
-                    System.out.println("ball hit OBJECT from the right");
+                    System.out.println("ball hit OBJECT from the right");*/
 
                 }
                 if(ballCoordinateType == Type.Water){
@@ -341,11 +464,11 @@ public class PhysicsEngine {
 
 
                 if (ballCoordinateType == Type.OBJECT) {
-                    ball.getCoordinate().setX(ball.getCoordinate().getX() - 2*ball.getSpeedX());
+                   /* ball.getCoordinate().setX(ball.getCoordinate().getX() - 2*ball.getSpeedX());
                     ball.getCoordinate().setY(ball.getCoordinate().getY() -2* ball.getSpeedY());
                     ball.reverseBallDirectionX();
                     ball.reverseBallDirectionY();
-                    System.out.println("ball hit OBJECT from below");
+                    System.out.println("ball hit OBJECT from below");*/
 
                 }
                 if(ballCoordinateType == Type.Water){
@@ -368,11 +491,11 @@ public class PhysicsEngine {
 
 
                 if (ballCoordinateType == Type.OBJECT) {
-                    ball.getCoordinate().setX(ball.getCoordinate().getX() - 2*ball.getSpeedX());
+                    /*ball.getCoordinate().setX(ball.getCoordinate().getX() - 2*ball.getSpeedX());
                     ball.getCoordinate().setY(ball.getCoordinate().getY() - 2*ball.getSpeedY());
                     ball.reverseBallDirectionX();
                     ball.reverseBallDirectionY();
-                    System.out.println("ball hit OBJECT from up");
+                    System.out.println("ball hit OBJECT from up");*/
 
                 }
                 if(ballCoordinateType == Type.Water){

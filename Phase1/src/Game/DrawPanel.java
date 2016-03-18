@@ -197,7 +197,7 @@ public class DrawPanel extends JPanel {
 
 
         }
-        drawPowerLine(g,currentPlayer.getBall());
+        if (currentPlayer != null) drawPowerLine(g,currentPlayer.getBall());
 
     }
 
