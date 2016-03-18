@@ -10,9 +10,7 @@ import java.util.ArrayList;
  * Created by tony on 16/03/2016.
  */
 public class Game {
-    private static Type selectedType = Type.Grass;
     private static Course course;
-    private static int pensize = 20;
     public static JFrame frame;
     private static PhysicsEngine physics;
 
@@ -35,7 +33,7 @@ public class Game {
 
         course.setTile(400, 400, 0, Type.Hole);
         course.setTile(300, 400, 0, Type.Start);
-        course.addRectangle(600, 400, 50, 100, Type.OBJECT);
+        course.addRectangle(600, 400, 50, 100, Type.Water);
 
         pp.add(p);
         pp.add(p2);
@@ -63,7 +61,7 @@ public class Game {
                 p.getBall().getPhysics().processPhysics();
                 p.getBall().getPhysics().processNaturalForces();
                 p.getBall().checkBallStopped();
-                //p.getBall().printBallInfo();
+                p.getBall().printBallInfo();
                 try {
                     dp.repaint();
                     Thread.sleep(REFRESH_RATE);

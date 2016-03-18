@@ -10,6 +10,8 @@ public class Ball {
     public boolean isMoving = false;
     private Coordinate coordinate = new Coordinate();
     private PhysicsEngine physics = new PhysicsEngine();
+    private int speedLimiter = Config.speedLimiter;
+    private double speedSlower = Config.speedSlower;
 
 
 
@@ -22,14 +24,26 @@ public class Ball {
         return isMoving;
     }
 
+    public double getSign(double number){
+        if(number>=0)
+            return 1;
+        else{
+            return -1;
+        }
+    }
+
     public void shootBall(double speedX, double speedY, double speedZ) {
         System.out.println(inPlay());
         System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             isMoving = true;
-            this.speedX = speedX;
-            this.speedY = speedY;
-            this.speedZ = speedZ;
+            this.speedX = (Math.abs(speedX)>=speedLimiter) ? getSign(speedX)*speedLimiter : speedX ;
+            this.speedY = (Math.abs(speedY)>=speedLimiter) ? getSign(speedY)*speedLimiter : speedY;
+            this.speedZ = (Math.abs(speedZ)>=speedLimiter) ? getSign(speedZ)*speedLimiter : speedZ;
+            this.speedX = this.speedX/speedSlower;
+            this.speedY = this.speedY/speedSlower;
+            this.speedZ = this.speedZ/speedSlower;
+            System.out.println("ball is still moving or not in play speedY: " + this.speedY);
         } else {
             System.out.println("ball is still moving or not in play");
         }

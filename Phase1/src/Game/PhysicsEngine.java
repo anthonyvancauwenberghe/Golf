@@ -11,6 +11,8 @@ public class PhysicsEngine {
     private final double AIR_FRICTION = Config.AIR_FRICTION;
     private final double GRAVITY_FORCE = Config.GRAVITY_FORCE;
     private final double WALL_ENERGY_LOSS = Config.WALL_ENERGY_LOSS;
+    private final double SAND_ENERGY_LOSS = Config.SAND_ENERGY_LOSS;
+    private final double WATER_ENERGY_LOSS = Config.WATER_ENERGY_LOSS;
 
 
     public static boolean enable3D = Config.ENABLED3D;
@@ -262,13 +264,17 @@ public class PhysicsEngine {
 
         }
 
-        /*********************************/
-        /** Process Object Colissions **/
-        /*********************************/
+        /*************************************************/
+        /** Process Object Colissions & Object Friction **/
+        /************************************************/
         if (Math.abs(ball.getSpeedX()) >= Math.abs(ball.getSpeedY())) {
             if (ball.getSpeedX() > 0) {
-                ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() + ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                try{
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
 
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
                 if (ballCoordinateType == Type.OBJECT) {
                     ball.getCoordinate().setX(ball.getCoordinate().getX() - ball.getSpeedX());
                     ball.getCoordinate().setY(ball.getCoordinate().getY() - ball.getSpeedY());
@@ -276,7 +282,24 @@ public class PhysicsEngine {
                     ball.reverseBallDirectionY();
                     System.out.println("ball hit OBJECT from the left");
                 }
+                if(ballCoordinateType == Type.Water){
+                    ball.speedX *= WATER_ENERGY_LOSS;
+                    ball.speedY *= WATER_ENERGY_LOSS;
+                    System.out.println("ball hit water left");
+                }
+                if(ballCoordinateType == Type.Sand){
+                    ball.speedX *= SAND_ENERGY_LOSS;
+                    ball.speedY *= SAND_ENERGY_LOSS;
+                    System.out.println("ball hit sand left");
+                }
+
             } else {
+                try{
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
                 ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
 
                 if (ballCoordinateType == Type.OBJECT) {
@@ -287,10 +310,27 @@ public class PhysicsEngine {
                     System.out.println("ball hit OBJECT from the right");
 
                 }
+                if(ballCoordinateType == Type.Water){
+                    ball.speedX *= WATER_ENERGY_LOSS;
+                    ball.speedY *= WATER_ENERGY_LOSS;
+                    System.out.println("ball hit water right");
+                }
+                if(ballCoordinateType == Type.Sand){
+                    ball.speedX *= SAND_ENERGY_LOSS;
+                    ball.speedY *= SAND_ENERGY_LOSS;
+                    System.out.println("ball hit sand right");
+                }
+
             }
         } else {
             if (ball.getSpeedY() < 0) {
-                ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() + ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                try{
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+
 
                 if (ballCoordinateType == Type.OBJECT) {
                     ball.getCoordinate().setX(ball.getCoordinate().getX() - 2*ball.getSpeedX());
@@ -300,8 +340,24 @@ public class PhysicsEngine {
                     System.out.println("ball hit OBJECT from below");
 
                 }
+                if(ballCoordinateType == Type.Water){
+                    ball.speedX *= WATER_ENERGY_LOSS;
+                    ball.speedY *= WATER_ENERGY_LOSS;
+                    System.out.println("ball hit water below");
+                }
+                if(ballCoordinateType == Type.Sand){
+                    ball.speedX *= SAND_ENERGY_LOSS;
+                    ball.speedY *= SAND_ENERGY_LOSS;
+                    System.out.println("ball hit sand below");
+                }
             } else if (ball.getSpeedY() >= 0) {
-                ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                try{
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() + ball.getRadius()), (int) (ball.getCoordinate().getY() + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
+
 
                 if (ballCoordinateType == Type.OBJECT) {
                     ball.getCoordinate().setX(ball.getCoordinate().getX() - 2*ball.getSpeedX());
@@ -310,6 +366,16 @@ public class PhysicsEngine {
                     ball.reverseBallDirectionY();
                     System.out.println("ball hit OBJECT from up");
 
+                }
+                if(ballCoordinateType == Type.Water){
+                    ball.speedX *= WATER_ENERGY_LOSS;
+                    ball.speedY *= WATER_ENERGY_LOSS;
+                    System.out.println("ball hit water up");
+                }
+                if(ballCoordinateType == Type.Sand){
+                    ball.speedX *= SAND_ENERGY_LOSS;
+                    ball.speedY *= SAND_ENERGY_LOSS;
+                    System.out.println("ball hit sand up");
                 }
 
             }
