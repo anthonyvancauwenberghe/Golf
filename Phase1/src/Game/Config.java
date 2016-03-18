@@ -9,10 +9,10 @@ public class Config {
     private static final int height = 768;
     private static final int depth = 1;
 
-    public static final double maxSpeedToFallIntoHole = 3;
+
     private static final double ballMass = 1;
-    private static final double ballRadius = 20;
-    private static final double holeRadius = 35;
+    private static final double ballRadius = 10;
+    private static final double holeRadius = 24;
     public static final double GROUND_FRICTION = 0.90;
     public static final double AIR_FRICTION = 0.995;
     public static final double GRAVITY_FORCE = 9.81;
