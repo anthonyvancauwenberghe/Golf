@@ -10,7 +10,7 @@ import Game.*;
 /**
  * Created by tony on 16/03/2016.
  */
-public class IntegrationMain {
+public class IntegrationMain extends JPanel{
     private Type selectedType = Type.Grass;
     private int selectedSize = 1;
     private Course course;
@@ -19,14 +19,19 @@ public class IntegrationMain {
     JFrame frame;
 
     public IntegrationMain() {
-        start();
+
     }
 
     JFrame getFrame(){
         return frame;
     }
 
+    JPanel getPanel(){
+        return
+    }
+
     public void start(){
+
         int counter = 0;
 
         course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
@@ -82,9 +87,7 @@ public class IntegrationMain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-
         }
     }
 

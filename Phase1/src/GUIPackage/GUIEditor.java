@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 
 
 public class GUIEditor {
-    private JFrame frame;
+    public JFrame frame;
     private JPanel panel1;
     private JPanel mainPane;
     private JButton EXITButton;
@@ -21,21 +21,30 @@ public class GUIEditor {
     private JButton butExit;
     private JButton butBackMain;
 
+    GUI gui;
+
     public GUIEditor() {
 
         butBackMain.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI gui = new GUI();
+
+                gui = new GUI();
                 gui.getMainMenu();
+
             }
         });
         butExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //frame.setVisible(false);
                 System.exit(0);
             }
         });
+    }
+
+    public void disable(){
+        frame.setVisible(false);
     }
 
     public JFrame getFrame() {
@@ -60,7 +69,8 @@ public class GUIEditor {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        testPane = getComboPanel(100);
+        Game.Main main = new Game.Main();
+        testPane = new Game.Main();
 
     }
 }

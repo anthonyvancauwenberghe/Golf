@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * Created by tony on 16/03/2016.
  * @deprecated
  */
-public class Main {
+public class Main extends JPanel {
     private static Type selectedType = Type.Grass;
     private static Course course;
     private static int pensize = 20;
