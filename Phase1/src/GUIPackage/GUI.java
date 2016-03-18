@@ -2,32 +2,36 @@ package GUIPackage;
 
 import javax.swing.*;
 import Game.Game;
-
 public class GUI{
 
-    JFrame guiFrame;
+    public JFrame guiFrame1;
+    public JFrame guiFrame2;
+    GUIMainMenu guiFrame;
+    GUIEditor guiFrame0;
     public GUIMainMenu main;
+    public GUIEditor edit;
 
     public GUI(){
-        guiFrame = new JFrame();
-        guiFrame.setSize(800,600);
+
+    }
+
+    public void close() {
+        edit.disable();
     }
 
     public void getMainMenu() {
-        main = new GUIMainMenu();
-        guiFrame = main.getFrame();
-        guiFrame.setSize(800,600);
+        guiFrame = new GUIMainMenu();
+        guiFrame.setSize(900,688);
         guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         guiFrame.setVisible(true);
     }
 
     public void getEditor()  {
 
-        GUIEditor edit = new GUIEditor();
-        guiFrame = edit.getFrame();
-        guiFrame.setSize(800,600);
-        guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        guiFrame.setVisible(true);
+        guiFrame0 = new GUIEditor();
+        guiFrame0.setSize(800,600);
+        guiFrame0.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        guiFrame0.setVisible(true);
 
     }
 

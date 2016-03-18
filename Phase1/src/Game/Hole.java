@@ -10,17 +10,7 @@ public class Hole extends Tile {
         this.radius = radius;
     }
 
-    boolean isBallInHole(Ball b){
-        Coordinate bc = b.getCoordinate();
-        if (Math.abs(z-bc.getZ())>b.radius){
-            return false;
-        }
-        if (Coordinate.getDistance(x, y,z, bc.getX(), bc.getY(), bc.getZ()) < (radius-b.radius)) {
-            if (b.speedX+b.speedY >= Config.maxSpeedToFallIntoHole) return false;
-            return true;
-        }
-        return false;
-    }
+
 
     /**
      *

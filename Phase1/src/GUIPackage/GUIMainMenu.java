@@ -2,43 +2,60 @@ package GUIPackage;
 
 
 
-import com.sun.glass.ui.Screen;
-import com.sun.prism.Texture;
-import Game.Main;
+import Game.Game;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 
 /**
  * Created by lukas on 16/03/16.
  */
-public class GUIMainMenu {
-    static JFrame frame;
+public class GUIMainMenu extends JFrame {
+    public JFrame frame;
     private JPanel panel1;
-    private JButton EXITButton;
-    private JButton courseEditorButton;
-    private JButton startDefaultGameButton;
-    private JPanel panel2;
-    //final private Texture texture = new Texture("grass.jpg");
-    //final private Image image = new Image(texture);
-    //private BufferedImage image2 = new BufferedImage(image);
+    private JButton exitB;
+    private JButton editorB;
+    private JButton startB;
+    private JPanel panelwithIMG;
+    private BufferedImage img;
 
+    Icon start1 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/start1.png");
+    Icon start2 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/start2.png");
+    Icon editor1 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/editor1.png");
+    Icon editor2 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/editor2.png");
+    Icon exit1 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/exit1.png");
+    Icon exit2 = new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/exit2.png");
 
 
     public GUIMainMenu() {
 
 
-        try {
+        this.getContentPane().add(panel1);
 
-        startDefaultGameButton.setOpaque(false);
-        startDefaultGameButton.setFocusPainted(false);
-        startDefaultGameButton.setBorderPainted(false);
-        startDefaultGameButton.setContentAreaFilled(false);
-        //setBorder(BorderFactory.createEmptyBorder(0,0,0,0)); // Especially important
-        courseEditorButton.addActionListener(new ActionListener() {
+        startB.setOpaque(false);
+        startB.setFocusPainted(false);
+        startB.setBorderPainted(false);
+        startB.setContentAreaFilled(false);
+        exitB.setOpaque(false);
+        exitB.setFocusPainted(false);
+        exitB.setBorderPainted(false);
+        exitB.setContentAreaFilled(false);
+        editorB.setOpaque(false);
+        editorB.setFocusPainted(false);
+        editorB.setBorderPainted(false);
+        editorB.setContentAreaFilled(false);
+
+
+
+
+        //ACTIONLISTENERS
+        editorB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GUI gui = new GUI();
@@ -46,22 +63,78 @@ public class GUIMainMenu {
 
             }
         });
-        } catch(Exception e){
-            e.printStackTrace();
-        }
-
-        startDefaultGameButton.addActionListener(new ActionListener() {
+        startB.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                Testing test = new Testing();
-                test.go();
+                //IntegrationMain main = new IntegrationMain();
+                //Middleman dude = new Middleman();
+                //frame.getContentPane().removeAll();
+                //frame.getContentPane().add(new IntegrationMain());
+                Game.main(null);
 
+                frame = Game.frame;
+
+
+            }
+        });
+        exitB.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.exit(0);
+            }
+        });
+
+
+        //MOUSELISTENERS
+        startB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                startB.setIcon(start2);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                startB.setIcon(start1);
+            }
+        });
+        editorB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                editorB.setIcon(editor2);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                editorB.setIcon(editor1);
+            }
+        });
+        exitB.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                exitB.setIcon(exit2);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                exitB.setIcon(exit1);
             }
         });
     }
 
     public void createUIComponents() {
+
+
+
+        panelwithIMG = new JPanelIMG(new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/caddy.jpg").getImage());
+
+
+        //b.setIcon(Icon x);
+        //b.setDisabledIcon(Icon x);
+        //b.setPressedIcon(Icon x);
+        //b.setSelectedIcon(Icon x);
+        //b.setDisabledSelectedIcon(Icon x);
+
 
     }
 
@@ -71,4 +144,8 @@ public class GUIMainMenu {
 
         return frame;
     }
+
+
 }
+
+

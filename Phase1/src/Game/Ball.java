@@ -1,10 +1,5 @@
 package Game;
 
-/**
- * @author ??
- * @author ??
- */
-
 public class Ball {
 
     //Color c;
@@ -13,8 +8,12 @@ public class Ball {
     double bounciness;
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
+    public boolean inHole = false;
+    public boolean inPlay = true;
     private Coordinate coordinate = new Coordinate();
     private PhysicsEngine physics = new PhysicsEngine();
+    private int speedLimiter = Config.speedLimiter;
+    private double speedSlower = Config.speedSlower;
 
 
     /**
@@ -42,14 +41,26 @@ public class Ball {
      * @param speedY speed of ball in Y-axis
      * @param speedZ speed of ball in Z-axis
      */
+    public double getSign(double number){
+        if(number>=0)
+            return 1;
+        else{
+            return -1;
+        }
+    }
+
     public void shootBall(double speedX, double speedY, double speedZ) {
         System.out.println(inPlay());
         System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             isMoving = true;
-            this.speedX = speedX;
-            this.speedY = speedY;
-            this.speedZ = speedZ;
+            this.speedX = (Math.abs(speedX)>=speedLimiter) ? getSign(speedX)*speedLimiter : speedX ;
+            this.speedY = (Math.abs(speedY)>=speedLimiter) ? getSign(speedY)*speedLimiter : speedY;
+            this.speedZ = (Math.abs(speedZ)>=speedLimiter) ? getSign(speedZ)*speedLimiter : speedZ;
+            this.speedX = this.speedX/speedSlower;
+            this.speedY = this.speedY/speedSlower;
+            this.speedZ = this.speedZ/speedSlower;
+            System.out.println("ball is still moving or not in play speedY: " + this.speedY);
         } else {
             System.out.println("ball is still moving or not in play");
         }
@@ -70,7 +81,16 @@ public class Ball {
      * @return true
      */
     public boolean inPlay() {
-        return true;
+        return inPlay;
+    }
+
+    public boolean isInHole() {
+        return inHole;
+    }
+
+    public void setInHole(boolean inHole) {
+        this.inHole = inHole;
+        this.inPlay = !inHole;
     }
 
     /**
@@ -139,6 +159,7 @@ public class Ball {
     public PhysicsEngine getPhysics() {
         return physics;
     }
+    public boolean checkBallStopped(){
 
     /**
      * check if ball is stopped, ball is stopped under following condition
@@ -148,9 +169,13 @@ public class Ball {
         if(Math.abs(speedX)<=0.2 && Math.abs(speedY)<=0.3 && Math.abs(speedZ)<=1){
             isMoving=false;
             System.out.println("ballStopped");
+            return true;
+
         }
+        return false;
 
     }
+
 
     /**
      * method that prints the information about the ball

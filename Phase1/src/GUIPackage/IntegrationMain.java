@@ -10,11 +10,11 @@ import Game.*;
 /**
  * Created by tony on 16/03/2016.
  */
-public class IntegrationMain {
-    private Type selectedType = Type.Grass;
-    private int selectedSize = 1;
-    private Course course;
-    private int pensize = 20;
+public class IntegrationMain extends JPanel{
+    public Type selectedType = Type.Grass;
+    public int selectedSize = 1;
+    public Course course;
+    public int pensize = 20;
     DrawPanel dp;
     JFrame frame;
 
@@ -26,7 +26,12 @@ public class IntegrationMain {
         return frame;
     }
 
+    JPanel getPanel(){
+        return dp;
+    }
+
     public void start(){
+
         int counter = 0;
 
         course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
@@ -82,9 +87,7 @@ public class IntegrationMain {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-
             }
-
         }
     }
 

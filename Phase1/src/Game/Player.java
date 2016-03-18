@@ -20,14 +20,17 @@ public class Player {
 
 
     public boolean isInPlay(){
-        return inPlay;
+        return b.inPlay;
     }
     public void setInPlay(boolean t) {
-        inPlay = t;
+        b.inPlay = t;
+
+
     }
 
     public void shoot(double speedX, double speedY, double speedZ){
         b.shootBall(speedX,speedY,speedZ);
+        addStroke();
     }
 
     public void setBallPosition(Coordinate c){
@@ -44,7 +47,6 @@ public class Player {
     }
 
     public void resetCurrentStrokes(){
-        inPlay=false;
         currentStrokes = 0;
     }
     public void addStroke(){
@@ -61,7 +63,21 @@ public class Player {
     }
 
     public void shootBall(int x, int y, int z) {
-        currentStrokes++;
         b.shootBall(x,y,z);
+        addStroke();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void resetStrokes() {
+        totalStrokes = 0;
+        currentStrokes = 0;
+
+    }
+
+    public void resetBall() {
+        this.b = new Ball(Config.getBallMass(),Config.getBallRadius());
     }
 }
