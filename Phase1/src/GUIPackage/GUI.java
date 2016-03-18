@@ -4,14 +4,15 @@ import javax.swing.*;
 import Game.Game;
 public class GUI{
 
-    public JFrame guiFrame;
+    public JFrame guiFrame1;
     public JFrame guiFrame2;
+    GUIMainMenu guiFrame;
+    GUIEditor guiFrame0;
     public GUIMainMenu main;
     public GUIEditor edit;
 
     public GUI(){
-        guiFrame = new JFrame();
-        guiFrame.setSize(800,600);
+
     }
 
     public void close() {
@@ -19,8 +20,7 @@ public class GUI{
     }
 
     public void getMainMenu() {
-        main = new GUIMainMenu();
-        guiFrame = main.getFrame();
+        guiFrame = new GUIMainMenu();
         guiFrame.setSize(900,688);
         guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         guiFrame.setVisible(true);
@@ -28,11 +28,10 @@ public class GUI{
 
     public void getEditor()  {
 
-        edit = new GUIEditor();
-        guiFrame = edit.getFrame();
-        guiFrame.setSize(800,600);
-        guiFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        guiFrame.setVisible(true);
+        guiFrame0 = new GUIEditor();
+        guiFrame0.setSize(800,600);
+        guiFrame0.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        guiFrame0.setVisible(true);
 
     }
 

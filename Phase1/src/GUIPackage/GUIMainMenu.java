@@ -3,6 +3,7 @@ package GUIPackage;
 
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -13,8 +14,8 @@ import java.awt.image.BufferedImage;
 /**
  * Created by lukas on 16/03/16.
  */
-public class GUIMainMenu {
-    static JFrame frame;
+public class GUIMainMenu extends JFrame {
+    public JFrame frame;
     private JPanel panel1;
     private JButton exitB;
     private JButton editorB;
@@ -32,6 +33,8 @@ public class GUIMainMenu {
 
     public GUIMainMenu() {
 
+
+        this.getContentPane().add(panel1);
 
         startB.setOpaque(false);
         startB.setFocusPainted(false);
@@ -63,7 +66,10 @@ public class GUIMainMenu {
             public void actionPerformed(ActionEvent e) {
 
                 //IntegrationMain main = new IntegrationMain();
-                Middleman dude = new Middleman();
+                //Middleman dude = new Middleman();
+                frame.getContentPane().removeAll();
+                frame.getContentPane().add(new IntegrationMain());
+
 
             }
         });
@@ -116,10 +122,6 @@ public class GUIMainMenu {
 
 
         panelwithIMG = new JPanelIMG(new ImageIcon("/Users/lukas/Dropbox/Developer/Golf/Phase1/src/GUIPackage/media/caddy.jpg").getImage());
-
-
-
-
 
 
         //b.setIcon(Icon x);
