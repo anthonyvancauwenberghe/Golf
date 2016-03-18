@@ -23,7 +23,7 @@ public class Config {
     public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;
     public static final int OFFSET_Y_EDITOR=62;
-    public static final int speedLimiter=160;
+    public static final int speedLimiter=120;
     public static final double speedSlower=1.3;
 
     public static final boolean ENABLED3D=false;

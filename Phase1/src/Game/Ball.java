@@ -9,6 +9,7 @@ public class Ball {
     public double speedX, speedY, speedZ;
     public boolean isMoving = false;
     public boolean inHole = false;
+    public boolean inPlay = true;
     private Coordinate coordinate = new Coordinate();
     private PhysicsEngine physics = new PhysicsEngine();
     private int speedLimiter = Config.speedLimiter;
@@ -55,7 +56,7 @@ public class Ball {
     }
 
     public boolean inPlay() {
-        return true;
+        return inPlay;
     }
 
     public boolean isInHole() {
@@ -64,6 +65,7 @@ public class Ball {
 
     public void setInHole(boolean inHole) {
         this.inHole = inHole;
+        this.inPlay = !inHole;
     }
 
     public double getSpeedX() {
