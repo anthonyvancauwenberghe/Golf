@@ -23,6 +23,7 @@ public class Config {
     public static final int OFFSET_Y_EDITOR=62;
 
     public static final boolean ENABLED3D=false;
+    public static final float POWERLINEWIDTH = 3.f;
 
     public static double getBallMass() {
         return ballMass;

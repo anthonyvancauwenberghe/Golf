@@ -37,6 +37,7 @@ public class DrawPanel extends JPanel {
     private TexturePaint holeP;
     private TexturePaint ballP;
     private BufferedImage ballTexture;
+    private boolean prepareShoot;
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -56,6 +57,7 @@ public class DrawPanel extends JPanel {
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton()== MouseEvent.BUTTON3){
                     Editor.addObject(e.getPoint());
+
                 }
             }
 
@@ -64,6 +66,7 @@ public class DrawPanel extends JPanel {
                 if(e.getButton()!= MouseEvent.BUTTON3) {
                     setFirstXClick(e.getX());
                     setFirstYClick(e.getY());
+                    prepareShoot=true;
                 }
             }
 
@@ -80,6 +83,7 @@ public class DrawPanel extends JPanel {
                     if (currentPlayer != null)
 
                         currentPlayer.shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
+                        prepareShoot = false;
                 }
 
             }
@@ -181,6 +185,22 @@ public class DrawPanel extends JPanel {
 
 
         }
+        drawPowerLine(g,currentPlayer.getBall());
+
+    }
+
+    private void drawPowerLine(Graphics g, Ball b) {
+        if (!prepareShoot) return;
+        Point mousePosition = this.getMousePosition();
+        if (mousePosition == null) return;
+
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setStroke(new BasicStroke(Config.POWERLINEWIDTH));
+        g2.setColor(Color.red);
+        Coordinate c = b.getCoordinate();
+        g2.drawLine((int)c.getX(),(int)c.getY(), mousePosition.x,mousePosition.y);
+
+
 
     }
 
