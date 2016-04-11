@@ -1,8 +1,12 @@
 package Game;
 
+import com.sun.prism.*;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -117,13 +121,15 @@ public class DrawPanel extends JPanel {
 
 
         try {
-            File f =new File("Phase1/src/Game/textures/grass.jpg");
+            String current = new java.io.File( "." ).getCanonicalPath();
+            System.out.println("Current dir:"+current);
+            File f =new File("Phase1"+File.separator+"out"+ File.separator+"Game"+File.separator+"textures"+File.separator+"grass.jpg");
             grassTexture = ImageIO.read(f);
-            sandTexture = ImageIO.read(new File("Phase1/src/Game/textures/sand.jpg"));
-            waterTexture = ImageIO.read(new File("Phase1/src/Game/textures/water.jpg"));
-            holeTexture = ImageIO.read(new File("Phase1/src/Game/textures/hole.jpg"));
-            objectTexture = ImageIO.read(new File("Phase1/src/Game/textures/object.jpg"));
-            ballTexture = ImageIO.read(new File("Phase1/src/Game/textures/ball.jpg"));
+            sandTexture = ImageIO.read(new File("Phase1/out"+File.separator+"Game"+File.separator+"textures"+File.separator+"sand.jpg"));
+            waterTexture = ImageIO.read(new File("Phase1/out/Game/textures/water.jpg"));
+            holeTexture = ImageIO.read(new File("Phase1/out/Game/textures/hole.jpg"));
+            objectTexture = ImageIO.read(new File("Phase1/out/Game/textures/object.jpg"));
+            ballTexture = ImageIO.read(new File("Phase1/out/Game/textures/ball.jpg"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -145,31 +151,42 @@ public class DrawPanel extends JPanel {
     }
 
     public BufferedImage createImage() {
-        Tile[][][] pf = course.getPlayfield();
+        Type[][][] pf = course.getPlayfield();
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
                 new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = bufferedImage.createGraphics();
 
         Random r = new Random(0);
+        for (int z = 0; z < d[2]; z++) {
+            float f = (float) (0.5-(z*1f/d[2])*0.5);
+            Color zshadow = new Color(0,0,0,f);
+         for (int x = 0; x < d[0]; x++) {
+             for (int y = 0; y < d[1]; y++) {
 
-        for (int x = 0; x < d[0]; x++) {
-            for (int y = 0; y < d[1]; y++) {
-                for (int z = 0; z < d[2]; z++) {
-                    Tile t = pf[x][y][z];
-                    if (t.getType() == Type.Empty) continue;
-                    Point p = new Point(x%32,y%32);
-                    if (t.getType() == Type.Grass) g.setColor(GrassText.get(p));
-                    if (t.getType() == Type.Sand) g.setColor(SandText.get(p));
-                    if (t.getType() == Type.Water) g.setColor(WaterText.get(p));
-                    if (t.getType() == Type.OBJECT) g.setColor(ObjectText.get(p));
+                    Type t = pf[x][y][z];
+                    if (t == Type.Empty) continue;
+                    Point p = new Point((x)%32,(y)%32);
+                    if (t == Type.Grass) g.setColor(GrassText.get(p));
+                    if (t == Type.Sand) g.setColor(SandText.get(p));
+                    if (t == Type.Water) g.setColor(WaterText.get(p));
+                    if (t  == Type.OBJECT) g.setColor(ObjectText.get(p));
 
-                    g.fillRect(x, y, 10, 10);
+                 g.fillRect(x, y, 1, 1);
 
-                }
+                 g.setColor(zshadow);
+                 g.fillRect(x, y, 1, 1);
+
+               //  g.fillRect(0, 0,  d[0],  d[1]);
+
             }
 
+            }
+
+
         }
+
+
         g.dispose();
         return bufferedImage;
     }
@@ -177,7 +194,23 @@ public class DrawPanel extends JPanel {
 
     public void setCourse(Course c) {
         this.course = c;
-        managedBufferedImage = createImage();
+        managedBufferedImage = null;
+        try {
+            managedBufferedImage = ImageIO.read(new File(c.getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (managedBufferedImage==null){//(true){//
+            managedBufferedImage = createImage();
+            try {
+                // retrieve image
+                File outputfile = new File(c.getName());
+                ImageIO.write(managedBufferedImage, "png", outputfile);
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+        }
+
     }
 
 
@@ -185,6 +218,7 @@ public class DrawPanel extends JPanel {
     protected void paintComponent(Graphics g) {
 
         super.paintComponent(g);
+
         if (managedBufferedImage != null) g.drawImage(managedBufferedImage, 0, 0, null);
         drawHole(g);
 
@@ -240,11 +274,11 @@ public class DrawPanel extends JPanel {
 
     public void drawHole(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+
+
+
+
         Hole t = course.getHole();
-
-
-
-
         g2.setPaint(holeP);
         g2.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) (t.radius*2), (int) (t.radius*2));
 

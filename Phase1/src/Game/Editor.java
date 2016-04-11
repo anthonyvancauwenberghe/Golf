@@ -223,7 +223,7 @@ public class Editor {
     public static void addObject(Point point) {
         switch (selectedShape) {
             case Rectangle:
-                course.addRectangle(point.x, point.y, penWidth, penHeight, selectedType);
+                course.addRectangle(point.x, point.y, 0, penWidth, penHeight, selectedType);
                 break;
             case Squircle:
                 course.addSquircle(point.x, point.y, penWidth, 4, 0, selectedType);

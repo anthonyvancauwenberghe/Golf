@@ -1,4 +1,6 @@
-package Game;
+package MarkusTestLab;
+
+import Game.Config;
 
 import java.awt.*;
 
@@ -12,8 +14,7 @@ public enum Type {
     Hole(Color.WHITE,0.9),
     Grass(Color.GREEN,0.3),
     Start(Color.RED,0.0),
-    OBJECT(Color.gray, Config.WALL_ENERGY_LOSS),$MARKER(Color.black,0);
-
+    OBJECT(Color.gray, Config.WALL_ENERGY_LOSS);
 
 
     Color g;

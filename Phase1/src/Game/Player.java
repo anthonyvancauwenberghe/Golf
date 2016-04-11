@@ -33,10 +33,10 @@ public class Player {
         addStroke();
     }
 
-    public void setBallPosition(Coordinate c){
-        b.getCoordinate().setX(c.getX());
-        b.getCoordinate().setY(c.getY());
-        b.getCoordinate().setZ(c.getZ());
+    public void setBallPosition(double x, double y, double z){
+        b.getCoordinate().setX(x);
+        b.getCoordinate().setY(y);
+        b.getCoordinate().setZ(z);
     }
 
     public Player(String name){
@@ -44,6 +44,7 @@ public class Player {
         this.id = idCounter++;
         this.currentStrokes=0;
         this.totalStrokes=0;
+        resetBall();
     }
 
     public void resetCurrentStrokes(){

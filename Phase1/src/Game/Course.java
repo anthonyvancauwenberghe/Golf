@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
@@ -17,14 +18,14 @@ import java.util.Random;
 public class Course {
  String name;
 
-    Tile[][][] playfield;
-    Tile[][][] copy;
+    Type[][][] playfield;
+    Type[][][] copy;
     int[] dimension;
-    ArrayList<ArrayList<Tile>> objectsOnPlayfield;
+
     int par;
     public Tile startTile;
     public Hole hole;
-    public ArrayList<ArrayList<Tile>> oldTiles = new ArrayList<>(8);
+    public Stack<Tile> oldTiles = new Stack<Tile>();
 
 
     /**
@@ -42,19 +43,16 @@ public class Course {
      */
     public Course(String name, int length, int width, int height, Type standartType, int par){
         this.name = name;
-        playfield = new Tile[length][width][height];
+        playfield = new Type[length][width][height];
         dimension = new int[3]; dimension[0] =length; dimension[1] =width; dimension[2]=height;
-        objectsOnPlayfield = new ArrayList<ArrayList<Tile>>();
-        //Creates the arraylists for the different objecttypes
-        for (int i = 0; i < Type.values().length; i++) {
-            objectsOnPlayfield.add(new ArrayList<>());
-        }
+
+
 
         //fills the playfield with empty tiles
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
-                    playfield[x][y][z] = Tile.newTile(Type.Empty,x,y,z);
+                    playfield[x][y][z] = Type.Empty;
                 }
             }
         }
@@ -64,22 +62,17 @@ public class Course {
                     Type typ;
                     if (standartType == null) typ = Type.values()[r.nextInt(Type.values().length)];
                     else typ =standartType;
-                    Tile t =Tile.newTile(typ,x,y,0);
-                    playfield[x][y][0] = t;
 
-                    if (typ!= Type.Empty) objectsOnPlayfield.get(typ.ordinal()).add(t);
+                    playfield[x][y][0] = typ;
             }
         }
-
 
 
         this.par = par;
 
     }
 
-    ArrayList<Tile> getObjectsOfType(Type t){
-        return objectsOnPlayfield.get(t.ordinal());
-    }
+
 
     /**
      * setter to set the tiles
@@ -89,30 +82,31 @@ public class Course {
      * @param t
      */
     public void setTile(int x, int y, int z, Type t){
-        Tile originalTile = playfield[x][y][z];
-        Tile newTile = originalTile;
-        if (originalTile.getType()!=Type.Empty){
-            objectsOnPlayfield.get(originalTile.getType().ordinal()).remove(originalTile);
-
+        Type originalTile;
+        try {
+            originalTile = playfield[x][y][z];
+        }catch (ArrayIndexOutOfBoundsException a){
+            a.printStackTrace();
+            return;
         }
-        newTile.setType(t);
+
+
+        Type newTile = originalTile;
+
+
+        newTile=t;
         if (t== Type.Hole){
             hole = new Hole(Config.getHoleRadius(), x,y,z) ;
-            playfield[x][y][z] = hole;
-            objectsOnPlayfield.get(t.ordinal()).add(hole);
         }else if (t == Type.Start) {
-            startTile = newTile;
-            playfield[x][y][z] = newTile;
-            objectsOnPlayfield.get(t.ordinal()).add(newTile);
+            startTile = new Tile(newTile,x,y,z);
+
         }else{
-            playfield[x][y][z] = newTile;
-            objectsOnPlayfield.get(t.ordinal()).add(newTile);
+
         }
-
-
+        playfield[x][y][z] = t;
     }
 
-    Tile getTile(int x, int y, int z){
+    Type getTile(int x, int y, int z){
         return playfield[x][y][z];
     }
 
@@ -120,7 +114,7 @@ public class Course {
      * getter to get the playfield
      * @return playfield
      */
-    public Tile[][][] getPlayfield(){
+    public Type[][][] getPlayfield(){
         return playfield;
     }
 
@@ -159,13 +153,13 @@ public class Course {
         if (c.startTile == null){
 
             c.setTile(20, 20, 0, Type.Start);
-            c.startTile = c.getTile(20, 20, 0);
+            c.startTile = new Tile(Type.Start,20, 20, 0);
         }
         if (c.hole == null){
             int x = (int) (length*0.8);
             int y = (int) (width*0.8);
             c.setTile(x, y, 0, Type.Hole);
-            c.hole = (Hole) c.getTile(x, y, 0);
+            c.hole = new Hole(Config.getHoleRadius(),x, y, 0);
         }
         return c;
 
@@ -190,8 +184,8 @@ public class Course {
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
-                    if (!playfield[x][y][z].getType().equals(Type.Empty))
-                    s.append("x:" + x + "y:" + y + "z:" + z + "Type:" + playfield[x][y][z].getType().name() + "STOP\n");
+                    if (!playfield[x][y][z].equals(Type.Empty))
+                    s.append("x:" + x + "y:" + y + "z:" + z + "Type:" + playfield[x][y][z].name() + "STOP\n");
                 }
             }
         }
@@ -210,13 +204,7 @@ public class Course {
         return name;
     }
 
-    /**
-     * getter to get the objects of the ArrayList of the ArrayList Tile
-     * @return objectsOnPlayfield
-     */
-    public ArrayList<ArrayList<Tile>> getObjects() {
-        return objectsOnPlayfield;
-    }
+
 
     /**
      * getter to get the dimension
@@ -267,15 +255,43 @@ public class Course {
      * @param height of the course
      * @param type
      */
-    public void addRectangle(int x1, int y1, int width, int height, Type type) {
-        ArrayList<Tile> newOldTile = new ArrayList<Tile>(2 * width * 2 * height);
-        oldTiles.add(newOldTile);
+    public void addRectangle(int x1, int y1, int z1, int width, int height, Type type) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
+
         int initialX=x1;
         int initalY=y1;
         for (int x = x1; x < initialX+width; x++) {
             for (int y = y1; y < initalY+height; y++) {
-                newOldTile.add(new Tile(getTile(x, y, 0).getType(), x, y, 0));
-                setTile(x,y,0,type);
+
+                oldTiles.add(new Tile(getTile(x,y,z1), x, y, z1));
+                setTile(x,y,z1,type);
+            }
+        }
+
+    }
+
+    /**
+     * method to add a rectangle to the course
+     * To set a tile to an object
+     * @param x1 x coordinate in the course to place the object
+     * @param y1 y coordinate in the course to place the object
+     * @param width of the course
+     * @param height of the course
+     * @param type
+     */
+    public void addCuboid(int x1, int y1, int z1, int length, int width, int height, Type type) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
+
+        int initialX=x1;
+        int initalY=y1;
+        int initalZ=z1;
+        for (int x = x1; x < initialX+length; x++) {
+            for (int y = y1; y < initalY+width; y++) {
+                for (int z = z1; z < initalZ+height; z++) {
+                    oldTiles.add(new Tile(getTile(x,y,z), x, y, z));
+                    setTile(x,y,z,type);
+                }
+
             }
         }
 
@@ -290,18 +306,19 @@ public class Course {
      * @param z
      * @param t
      */
-    public void addSquircle(int a, int b, int r, int n, int z, Type t) {
-        ArrayList<Tile> newOldTile = new ArrayList<Tile>(4*r*r);
-        oldTiles.add(newOldTile);
+    public void addSquircle(int a, int b, int r, double n, int z, Type t) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
         for (int x = -r+a; x < r+a; x++) {
             for (int y = -r+b; y < r+b; y++) {
               if(Math.pow(x-a,n)+Math.pow(y-b,n)<Math.pow(r,n)){
-                  newOldTile.add(new Tile(getTile(x,y,z).getType(),x,y,z));
-                  setTile(x, y, z, t);
+                  oldTiles.add(new Tile(getTile(x,y,z), x, y, z));
+                  setTile(x,y,z,t);
               }
             }
 
         }
+
+
     }
 
     /**
@@ -321,13 +338,51 @@ public class Course {
     }
 
     public void removeLastObject() {
-        if (oldTiles.size()==0)return;
-        ArrayList<Tile> od = oldTiles.get(oldTiles.size() - 1);
-        oldTiles.remove(oldTiles.size() - 1);
-        int s = od.size();
-        for (int i = 0; i < s; i++) {
-            Tile t = od.get(i);
-            this.setTile(t.getX(),t.getY(),t.getZ(),t.getType());
+        if (oldTiles.size() == 0) return;
+        Tile t = oldTiles.pop();
+
+        do{
+
+
+            this.setTile(t.getX(), t.getY(), t.getZ(), t.getType());
+            t = oldTiles.pop();
+
+        }while(t.t != Type.$MARKER);
+    }
+
+    public void addPyramid(int x, int y, int z, int length, int height, int depth, Type t) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
+        int initialX=x;
+        int initalY=y;
+        int initalZ=z;
+        int initialLength=x;
+        int initalHeight=y;
+        for (z = initalZ; z < initalZ+depth; z++) {
+            addRectangle(x,y,z,length,height,t);
+            oldTiles.pop(); //marker get set after every adding... as we add many objects
+            x++;
+            y++;
+            length--;
+            height--;
+            length--;
+            height--;
+            if (height<=0||length<=0)break;
         }
+
+    }
+    public void addHill(int a, int b, int r, double n, int z, int depth, Type t) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
+        int initialX=a;
+        int initalY=b;
+        int initalZ=z;
+
+        for (z = initalZ; z < initalZ+depth; z++) {
+            addSquircle(a,b,r,n,z,t);
+            oldTiles.pop(); //marker get set after every adding... as we add many objects
+            r--;
+
+            if (r<=0)break;
+        }
+
     }
 }

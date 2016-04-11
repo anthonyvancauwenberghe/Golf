@@ -25,7 +25,7 @@ public class Game {
 
 
     public Game(){
-        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);
+        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
         physics = new PhysicsEngine();
         frame = new JFrame();
         dp = new DrawPanel();
@@ -39,16 +39,19 @@ public class Game {
 
         course.setTile(400, 400, 0, Type.Hole);
         course.setTile(300, 400, 0, Type.Start);
-        course.addRectangle(600, 400, 50, 100, Type.OBJECT);
-
+        course.addRectangle(600, 400, 50, 100,0, Type.OBJECT);
+        course.addRectangle(400, 400, 50, 100,1, Type.OBJECT);
+        course.addCuboid(400, 400, 50, 100,30,20, Type.OBJECT);
+        course.addPyramid(200, 200, 50, 100,30,20, Type.OBJECT);
+        course.addHill(152, 152, 150, 1.5,0,20, Type.OBJECT);
+        course.addPyramid(400, 400, 0, 200,200,100, Type.OBJECT);
 
 
 
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
-        frame.add(dp);
-        addMenues(frame);
+
 
 
 
@@ -63,6 +66,8 @@ public class Game {
         dp.setCourse(course);
 
         physics.init(course, p.getBall());
+        frame.add(dp);
+        addMenues(frame);
         frame.setVisible(true);
         dp.repaint();
         Thread gameThread = new Thread(){
@@ -119,91 +124,8 @@ public class Game {
 
     }
     public static void main(String[] args) {
+        Game g = new Game();
 
-        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);
-        physics = new PhysicsEngine();
-        frame = new JFrame();
-        dp = new DrawPanel();
-
-        pp = new ArrayList<Player>(2);
-
-        Player p = new Player("Player 1");
-        Player p2 = new Player("Player 2");
-
-
-        course.setTile(400, 400, 0, Type.Hole);
-        course.setTile(300, 400, 0, Type.Start);
-        course.addRectangle(600, 400, 50, 100, Type.OBJECT);
-
-
-
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
-        frame.add(dp);
-        addMenues(frame);
-
-
-
-        pp.add(p);
-        pp.add(p2);
-
-        loadCourse(course);
-
-
-        dp.setPlayers(pp);
-        dp.setCurrentPlayer(p);
-        dp.setCourse(course);
-
-        physics.init(course, p.getBall());
-        dp.repaint();
-
-        while (true) {
-            if (pp.get(currentPlayer).getBall().isMoving) {
-                Player cp = pp.get(currentPlayer);
-
-                selectNextPlayer=true;
-                cp.getBall().getPhysics().init(course, cp.getBall());
-                cp.getBall().getPhysics().processPhysics();
-                cp.getBall().getPhysics().processNaturalForces();
-                cp.getBall().checkBallStopped();
-                cp.getBall().printBallInfo();
-                try {
-                    dp.repaint();
-                    Thread.sleep(REFRESH_RATE);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-            } else {
-                if (selectNextPlayer){
-                    if (!IsGameStillOn()){
-                        selectNextPlayer = false;
-                        JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
-                        showScoreOnScreen();
-                    }
-                    selectNextPlayer = false;
-
-                    do {
-                        currentPlayer=(currentPlayer+1)%(pp.size());
-                    }while (!pp.get(currentPlayer).getBall().inPlay);
-
-                    pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
-                    dp.setCurrentPlayer(pp.get(currentPlayer));
-                    JOptionPane.showMessageDialog(null, "It is " +  pp.get(currentPlayer).getName() + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
-                    dp.repaint();
-                }
-                try {
-                    Thread.sleep(1);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-            }
-
-        }
 
     }
 
@@ -307,7 +229,8 @@ public class Game {
             p.resetBall();
             p.resetCurrentStrokes();
             p.setInPlay(true);
-            p.setBallPosition(course.getStartTile().getCoordinate());
+            Tile t = course.getStartTile();
+            p.setBallPosition(t.x,t.y,t.z);
         }
         physics.init(course, pp.get(0).getBall());
         dp.setCourse(course);
@@ -361,7 +284,8 @@ public class Game {
 
 
                 Player p = new Player(s);
-                p.setBallPosition(course.getStartTile().getCoordinate());
+                Tile t = course.getStartTile();
+                p.setBallPosition(t.x,t.y,t.z);
                 pp.add(p);
             }
         });

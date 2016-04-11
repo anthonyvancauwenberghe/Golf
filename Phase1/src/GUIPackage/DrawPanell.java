@@ -79,7 +79,7 @@ public class DrawPanell extends JPanel {
     }
 
     private BufferedImage createImage() {
-        Tile[][][] pf = course.getPlayfield();
+        Type[][][] pf = course.getPlayfield();
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
                 new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);
@@ -90,8 +90,8 @@ public class DrawPanell extends JPanel {
         for (int x = 0; x < d[0]; x++) {
             for (int y = 0; y < d[1]; y++) {
                 for (int z = 0; z < d[2]; z++) {
-                    Tile t = pf[x][y][z];
-                    if (t.getType() == Type.Empty) continue;
+                    Type t = pf[x][y][z];
+                    if (t == Type.Empty) continue;
 
 
                     g.setColor(t.getColor());

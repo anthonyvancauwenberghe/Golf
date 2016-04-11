@@ -35,7 +35,7 @@ public class IntegrationMain extends JPanel{
         int counter = 0;
 
         course = new Course("Golf Deluxe", 800, 600, 1, Type.Grass, 1 );
-        course.addRectangle(40, 30, 50, 0, Type.Sand);
+        course.addRectangle(40, 30, 50,1, 0, Type.Sand);
         course.addSquircle(20,60,20,4,0,Type.Water);
         course.setTile(400,400,0,Type.Hole);
         course.setTile(300,400,0,Type.Start);
@@ -54,8 +54,8 @@ public class IntegrationMain extends JPanel{
 
         dp = new DrawPanel();
         frame.add(dp);
-
-        p.setBallPosition(course.getStartTile().getCoordinate());
+        Tile t = course.getStartTile();
+        p.setBallPosition(t.getX(),t.getY(),t.getZ());
         dp.setPlayers(pp);
         dp.setCurrentPlayer(p);
         dp.setCourse(course);

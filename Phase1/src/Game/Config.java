@@ -8,7 +8,7 @@ public class Config {
 
     private static final int width=1024;
     private static final int height = 768;
-    private static final int depth = 1;
+    private static final int depth = 100;
 
     public static final double maxSpeedToFallIntoHole = 3;
     private static final double ballMass = 1;

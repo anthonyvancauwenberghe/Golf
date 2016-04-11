@@ -26,12 +26,12 @@ public class GUIMainMenu extends JFrame {
     private JPanel panelwithIMG;
     private BufferedImage img;
 
-    Icon start1 = new ImageIcon("Phase1/src/GUIPackage/media/start1.png");
-    Icon start2 = new ImageIcon("Phase1/src/GUIPackage/media/start2.png");
-    Icon editor1 = new ImageIcon("Phase1/src/GUIPackage/media/editor1.png");
-    Icon editor2 = new ImageIcon("Phase1/src/GUIPackage/media/editor2.png");
-    Icon exit1 = new ImageIcon("Phase1/src/GUIPackage/media/exit1.png");
-    Icon exit2 = new ImageIcon("Phase1/src/GUIPackage/media/exit2.png");
+    Icon start1 = new ImageIcon("out/GUIPackage/media/start1.png");
+    Icon start2 = new ImageIcon("out/GUIPackage/media/start2.png");
+    Icon editor1 = new ImageIcon("out/GUIPackage/media/editor1.png");
+    Icon editor2 = new ImageIcon("out/GUIPackage/media/editor2.png");
+    Icon exit1 = new ImageIcon("out/GUIPackage/media/exit1.png");
+    Icon exit2 = new ImageIcon("out/GUIPackage/media/exit2.png");
 
     static GUIMainMenu g;
     public GUIMainMenu() {
@@ -129,7 +129,7 @@ public class GUIMainMenu extends JFrame {
 
 
 
-        panelwithIMG = new JPanelIMG(new ImageIcon("Phase1/src/GUIPackage/media/caddy.jpg").getImage());
+        panelwithIMG = new JPanelIMG(new ImageIcon("src/GUIPackage/media/caddy.jpg").getImage());
 
 
         //b.setIcon(Icon x);

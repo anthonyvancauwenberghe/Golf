@@ -89,7 +89,7 @@ public class PhysicsEngine {
                     break forloop;
                 } else {
 
-                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate - ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate - ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ());
                     System.out.println(1 + (i / 5) + ". coordinateX: " + futureXCoordinate + " coordinateY: " + futureYCoordinate);
                     if (nextBallCoordinateType == Type.OBJECT) {
                         ball.getCoordinate().setX(futureXCoordinate);
@@ -125,7 +125,7 @@ public class PhysicsEngine {
                     System.out.println("bigger!!!!!");
                     break forloop;
                 } else {
-                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate + ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate + ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ());
                     System.out.println(1 + (i / 5) + ". coordinateX: " + futureXCoordinate + " coordinateY: " + futureYCoordinate);
                     if (nextBallCoordinateType == Type.OBJECT) {
                         System.out.println("colission!");
@@ -176,7 +176,7 @@ public class PhysicsEngine {
                     break forloop;
                 } else {
 
-                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate - ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate - ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ());
                     System.out.println(1 + (i / 5) + ". coordinateX: " + futureXCoordinate + " coordinateY: " + futureYCoordinate);
                     if (nextBallCoordinateType == Type.OBJECT) {
                         ball.getCoordinate().setX(futureXCoordinate);
@@ -205,7 +205,7 @@ public class PhysicsEngine {
 
         int ss = pp.size();
         loop:for (int i = 0; i < ss; i++) {
-            if (course.getTile(pp.get(i)[0],pp.get(i)[1],0).getType()==Type.OBJECT){
+            if (course.getTile(pp.get(i)[0],pp.get(i)[1],0)==Type.OBJECT){
                 collisionX=pp.get(i)[0];
                 collisionY= pp.get(i)[1];
                 collisionHappened = true;
@@ -401,7 +401,7 @@ public class PhysicsEngine {
         if (Math.abs(ball.getSpeedX()) >= Math.abs(ball.getSpeedY())) {
             if (ball.getSpeedX() > 0) {
                 try{
-                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ());
 
                 } catch(Exception e) {
                     e.printStackTrace();
@@ -427,7 +427,7 @@ public class PhysicsEngine {
 
             } else {
                 try{
-                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ());
 
                 } catch(Exception e) {
                     e.printStackTrace();
@@ -456,7 +456,7 @@ public class PhysicsEngine {
         } else {
             if (ball.getSpeedY() < 0) {
                 try{
-                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() - ball.getRadius()), (int) (ball.getCoordinate().getY() - ball.getRadius()), (int) ball.getCoordinate().getZ());
 
                 } catch(Exception e) {
                     e.printStackTrace();
@@ -483,7 +483,7 @@ public class PhysicsEngine {
                 }
             } else if (ball.getSpeedY() >= 0) {
                 try{
-                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() + ball.getRadius()), (int) (ball.getCoordinate().getY() + ball.getRadius()), (int) ball.getCoordinate().getZ()).getType();
+                    ballCoordinateType = course.getTile((int) (ball.getCoordinate().getX() + ball.getRadius()), (int) (ball.getCoordinate().getY() + ball.getRadius()), (int) ball.getCoordinate().getZ());
 
                 } catch(Exception e) {
                     e.printStackTrace();

@@ -1,4 +1,9 @@
-package Game;
+package MarkusTestLab;
+
+import Game.Config;
+import Game.Coordinate;
+import Game.Game;
+import Game.Hole;
 
 import java.awt.*;
 
@@ -6,21 +11,19 @@ import java.awt.*;
  * Created by nibbla on 14.03.16.
  */
 public class Tile {
-    Type t;
+   Type t;
 
 
 
     int x,y,z;
-
+    public Coordinate coordinate;
 
 
     public static Tile newTile(Type t, int x, int y, int z){
         Tile a;
-        if (t == Type.Hole) {
-            a = new Hole(Config.getHoleRadius(), x, y, z);
-        }else{
+
             a = new Tile(t, x, y, z);
-        }
+
         return a;
 
 
@@ -78,6 +81,6 @@ public class Tile {
     }
 
     public Coordinate getCoordinate() {
-        return new Coordinate(x,y,z);
+        return coordinate;
     }
 }
