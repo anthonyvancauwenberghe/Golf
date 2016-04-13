@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -33,8 +31,8 @@ public class Editor {
 
         ArrayList<Player> pp = new ArrayList<>(2);
 
-        Player p = new Player("Player 1");
-        Player p2 = new Player("Player 2");
+        Player p = new HumanPlayer("Player 1");
+        Player p2 = new HumanPlayer("Player 2");
 
 
         //course.addRectangle(20, 40, 30, 50, Type.Sand);

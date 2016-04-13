@@ -1,9 +1,11 @@
 package Game;
 
+import java.util.ArrayList;
+
 /**
- * Created by nibbla on 14.03.16.
+ * Created by Nibbla on 13.04.2016.
  */
-public class Player {
+public abstract class Player {
     private boolean inPlay = false;
     String name;
     int id;
@@ -27,6 +29,8 @@ public class Player {
 
 
     }
+
+    public abstract void nextMove(Course c, ArrayList<Ball> balls);
 
     public void shoot(double speedX, double speedY, double speedZ){
         b.shootBall(speedX,speedY,speedZ);

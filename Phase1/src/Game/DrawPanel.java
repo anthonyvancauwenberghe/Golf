@@ -1,7 +1,5 @@
 package Game;
 
-import com.sun.prism.*;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

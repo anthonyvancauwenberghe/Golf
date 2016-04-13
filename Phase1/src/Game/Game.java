@@ -1,5 +1,8 @@
 package Game;
 
+import Game.Bots.AIPlayer;
+import Game.Bots.TestBot;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,8 +36,8 @@ public class Game {
 
         pp = new ArrayList<Player>(2);
 
-        Player p = new Player("Player 1");
-        Player p2 = new Player("Player 2");
+        Player p = new HumanPlayer("Player 1");
+        Player p2 = new TestBot("Player 2");
 
 
         course.setTile(400, 400, 0, Type.Hole);
@@ -102,10 +105,20 @@ public class Game {
                             do {
                                 currentPlayer=(currentPlayer+1)%(pp.size());
                             }while (!pp.get(currentPlayer).getBall().inPlay);
+                            ArrayList<Ball> balls = new ArrayList<>(8);
+                            ArrayList<Ball> otherBalls = new ArrayList<>(8);
+                            for (int i = 0; i < pp.size(); i++) {
+                                balls.add(pp.get(i).getBall());
+                                if (i!=currentPlayer) otherBalls.add(pp.get(i).getBall());
+                            }
+
+
 
                             pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
                             dp.setCurrentPlayer(pp.get(currentPlayer));
-                            JOptionPane.showMessageDialog(null, "It is " +  pp.get(currentPlayer).getName() + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
+
+                            pp.get(currentPlayer).nextMove(course,otherBalls);
+
                             dp.repaint();
                         }
                         try {
@@ -283,7 +296,7 @@ public class Game {
 
 
 
-                Player p = new Player(s);
+                Player p = new HumanPlayer(s);
                 Tile t = course.getStartTile();
                 p.setBallPosition(t.x,t.y,t.z);
                 pp.add(p);

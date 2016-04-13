@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import Game.*;
+import Game.Bots.AIPlayer;
+import Game.Bots.TestBot;
 
 /**
  * Created by tony on 16/03/2016.
@@ -40,8 +42,9 @@ public class IntegrationMain extends JPanel{
         course.setTile(400,400,0,Type.Hole);
         course.setTile(300,400,0,Type.Start);
         ArrayList<Player> pp = new ArrayList<>(2);
-        Player p = new Player("PlayerEins");
-        Player p2 = new Player("PlayerZwei");
+        Player p = new HumanPlayer("PlayerEins");
+        Player p2 = new TestBot("PlayerZwei");
+
         pp.add(p);
         pp.add(p2);
 
