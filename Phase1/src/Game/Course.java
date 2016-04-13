@@ -190,7 +190,7 @@ public class Course {
             }
         }
 
-        Utils.saveFile(name + ".txt", s.toString());
+        Utils.saveFile(name + ".gol", s.toString());
 
 
 

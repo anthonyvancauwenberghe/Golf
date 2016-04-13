@@ -28,7 +28,24 @@ public class Game {
 
 
     public Game(){
-        course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+
+        course = Course.loadCourse("GolfDeluxe.gol");
+        if (course == null) {
+            course = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+
+
+
+            course.setTile(400, 400, 0, Type.Hole);
+            course.setTile(300, 400, 0, Type.Start);
+            course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
+            course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
+            course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
+            course.addPyramid(200, 200, 50, 100, 30, 20, Type.OBJECT);
+            course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
+            course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
+            course.saveCourse();
+        }
+
         physics = new PhysicsEngine();
         frame = new JFrame();
         dp = new DrawPanel();
@@ -38,19 +55,6 @@ public class Game {
 
         Player p = new HumanPlayer("Player 1");
         Player p2 = new TestBot("Player 2");
-
-
-        course.setTile(400, 400, 0, Type.Hole);
-        course.setTile(300, 400, 0, Type.Start);
-        course.addRectangle(600, 400, 50, 100,0, Type.OBJECT);
-        course.addRectangle(400, 400, 50, 100,1, Type.OBJECT);
-        course.addCuboid(400, 400, 50, 100,30,20, Type.OBJECT);
-        course.addPyramid(200, 200, 50, 100,30,20, Type.OBJECT);
-        course.addHill(152, 152, 150, 1.5,0,20, Type.OBJECT);
-        course.addPyramid(400, 400, 0, 200,200,100, Type.OBJECT);
-
-
-
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);

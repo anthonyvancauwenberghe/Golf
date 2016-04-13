@@ -121,13 +121,14 @@ public class DrawPanel extends JPanel {
         try {
             String current = new java.io.File( "." ).getCanonicalPath();
             System.out.println("Current dir:"+current);
-            File f =new File("Phase1"+File.separator+"out"+ File.separator+"Game"+File.separator+"textures"+File.separator+"grass.jpg");
+            String t = Config.getTexturePath();
+            File f =new File(t+"grass.jpg");
             grassTexture = ImageIO.read(f);
-            sandTexture = ImageIO.read(new File("Phase1/out"+File.separator+"Game"+File.separator+"textures"+File.separator+"sand.jpg"));
-            waterTexture = ImageIO.read(new File("Phase1/out/Game/textures/water.jpg"));
-            holeTexture = ImageIO.read(new File("Phase1/out/Game/textures/hole.jpg"));
-            objectTexture = ImageIO.read(new File("Phase1/out/Game/textures/object.jpg"));
-            ballTexture = ImageIO.read(new File("Phase1/out/Game/textures/ball.jpg"));
+            sandTexture = ImageIO.read(new File(t+"sand.jpg"));
+            waterTexture = ImageIO.read(new File(t+"water.jpg"));
+            holeTexture = ImageIO.read(new File(t+"hole.jpg"));
+            objectTexture = ImageIO.read(new File(t+ "object.jpg"));
+            ballTexture = ImageIO.read(new File(t+"ball.jpg"));
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
