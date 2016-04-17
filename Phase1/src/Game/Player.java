@@ -32,10 +32,7 @@ public abstract class Player {
 
     public abstract void nextMove(Course c, ArrayList<Ball> balls);
 
-    public void shoot(double speedX, double speedY, double speedZ){
-        b.shootBall(speedX,speedY,speedZ);
-        addStroke();
-    }
+
 
     public void setBallPosition(double x, double y, double z){
         b.getCoordinate().setX(x);
@@ -68,9 +65,14 @@ public abstract class Player {
     }
 
     public void shootBall(int x, int y, int z) {
-        b.shootBall(x,y,z);
+        b.shootBall(x*Config.speedMultiplyer,y*Config.speedMultiplyer,z*Config.speedMultiplyer);
         addStroke();
     }
+    public void shootBall(double speedX, double speedY, double speedZ){
+        b.shootBall(speedX,speedY,speedZ);
+        addStroke();
+    }
+
 
     public String getName() {
         return name;

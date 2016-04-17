@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
+import static java.lang.Math.floor;
+
 /**
  * Created by tony on 16/03/2016.
  */
@@ -72,22 +74,50 @@ public class Game {
         dp.setCurrentPlayer(p);
         dp.setCourse(course);
 
-        physics.init(course, p.getBall());
+
         frame.add(dp);
         addMenues(frame);
         frame.setVisible(true);
         dp.repaint();
+        ArrayList<Ball> balls = new ArrayList<>(8);
+        for (int i = 0; i < pp.size(); i++) {
+            balls.add(pp.get(i).getBall());
+        }
+
+        physics.init(course,balls);
+
         Thread gameThread = new Thread(){
+
+            long elapsedTime = 0;
+            long currentTime = 0;
+            long leftOverTime = 0;
+            long lastTime = System.currentTimeMillis();
+
             public void run(){
+
                 while (true) {
-                    if (pp.get(currentPlayer).getBall().isMoving) {
+                    if (isSomeBallMoving()) {
                         Player cp = pp.get(currentPlayer);
 
                         selectNextPlayer=true;
-                        cp.getBall().getPhysics().init(course, cp.getBall());
-                        cp.getBall().getPhysics().processPhysics();
-                        cp.getBall().getPhysics().processNaturalForces();
-                        cp.getBall().checkBallStopped();
+                        currentTime = System.currentTimeMillis();
+                        long elapsedTime =  currentTime - lastTime;
+                        lastTime = currentTime; // reset lastTime
+
+                        // add time that couldn't be used last frame
+                        elapsedTime += leftOverTime;
+
+                        // divide it up in chunks of 16 ms
+                        long timesteps = elapsedTime / Config.timeStep;
+
+                        // store time we couldn't use for the next frame.
+                        leftOverTime = elapsedTime - timesteps* Config.timeStep;
+
+                        for (int i = 0; i < timesteps; i++) {
+                            physics.processPhysics(Config.timeStepSeconds);
+                        }
+
+
                         cp.getBall().printBallInfo();
                         try {
                             dp.repaint();
@@ -98,6 +128,8 @@ public class Game {
 
 
                     } else {
+                        lastTime = System.currentTimeMillis();
+
                         if (selectNextPlayer){
                             if (!IsGameStillOn()){
                                 selectNextPlayer = false;
@@ -109,20 +141,15 @@ public class Game {
                             do {
                                 currentPlayer=(currentPlayer+1)%(pp.size());
                             }while (!pp.get(currentPlayer).getBall().inPlay);
-                            ArrayList<Ball> balls = new ArrayList<>(8);
+
                             ArrayList<Ball> otherBalls = new ArrayList<>(8);
+
                             for (int i = 0; i < pp.size(); i++) {
-                                balls.add(pp.get(i).getBall());
                                 if (i!=currentPlayer) otherBalls.add(pp.get(i).getBall());
                             }
 
-
-
-                            pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
                             dp.setCurrentPlayer(pp.get(currentPlayer));
-
                             pp.get(currentPlayer).nextMove(course,otherBalls);
-
                             dp.repaint();
                         }
                         try {
@@ -140,6 +167,16 @@ public class Game {
 
 
     }
+
+    private boolean isSomeBallMoving() {
+        for (int i = 0; i < pp.size(); i++) {
+            if (pp.get(currentPlayer).getBall().isMoving) return true;
+        }
+
+
+        return false;
+    }
+
     public static void main(String[] args) {
         Game g = new Game();
 
@@ -247,9 +284,9 @@ public class Game {
             p.resetCurrentStrokes();
             p.setInPlay(true);
             Tile t = course.getStartTile();
-            p.setBallPosition(t.x,t.y,t.z);
+            p.setBallPosition(t.x,t.y,t.z+1);
         }
-        physics.init(course, pp.get(0).getBall());
+
         dp.setCourse(course);
         dp.setCurrentPlayer(pp.get(0));
         currentPlayer=0;

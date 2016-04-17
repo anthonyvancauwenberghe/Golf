@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import Game.*;
-import Game.Bots.AIPlayer;
 import Game.Bots.TestBot;
 
 /**
@@ -65,13 +64,16 @@ public class IntegrationMain extends JPanel{
         dp.repaint();
 
         PhysicsEngine physics = new PhysicsEngine();
-
-        physics.init(course, p.getBall());
+        ArrayList<Ball> balls = new ArrayList<>(8);
+        for (int i = 0; i < pp.size(); i++) {
+            balls.add(pp.get(i).getBall());
+        }
+        physics.init(course, balls);
         dp.repaint();
         while(true){
             if(p.getBall().isMoving){
-                p.getBall().getPhysics().init(course, p.getBall());
-                p.getBall().getPhysics().processPhysics();
+                p.getBall().getPhysics().init(course,balls);
+                p.getBall().getPhysics().processPhysics(Config.timeStep);
                 p.getBall().getPhysics().processNaturalForces();
                 p.getBall().checkBallStopped();
                 p.getBall().printBallInfo();

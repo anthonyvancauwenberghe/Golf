@@ -16,6 +16,7 @@ public class Ball {
     private double speedSlower = Config.speedSlower;
 
 
+
     /**
      * constructor of the class Ball
      * @param mass the mass of the ball
@@ -24,6 +25,26 @@ public class Ball {
     public Ball(double mass, double radius) {
         this.mass = mass;
         this.radius = radius;
+    }
+
+    public void setX(double x){
+        coordinate.setX(x);
+    }
+    public void setY(double y){
+        coordinate.setY(y);
+    }
+    public void setZ(double z){
+        coordinate.setZ(z);
+    }
+
+    public double getX(){
+        return coordinate.getX();
+    }
+    public double getY(){
+        return coordinate.getY();
+    }
+    public double getZ(){
+        return coordinate.getZ();
     }
 
     /**
@@ -63,15 +84,7 @@ public class Ball {
         }
     }
 
-    /**
-     * What is shootBall3D doing?
-     * @param speed1
-     * @param speed2
-     * @param angle
-     */
-    public void shootBall3D(double speed1, double speed2, double angle) {
 
-    }
 
     /**
      * ??
@@ -219,5 +232,9 @@ public class Ball {
 
 
 
+    }
+
+    public void setPosition(Coordinate position) {
+        this.coordinate = position;
     }
 }

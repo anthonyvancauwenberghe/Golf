@@ -14,7 +14,7 @@ public class Config {
     private static final double ballMass = 1;
     private static final double ballRadius = 14;
     private static final double holeRadius = 24;
-    public static final double GROUND_FRICTION = 0.88;
+    public static final double GROUND_FRICTION = 0.98;
     public static final double AIR_FRICTION = 0.995;
     public static final double GRAVITY_FORCE = 9.81;
     public static final double WALL_ENERGY_LOSS = 0.7;
@@ -24,12 +24,16 @@ public class Config {
     public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;
     public static final int OFFSET_Y_EDITOR=62;
-    public static final int speedLimiter=120;
+    public static final int speedLimiter=380;
     public static final double speedSlower=1.3;
 
     public static final boolean ENABLED3D=false;
     public static final float POWERLINEWIDTH = 3.f;
-    private static final String texturePath = "Phase1/out/Game/textures/";
+    public static final String texturePath = "Phase1/out/Game/textures/";
+    public static final int timeStep = 16;
+    public static final double timeStepSeconds = timeStep/1000f;
+    public static final double MINSPEED = 5;
+    public static final double speedMultiplyer = 3;
 
     /**
      * getter to get the mass of the ball

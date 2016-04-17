@@ -96,7 +96,7 @@ public class DrawPanel extends JPanel {
                     */
                     if (currentPlayer != null)
 
-                        currentPlayer.shootBall((-(getFirstXClick() - e.getX())) / 2, -(getFirstYClick() - e.getY()), 0);
+                        currentPlayer.shootBall((-(getFirstXClick() - e.getX())), -(getFirstYClick() - e.getY()), 0);
                         prepareShoot = false;
                 }
 

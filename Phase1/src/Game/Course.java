@@ -22,6 +22,7 @@ public class Course {
     Type[][][] copy;
     int[] dimension;
 
+
     int par;
     public Tile startTile;
     public Hole hole;
@@ -124,6 +125,7 @@ public class Course {
      */
     public static Course loadCourse(String path){
         String content = Utils.readFile(path);
+        if (content == null) return null;
         String[] lines = content.split(System.lineSeparator());
         String name = lines[0];
 
@@ -384,5 +386,19 @@ public class Course {
             if (r<=0)break;
         }
 
+    }
+
+    public Type getType(Coordinate newPosition) {
+        int x = newPosition.getxInt();
+        int y = newPosition.getyInt();
+        int z = newPosition.getzInt();
+
+        return getType( x, y, z);
+    }
+    public Type getType(int x, int y, int z) {
+        if (x<0||y<0||z<0) return Type.OutOfBounds;
+        if (x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) return Type.OutOfBounds;
+
+        return playfield[x][y][z];
     }
 }

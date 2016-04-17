@@ -59,13 +59,16 @@ public class Main extends JPanel {
         dp.setCourse(course);
         dp.repaint();
 
-
-        physics.init(course, p.getBall());
+        ArrayList<Ball> balls = new ArrayList<>(8);
+        for (int i = 0; i < pp.size(); i++) {
+            balls.add(pp.get(i).getBall());
+        }
+        physics.init(course, balls);
         dp.repaint();
         while (true) {
             if (p.getBall().isMoving) {
-                p.getBall().getPhysics().init(course, p.getBall());
-                p.getBall().getPhysics().processPhysics();
+                p.getBall().getPhysics().init(course, balls);
+                p.getBall().getPhysics().processPhysics(Config.timeStep);
                 p.getBall().getPhysics().processNaturalForces();
                 p.getBall().checkBallStopped();
                 p.getBall().printBallInfo();

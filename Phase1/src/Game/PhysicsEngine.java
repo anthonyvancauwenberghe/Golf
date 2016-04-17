@@ -2,7 +2,6 @@ package Game;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -11,12 +10,12 @@ import java.util.ArrayList;
 public class PhysicsEngine {
     private Course course;
 
-    public void setBall(Ball ball) {
-        this.ball = ball;
-    }
 
-    private Ball ball;
+    ArrayList<Coordinate> forces = new ArrayList<>(4); //those forces are homogenious on the hole playing field
+    ArrayList<Coordinate> directed = new ArrayList<>(4); //those forces direct the ball to this point.
 
+    ArrayList<Ball> balls = new ArrayList<>(4);
+    Ball ball;
     private final double GROUND_FRICTION = Config.GROUND_FRICTION;
     private final double AIR_FRICTION = Config.AIR_FRICTION;
     private final double GRAVITY_FORCE = Config.GRAVITY_FORCE;
@@ -27,9 +26,9 @@ public class PhysicsEngine {
 
     public static boolean enable3D = Config.ENABLED3D;
 
-    public void init(Course course, Ball ball) {
+    public void init(Course course, ArrayList<Ball> ball) {
         this.course = course;
-        this.ball = ball;
+        this.balls = ball;
     }
 
     public void processNaturalForces() {
@@ -280,9 +279,89 @@ public class PhysicsEngine {
         */
 
 
+    public void processPhysics(double elapsedTime) {
 
 
-    public void processPhysics() {
+        Type[][][] playfield = course.getPlayfield();
+        for (int i = 0; i < balls.size(); i++) {
+
+            Ball b = balls.get(i);
+
+            double speedx = b.getSpeedX();
+            double speedy = b.getSpeedY();
+            double speedz = b.getSpeedZ();
+            //applyForces
+
+
+
+            //calculateV
+
+            //calculateDeltaPos
+            Coordinate newPosition = new Coordinate(b.getX() + b.getSpeedX() * elapsedTime,b.getY() + b.getSpeedY() * elapsedTime,b.getZ() + b.getSpeedZ() * elapsedTime);
+            //check for Collision
+            checkForCollision(b, newPosition);
+            //apply friction
+            b.speedX=b.getSpeedX()*Type.Grass.getFriction();
+            b.speedY=b.getSpeedY()*Type.Grass.getFriction();
+            b.speedZ=b.getSpeedZ()*Type.Grass.getFriction();
+
+            if (b.getSpeed()<Config.MINSPEED){
+                b.speedX=0;
+                b.speedY=0;
+                b.speedZ=0;
+                b.isMoving=false;
+            }
+
+        }
+    }
+
+    private void checkForCollision(Ball b, Coordinate newPosition) {
+        ArrayList<Coordinate> checkThose = Coordinate.getPxelBetweenToPoints(b.getCoordinate(),newPosition);
+        int indexOfLastFree = checkThose.size()-1;
+
+        Coordinate collisionCoordinate=null;
+        Coordinate lastFreeCoordinate = b.getCoordinate();
+
+        ;
+        for (int j = 0; j < checkThose.size(); j++) {
+            Coordinate c = checkThose.get(j);
+            Type positionType = course.getType(newPosition);
+            if (positionType != Type.Empty){
+                collisionCoordinate = c;
+                if (j > 0)  lastFreeCoordinate = checkThose.get(j-1);
+                else lastFreeCoordinate = checkThose.get(0);
+
+                indexOfLastFree = j-1;
+                break;
+            }
+
+        }
+        if (collisionCoordinate==null) {
+            b.setPosition(newPosition);
+            return;
+        }
+        if (indexOfLastFree>=0) b.setPosition(lastFreeCoordinate);
+
+        //updateSpeed
+        try {
+
+            Coordinate normal = Coordinate.getNormal(course, collisionCoordinate);
+
+        double projection = b.getSpeedX()*normal.getX()+b.getSpeedY()*normal.getY()+b.getSpeedZ()*normal.getZ();
+        projection *=2;
+        double newSpeedX = -normal.getX()*projection;
+        double newSpeedY = -normal.getY()*projection;
+        double newSpeedZ = -normal.getZ()*projection;
+
+        b.speedX = newSpeedX;
+        b.speedY = newSpeedY;
+        b.speedZ = newSpeedZ;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void processPhysicsOld(int timeStep) {
 
         Type ballCoordinateType = null;
         Coordinate b = ball.getCoordinate();
