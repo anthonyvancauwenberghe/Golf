@@ -31,7 +31,7 @@ public class Game {
 
     public Game(){
 
-        course = Course.loadCourse("GolfDeluxe.gol");
+        course = null;//Course.loadCourse("GolfDeluxe.gol");
         if (course == null) {
             course = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
 
@@ -45,6 +45,7 @@ public class Game {
             course.addPyramid(200, 200, 50, 100, 30, 20, Type.OBJECT);
             course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
             course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
+            course.addSphere(200, 200, 50, 100, Type.OBJECT);
             course.saveCourse();
         }
 

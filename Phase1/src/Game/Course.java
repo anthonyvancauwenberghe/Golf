@@ -2,13 +2,12 @@ package Game; /**
  * Created by nibbla on 14.03.16.
  */
 
-import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
-
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
  * A tile is 1cm³
@@ -44,6 +43,7 @@ public class Course {
      */
     public Course(String name, int length, int width, int height, Type standartType, int par){
         this.name = name;
+
         playfield = new Type[length][width][height];
         dimension = new int[3]; dimension[0] =length; dimension[1] =width; dimension[2]=height;
 
@@ -171,32 +171,47 @@ public class Course {
      * method saveCourse saves the course as a .txt file
      */
     public void saveCourse(){
-        StringBuilder s = new StringBuilder();
+
         int length = playfield.length;
         int width = playfield[0].length;
         int height = playfield[0][0].length;
 
-        s.append("Name:" + name +"\n");
-        s.append("Par:" + par +"\n");
-        s.append("length:" + length +"\n");
-        s.append("width:" + width +"\n");
-        s.append("height:" + height +"\n");
+        try {
+            BufferedWriter bf = new BufferedWriter(new FileWriter(name+"gol"));
+
+            bf.write("Name:" + name +"\n");
+            bf.write("Par:" + par +"\n");
+            bf.write("length:" + length +"\n");
+            bf.write("width:" + width +"\n");
+            bf.write("height:" + height +"\n");
 
 
-        for (int x = 0; x < length; x++) {
-            for (int y = 0; y < width; y++) {
-                for (int z = 0; z < height; z++) {
-                    if (!playfield[x][y][z].equals(Type.Empty))
-                    s.append("x:" + x + "y:" + y + "z:" + z + "Type:" + playfield[x][y][z].name() + "STOP\n");
+            for (int x = 0; x < length; x++) {
+                for (int y = 0; y < width; y++) {
+                    for (int z = 0; z < height; z++) {
+                        if (!playfield[x][y][z].equals(Type.Empty))
+                            bf.write("x:" + x + "y:" + y + "z:" + z + "Type:" + playfield[x][y][z].name() + "STOP\n");
+
+                    }
                 }
             }
+
+            bf.close();
         }
-
-        Utils.saveFile(name + ".gol", s.toString());
-
-
-
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+
+
+
+
+
+
+
+
+
 
     /**
      * getter to get the name of the course
@@ -400,5 +415,70 @@ public class Course {
         if (x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) return Type.OutOfBounds;
 
         return playfield[x][y][z];
+    }
+
+    public void addSphereSurface(int x, int y, int z, int r, Type object) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
+        ArrayList<Coordinate> sp = getSphereSurfacePoints(x,y,z,r,100,100);
+        for(Coordinate c : sp){
+            oldTiles.add(new Tile(Type.$MARKER,c.getxInt(),c.getyInt(),c.getzInt()));
+            playfield[c.getxInt()][c.getyInt()][c.getzInt()] = object;
+        }
+    }
+
+    public void addSphere(int xCenter, int yCenter, int zCenter, int r, Type object) {
+        oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
+        Coordinate center = new Coordinate(xCenter,yCenter,zCenter);
+        for (int x = xCenter+-r/2; x < xCenter+r/2; x++) {
+            for (int y = yCenter+-r/2; y < yCenter+r/2; y++) {
+                for (int z = zCenter+-r/2; z < zCenter+r/2; z++) {
+
+                    if (Coordinate.getDistance(xCenter,yCenter,zCenter,x,y,z) < r){
+                        playfield[x][y][z] = object;
+                    }
+
+                }
+            }
+        }
+
+
+    }
+
+    /**
+     *
+     * @param r radius
+     * @param lats resolution of the latitutes
+     * @param longs resolution of the longitutes
+     * @param xCenter
+     * @param yCenter
+     * @param zCenter
+     */
+    public static ArrayList<Coordinate> getSphereSurfacePoints(int xCenter, int yCenter, int zCenter ,double radius, int latResolution, int longResolution)
+    {
+        ArrayList<Coordinate> c = new ArrayList<>(latResolution*longResolution);
+        int i, j;
+
+
+        for (i = 0; i <= latResolution; i++)
+        {
+            double lat0 = Math.PI * (-0.5 + (double)(i - 1) / latResolution);
+            double z0 = Math.sin(lat0) *radius;
+            double zr0 = Math.cos(lat0) *radius;
+
+            double lat1 = Math.PI * (-0.5 + (double)i / latResolution);
+            double z1 = Math.sin(lat1) *radius;
+            double zr1 = Math.cos(lat1) *radius;
+
+            for (j = 0; j <= longResolution; j++)
+            {
+                double lng = 2 * Math.PI * (double)(j - 1) / longResolution;
+                double x = Math.cos(lng)*radius;
+                double y = Math.sin(lng)*radius;
+
+                c.add(new Coordinate(xCenter+x * zr0,yCenter+ y * zr0,zCenter+ z0));
+                c.add(new Coordinate(xCenter+x * zr1,yCenter+ y * zr1,zCenter+ z1));
+            }
+        }
+        return c;
     }
 }

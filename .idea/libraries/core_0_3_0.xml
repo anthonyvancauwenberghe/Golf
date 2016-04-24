@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="core-0.3.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Phase1/src/MarkusTestLab/core-0.3.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Phase1/src/MarkusTestLab/demo-0.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -2,6 +2,12 @@ package MarkusTestLab;
 
 
 
+import cern.colt.function.IntFunction;
+import cern.colt.matrix.DoubleFactory3D;
+import cern.colt.matrix.DoubleMatrix3D;
+import cern.colt.matrix.tint.IntFactory3D;
+import cern.colt.matrix.tint.IntMatrix3D;
+import hep.aida.IHistogram1D;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.colors.Color;
@@ -13,6 +19,9 @@ import org.jzy3d.plot3d.primitives.ScatterMultiColor;
 import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.DoubleStream;
+
+import hep.aida.*;
 
 /**
  * Created by Nibbla on 09.04.2016.
@@ -21,18 +30,21 @@ public class TestClassMarkusDontDeleteOrDoomIsNear {
 
 
 
+
     public static void main(String[] args){
         System.out.println("Welcome to Markus' Testlab\n");
-        boolean scenario1 = true;
-        boolean scenario2 = true;
-        boolean scenario3 = true;
-        boolean scenario4 = true;
-        boolean scenario5 = true;
+        boolean scenario1 = false;
+        boolean scenario2 = false;
+        boolean scenario3 = false;
+        boolean scenario4 = false;
+        boolean scenario5 = false;
 
-        boolean scenario6 = true;
-        boolean scenario7 = true;
-        boolean scenario8 = true;
+        boolean scenario6 = false;
+        boolean scenario7 = false;
+        boolean scenario8 = false;
         boolean scenario9 = false;
+        boolean scenario10 = false;
+        boolean scenario11 = true;
 
         System.out.println("Creating and filling different Array Types\n");
         Tile[][][] playfield;
@@ -110,9 +122,110 @@ public class TestClassMarkusDontDeleteOrDoomIsNear {
             printOut(Scenario3());
         }
 
+        if(scenario10){
+           DoubleMatrix3D d = DoubleFactory3D.dense.make(600,800,100);
+            int length = 800;
+            int width = 400;
+            int height = 1000;
+            int e = 600*800;
+            // Scenario Three
+            startTime = System.currentTimeMillis();
+            Random r = new Random();
 
+            for (int i = 0; i < 600; i++) {
+                for (int j = 0; j < 800; j++) {
+                    for (int k = 0; k < 1000; k++) {
+                        d.setQuick(i,j,k, 0);
+                    }
+                }
+
+            }
+            endTime = System.currentTimeMillis();
+            passedTime = endTime - startTime;
+
+            System.out.format("Version DoubleMatrix3D for %d elements in Dimension %d,%d,%d with enums took %n \t %.3f Milliseconds%n", e, length, width, height, passedTime);
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < 600; i++) {
+                for (int j = 0; j < 800; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        d.get(i,j,k);
+                    }
+                }
+
+            }
+
+
+            endTime = System.currentTimeMillis();
+            passedTime = endTime - startTime;
+
+            System.out.format("Version DoubleMatrix3D for %d elements in Dimension %d,%d,%d with enums took %n \t %.3f Milliseconds%n", e, length, width, height, passedTime);
+        }
+        if(scenario11){
+            IntMatrix3D d = IntFactory3D.dense.make(600,800,100);
+
+            int length = 800;
+            int width = 400;
+            int height = 1000;
+            int e = 600*800;
+            // Scenario Three
+            startTime = System.currentTimeMillis();
+            Random r = new Random();
+
+            for (int i = 0; i < 600; i++) {
+                for (int j = 0; j < 800; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        d.setQuick(i,j,k, 0);
+                    }
+                }
+
+            }
+            endTime = System.currentTimeMillis();
+            passedTime = endTime - startTime;
+
+            System.out.format("Version DoubleMatrix3D for %d elements in Dimension %d,%d,%d with enums took %n \t %.3f Milliseconds%n", e, length, width, height, passedTime);
+            startTime = System.currentTimeMillis();
+            for (int i = 0; i < 600; i++) {
+                for (int j = 0; j < 800; j++) {
+                    for (int k = 0; k < 100; k++) {
+                        d.get(i,j,k);
+                    }
+                }
+
+            }
+
+
+            endTime = System.currentTimeMillis();
+            passedTime = endTime - startTime;
+
+            System.out.format("Version DoubleMatrix3D for %d elements in Dimension %d,%d,%d with enums took %n \t %.3f Milliseconds%n", e, length, width, height, passedTime);
+
+            startTime = System.currentTimeMillis();
+            cern.colt.function.tint.IntFunction t = new testo();
+            for (int i = 0; i < 600; i++) {
+                for (int j = 0; j < 800; j++) {
+                    for (int k = 0; k < 100; k++) {
+
+                        d.assign(t);
+                    }
+                }
+
+            }
+
+
+            endTime = System.currentTimeMillis();
+            passedTime = endTime - startTime;
+
+            System.out.format("Version DoubleMatrix3D for %d elements in Dimension %d,%d,%d with enums took %n \t %.3f Milliseconds%n", e, length, width, height, passedTime);
+
+        }
     }
+    private static class testo implements cern.colt.function.tint.IntFunction{
 
+        @Override
+        public int apply(int i) {
+            return i*24;
+        }
+    }
     private static void printOut(Type[][][] types) {
         int size = 100000;
         float x;
@@ -322,6 +435,8 @@ public class TestClassMarkusDontDeleteOrDoomIsNear {
             }
         }
 
+        // Scenario Three
+        startTime = System.currentTimeMillis();
         endTime = System.currentTimeMillis();
         passedTime = endTime - startTime;
 

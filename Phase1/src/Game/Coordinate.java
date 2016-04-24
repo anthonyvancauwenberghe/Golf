@@ -155,6 +155,12 @@ public class Coordinate {
         return Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) + (z1 - z2) * (z1 - z2));
     }
 
+
+    public static double getDistance(Coordinate c1, Coordinate c2) {
+
+        return Math.sqrt((c1.getX() - c2.getX()) * (c1.getX() - c2.getX()) + (c1.getY() - c2.getY()) * (c1.getY() - c2.getY()) + (c1.getZ() - c2.getZ()) * (c1.getZ() - c2.getZ()));
+    }
+
     public static Coordinate getNormal(Course playfield, Coordinate c) {
         int x = c.xInt;
         int y = c.yInt;

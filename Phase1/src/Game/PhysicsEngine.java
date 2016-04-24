@@ -298,8 +298,20 @@ public class PhysicsEngine {
 
             //calculateDeltaPos
             Coordinate newPosition = new Coordinate(b.getX() + b.getSpeedX() * elapsedTime,b.getY() + b.getSpeedY() * elapsedTime,b.getZ() + b.getSpeedZ() * elapsedTime);
-            //check for Collision
+            //check for Collision with surroundings
             checkForCollision(b, newPosition);
+            //check for Collision with different balls
+            for (int j = i+1; j < balls.size(); j++) {
+                //check for collision between two balls
+                Ball bd = balls.get(j);
+               // if (Ball.collide(b,bd)){
+                    //if collision reset postion and update vectors
+
+                //}
+
+
+            }
+
             //apply friction
             b.speedX=b.getSpeedX()*Type.Grass.getFriction();
             b.speedY=b.getSpeedY()*Type.Grass.getFriction();

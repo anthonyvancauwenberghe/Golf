@@ -41,6 +41,7 @@ public class Utils {
     }
 
     static void saveFile(String path, String content){
+        System.out.println("Try to store at this path " + path);
         BufferedWriter writer = null;
         try
         {
@@ -61,6 +62,7 @@ public class Utils {
             }
             catch ( IOException e)
             {
+                e.printStackTrace();
             }
         }
     }
