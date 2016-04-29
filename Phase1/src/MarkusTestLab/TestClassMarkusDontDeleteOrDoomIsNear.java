@@ -1,7 +1,6 @@
 package MarkusTestLab;
 
-
-
+/*
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.colors.Color;
@@ -14,9 +13,6 @@ import java.awt.image.AreaAveragingScaleFilter;
 import java.util.ArrayList;
 import java.util.Random;
 
-/**
- * Created by Nibbla on 09.04.2016.
- */
 public class TestClassMarkusDontDeleteOrDoomIsNear {
 
 
@@ -385,3 +381,5 @@ public class TestClassMarkusDontDeleteOrDoomIsNear {
         System.out.format("Version 3nested Array for %d elements in Dimension %d,%d,%d took %n \t %.3f Milliseconds%n", e, length, width, height, passedTime);
     }
 }
+
+*/

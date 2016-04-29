@@ -185,6 +185,33 @@ public class Coordinate {
 
     }
 
+    public Coordinate normal(Course playfield){
+        int depth = 3;
+        int x = xInt;
+        int y = yInt;
+        int z = zInt;
+        double avgX = 0;
+        double avgY = 0;
+        double avgZ = 0;
+
+        for (int dx = x - depth; dx < x + depth; dx++){
+            for (int dy = y - depth; dy < y + depth; dy++){
+                for (int dz = z - depth; dz < z + depth; dz++){
+                    if (playfield.getType(dx, dy, dz) != Type.Empty){
+                        avgX += dx;
+                        avgY += dy;
+                        avgZ += dz;
+                    }
+                }
+            }
+        }
+        double length = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ); // distance from avg to the center
+        avgX /= length;
+        avgZ /= length;
+        avgY /= length;
+        return new Coordinate(avgX, avgY, avgZ);
+    }
+
     public static ArrayList<Coordinate> getPxelBetweenToPoints(Coordinate coordinate1, Coordinate coordinate2) {
 
 

@@ -15,7 +15,7 @@ import static java.lang.Math.floor;
  * Created by tony on 16/03/2016.
  */
 public class Game {
-    private static Course course;
+    public static Course course;
     public static JFrame frame;
     private static PhysicsEngine physics;
 
