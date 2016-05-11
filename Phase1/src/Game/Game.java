@@ -80,7 +80,7 @@ public class Game {
         addMenues(frame);
         frame.setVisible(true);
         dp.repaint();
-        ArrayList<Ball> balls = new ArrayList<>(8);
+        ArrayList<Ball> balls = new ArrayList<Ball>(8);
         for (int i = 0; i < pp.size(); i++) {
             balls.add(pp.get(i).getBall());
         }

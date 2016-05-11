@@ -11,10 +11,10 @@ public class PhysicsEngine {
     private Course course;
     //Testcomment
 
-    ArrayList<Coordinate> forces = new ArrayList<>(4); //those forces are homogenious on the hole playing field
-    ArrayList<Coordinate> directed = new ArrayList<>(4); //those forces direct the ball to this point.
+    ArrayList<Coordinate> forces = new ArrayList<Coordinate>(4); //those forces are homogenious on the hole playing field
+    ArrayList<Coordinate> directed = new ArrayList<Coordinate>(4); //those forces direct the ball to this point.
 
-    ArrayList<Ball> balls = new ArrayList<>(4);
+    ArrayList<Ball> balls = new ArrayList<Ball>(4);
     Ball ball;
     private final double GROUND_FRICTION = Config.GROUND_FRICTION;
     private final double AIR_FRICTION = Config.AIR_FRICTION;

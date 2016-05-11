@@ -28,5 +28,11 @@
     <orderEntry type="library" name="lwjgl-2.8.5" level="project" />
     <orderEntry type="library" name="lwjgl_util-2.8.2" level="project" />
     <orderEntry type="library" name="lwjgl-platform-2.8.5-natives-windows" level="project" />
+    <orderEntry type="library" name="lwjgl_util-2.8.2" level="project" />
+    <orderEntry type="library" name="lwjgl-2.8.5" level="project" />
+    <orderEntry type="library" name="core-0.3.0 (2)" level="project" />
+    <orderEntry type="library" name="demo-0.3.0" level="project" />
+    <orderEntry type="library" name="lwjgl-2.8.5 (2)" level="project" />
+    <orderEntry type="library" name="lwjgl_util-2.8.2 (2)" level="project" />
   </component>
 </module>

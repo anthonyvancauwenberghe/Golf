@@ -26,8 +26,8 @@ public class Editor {
 
         course = new Course("Golf Deluxe", Config.getWidth(), Config.getHeight(), 1, Type.Grass, 1);
 
-        frame = new JFrame();
-        dp = new DrawPanel();
+            frame = new JFrame();
+            dp = new DrawPanel();
 
         ArrayList<Player> pp = new ArrayList<>(2);
 

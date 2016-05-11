@@ -40,7 +40,7 @@ public class IntegrationMain extends JPanel{
         course.addSquircle(20,60,20,4,0,Type.Water);
         course.setTile(400,400,0,Type.Hole);
         course.setTile(300,400,0,Type.Start);
-        ArrayList<Player> pp = new ArrayList<>(2);
+        ArrayList<Player> pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("PlayerEins");
         Player p2 = new TestBot("PlayerZwei");
 

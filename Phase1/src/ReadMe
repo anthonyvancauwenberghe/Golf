@@ -1,0 +1,10 @@
+To make the game run make sure to include the jars
+core-0.3.0.jar
+demo-0.3.0.jar
+lwjgl-2.8.5.jar
+lwjgl_util-2.8.2.jar
+into the libary.
+
+Also when running the project add into VM options "-Djava.library.path='path to libs folder' "
+right now it should work on windows and linux.
+
