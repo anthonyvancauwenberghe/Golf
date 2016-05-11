@@ -13,8 +13,10 @@ public class OCE {
     public static void main(String[] args){
 //
         String[] a = new String[0];
-        //DemoBasket.main(a);
+        DemoBasket.main(a);
         //DemoDBall.main(a);
-        DemoRFriction.main(new String[0]);
+        //DemoRFriction.main(new String[0]);
+
+        org.ode4j.demo.DemoCards.main(new String[0]);
     }
 }

@@ -5,6 +5,7 @@
 
 package Game;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import org.ode4j.drawstuff.DrawStuff;
 import org.ode4j.drawstuff.DrawStuff.DS_TEXTURE_NUMBER;
@@ -40,9 +41,9 @@ public class newGame extends dsFunctions {
     private double mu = 0.37D;
     private double rho = 0.1D;
     private double omega = 25.0D;
-    private DBox[] rampGeom = new DBox[8];
-    private DBody[] sphereBody = new DBody[8];
-    private DSphere[] sphereGeom = new DSphere[8];
+    private ArrayList<DBox> rampGeom = new ArrayList<DBox>();
+    private ArrayList<DBody> sphereBody = new ArrayList<DBody>();
+    private ArrayList<DSphere> sphereGeom = new ArrayList<DSphere>();
     private DNearCallback nearCallback = new DNearCallback() {
         public void call(Object data, DGeom o1, DGeom o2) {
             newGame.this.nearCallback(data, o1, o2);
@@ -50,6 +51,10 @@ public class newGame extends dsFunctions {
     };
     private static double[] xyz = new double[]{0.0D, -3.0D, 3.0D};
     private static double[] hpr = new double[]{90.0D, -15.0D, 0.0D};
+    private double aX= 0.0D; //for the ramps
+    private double aY= 1.0D; //for the ramps
+    private double aZ= 0.0D; //for the ramps
+    private double angle = Math.toRadians(45); //for the ramps
 
     public newGame() {
     }
@@ -105,7 +110,12 @@ public class newGame extends dsFunctions {
     }
 
     private void reset() {
+        createWorld();
+
         this.clear();
+        rampGeom.clear();
+        sphereBody.clear();
+        sphereGeom.clear();
         this.world = OdeHelper.createWorld();
         this.space = OdeHelper.createHashSpace();
         this.contactgroup = OdeHelper.createJointGroup();
@@ -116,26 +126,40 @@ public class newGame extends dsFunctions {
 
         for(int ii = 0; ii < 8; ++ii) {
             DQuaternion q = new DQuaternion();
-            double angle = (double)(ii + 1) * 0.09817477042468103D;
+            //double angle = Math.toRadians(45);//(double)(ii + 1) * 0.09817477042468103D;
             double cosA = Math.cos(angle);
             double sinA = Math.sin(angle);
             double rampW = 6.0D / cosA;
             double zPos = 0.5D * (sinA * rampW - cosA * 0.25D);
             double yPos = (double)ii * 1.25D * 0.5D;
             double xPos = 0.0D;
-            this.rampGeom[ii] = OdeHelper.createBox(this.space, rampW, 0.5D, 0.25D);
-            OdeMath.dQFromAxisAndAngle(q, 0.0D, 1.0D, 0.0D, angle);
-            this.rampGeom[ii].setQuaternion(q);
-            this.rampGeom[ii].setPosition(xPos, yPos, zPos);
+            DBox newRamp = OdeHelper.createBox(this.space, rampW, 0.5D, 0.25D);
+            this.rampGeom.add(newRamp);
+
+
+            OdeMath.dQFromAxisAndAngle(q, aX, aY, aZ, angle);
+
+            newRamp.setQuaternion(q);
+            newRamp.setPosition(xPos, yPos, zPos);
             xPos = -2.75D;
             zPos = sinA * rampW + 0.25D;
-            this.sphereBody[ii] = OdeHelper.createBody(this.world);
-            this.sphereBody[ii].setMass(sphereMass);
-            this.sphereGeom[ii] = OdeHelper.createSphere(this.space, 0.25D);
-            this.sphereGeom[ii].setBody(this.sphereBody[ii]);
-            this.sphereBody[ii].setPosition(xPos, yPos, zPos);
-            this.sphereBody[ii].setAngularVel(0.0D, this.omega, 0.0D);
+            //addBall();
+            DBody newSphereBody = OdeHelper.createBody(this.world);
+            newSphereBody.setMass(sphereMass);
+
+            this.sphereBody.add(newSphereBody);
+            double radius_SupposeTo = 0.25D; //smaller seams to make it bigger and lighter???
+            DSphere newSphereGeom  = OdeHelper.createSphere(this.space, radius_SupposeTo); //smaller
+
+            newSphereGeom.setBody(newSphereBody);
+            newSphereGeom.setPosition(xPos, yPos, zPos);
+            newSphereBody.setAngularVel(0.0D, this.omega, 0.0D);
+            sphereGeom.add(newSphereGeom);
         }
+
+    }
+
+    private void createWorld() {
 
     }
 
@@ -146,17 +170,29 @@ public class newGame extends dsFunctions {
                 this.rho -= 0.02D;
                 if(this.rho < 0.0D) {
                     this.rho = 0.0D;
-                }
+                } break;
             case 'I':
             case 'K':
             case 'L':
             case 'O':
             case 'P':
+            case 'r':
+                this.angle +=0.1;
+                this.reset();
+                break;
             case 'Q':
             case 'S':
+            case 's':
+                this.aY -= 0.1;
+                this.reset();
+                break;
             case 'T':
             case 'U':
             case 'V':
+            case 'w':
+                this.aY += 0.1;
+                this.reset();
+                break;
             case 'W':
             case 'X':
             case 'Y':
@@ -166,11 +202,23 @@ public class newGame extends dsFunctions {
             case '_':
             case '`':
             case 'a':
+                this.aX -= 0.1;
+                this.reset();
+                break;
             case 'b':
             case 'c':
             case 'd':
+                this.aZ -= 0.1;
+                this.reset();
+                break;
             case 'e':
+                this.aZ += 0.1;
+                this.reset();
+                break;
             case 'f':
+                this.angle -=0.1;
+                this.reset();
+                break;
             case 'g':
             case 'i':
             case 'k':
@@ -178,6 +226,9 @@ public class newGame extends dsFunctions {
             case 'o':
             case 'p':
             case 'q':
+                this.aX += 0.1;
+                this.reset();
+                break;
             default:
                 break;
             case 'J':
@@ -202,7 +253,6 @@ public class newGame extends dsFunctions {
                 }
                 break;
             case 'R':
-            case 'r':
                 this.reset();
                 break;
             case '[':
@@ -221,23 +271,23 @@ public class newGame extends dsFunctions {
             this.contactgroup.empty();
         }
 
-        DrawStuff.dsSetTexture(DS_TEXTURE_NUMBER.DS_WOOD);
+        DrawStuff.dsSetTexture(DS_TEXTURE_NUMBER.DS_GROUND);
         DrawStuff.dsSetColor(1.0D, 0.5D, 0.0D);
-        DBox[] arr$ = this.rampGeom;
-        int len$ = arr$.length;
+        ArrayList<DBox> arr$ = this.rampGeom;
+        int len$ = arr$.size();
 
         int i$;
         for(i$ = 0; i$ < len$; ++i$) {
-            DBox g = arr$[i$];
+            DBox g = arr$.get(i$);
             DrawStuff.dsDrawBox(g.getPosition(), g.getRotation(), g.getLengths());
         }
 
         DrawStuff.dsSetColor(0.0F, 0.0F, 1.0F);
-        DSphere[] var6 = this.sphereGeom;
-        len$ = var6.length;
+        ArrayList<DSphere> var6 = this.sphereGeom;
+        len$ = var6.size();
 
         for(i$ = 0; i$ < len$; ++i$) {
-            DSphere var7 = var6[i$];
+            DSphere var7 = var6.get(i$);
             DrawStuff.dsDrawSphere(var7.getPosition(), var7.getRotation(), 0.25D);
         }
 
