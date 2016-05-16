@@ -370,6 +370,26 @@ public class Course {
         }while(t.t != Type.$MARKER);
     }
 
+    /**
+     *  we draw layer after layer squares from botom to top
+     you define x,y,z of the ground point in the upper left courner, then length, width, depth and then the steepnis.
+     this is done by giving 4 integers. xDeltaLeft and xDeltaRight. and yDeltaTop and yDeltaBottom
+     xDeltaLeft = 2 means that each layer the left boundery moves two to the right.
+     xDeltaRight =-2 means that each layer the left boundery moves two to the left.
+     yDeltaTop and Bottom do it respectifly
+
+     * @param initialX
+     * @param initialY
+     * @param initialZ
+     * @param length
+     * @param height
+     * @param depth
+     * @param leftXDeltaPerLayer
+     * @param rightXDeltaPerLayer
+     * @param topYDeltaPerLayer
+     * @param bottomYDeltaPerLayer
+     * @param t
+     */
     public void addFrustrum(int initialX, int initialY, int initialZ, int length, int height, int depth, int leftXDeltaPerLayer, int rightXDeltaPerLayer, int topYDeltaPerLayer, int bottomYDeltaPerLayer, Type t){
         oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
         int x=initialX;
