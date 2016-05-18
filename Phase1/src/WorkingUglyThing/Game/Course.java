@@ -171,9 +171,11 @@ public class Course {
 
 
         try {
+            System.out.println("try to read " + c.getName()+".png");
            c.setBufferedImage(ImageIO.read(new File(c.getName()+".png")));
         } catch (IOException e) {
             e.printStackTrace();
+
         }
         return c;
 
