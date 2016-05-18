@@ -31,6 +31,22 @@ public class Config {
     public static final float POWERLINEWIDTH = 3.f;
     private static final String texturePath = "Phase1/out/Game/textures/";
 
+    public static double[] getLightningVector3d() {
+        return lightningVector3d;
+    }
+
+    private static final double[] lightningVector3d = createLightningVector(0,0,1);
+
+    private static double[] createLightningVector(double x, double y,double z) {
+        double length = Math.sqrt(x * x + y * y+z*z);
+        // normalize vector
+        x /= length;
+        y /= length;
+        z /= length;
+        double[] d = {x,y,z};
+        return d;
+    }
+
     /**
      * getter to get the mass of the ball
      * @return ballMass

@@ -70,9 +70,12 @@ public class DrawPanel extends JPanel {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getButton()== MouseEvent.BUTTON3){
+                    System.out.print("SurfaceNormal:" + course.getSurfaceNormals()[e.getX()][e.getY()].toString());
+                    System.out.print("Shading%:" + course.getShadingMap()[e.getX()][e.getY()]);
                     Editor.addObject(e.getPoint());
 
                 }
+
             }
 
             @Override
@@ -162,18 +165,23 @@ public class DrawPanel extends JPanel {
     public static BufferedImage createImage(Course course) {
         if (grassTexture==null)DrawPanel.loadTextures();
         Type[][][] pf = course.getPlayfield();
+        int[][] hm = course.getHeightMap();
+        float[][] sm = course.getShadingMap();
+        Coordinate[][] normals = course.getSurfaceNormals();
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
                 new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);
         Graphics2D g = bufferedImage.createGraphics();
 
         Random r = new Random(0);
-        for (int z = 0; z < d[2]; z++) {
-            float f = (float) (0.5-(z*1f/d[2])*0.5);
-            Color zshadow = new Color(0,0,0,f);
+        HashMap<Integer,Color> hightColorFromZ = new HashMap<>(100);
+        HashMap<Float,Color> shadingColorFromZ = new HashMap<>(100);
+        Color shadingC;
+        Color zshadow;
+
             for (int x = 0; x < d[0]; x++) {
                 for (int y = 0; y < d[1]; y++) {
-
+                    int z = hm[x][y];
                     Type t = pf[x][y][z];
                     if (t == Type.Empty) continue;
                     Point p = new Point((x)%32,(y)%32);
@@ -182,19 +190,38 @@ public class DrawPanel extends JPanel {
                     if (t == Type.Water) g.setColor(WaterText.get(p));
                     if (t  == Type.OBJECT) g.setColor(ObjectText.get(p));
 
+
                     g.fillRect(x, y, 1, 1);
 
+                    zshadow = hightColorFromZ.get(z);
+                    if (zshadow == null){
+                        float f = (float) ((z*1f/d[2])*0.3);
+                        zshadow = new Color(0,0,0,f);
+                        hightColorFromZ.put(z,zshadow);
+                    }
                     g.setColor(zshadow);
-                    g.fillRect(x, y, 1, 1);
 
-                    //  g.fillRect(0, 0,  d[0],  d[1]);
+                   g.fillRect(x, y, 1, 1);
+
+                    //schraffurShaddow
+                    float ss =  sm[x][y];
+                    shadingC = shadingColorFromZ.get(ss);
+                    if (shadingC == null){
+                        shadingC = new Color(0,0,0,ss*0.9f);
+
+                        shadingColorFromZ.put(ss,shadingC);
+                    }
+
+
+                    g.setColor(shadingC);
+                     g.fillRect(x, y,  1,  1);
 
                 }
 
             }
 
 
-        }
+
 
 
         g.dispose();

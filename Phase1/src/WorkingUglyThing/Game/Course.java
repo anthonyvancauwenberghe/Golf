@@ -3,12 +3,9 @@ package WorkingUglyThing.Game; /**
  */
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -20,6 +17,13 @@ import java.util.Stack;
  */
 public class Course {
  String name;
+    Coordinate[][]surfaceNormals;
+    int[][]heightMap;
+
+
+
+    private float[][] shadingMap;
+
 
     Type[][][] playfield;
     Type[][][] copy;
@@ -30,6 +34,7 @@ public class Course {
     public Hole hole;
     public Stack<Tile> oldTiles = new Stack<Tile>();
     private BufferedImage managedBufferedImage;
+
 
 
     /**
@@ -175,6 +180,7 @@ public class Course {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        c.calculateSurfaceNormals();
         return c;
 
     }
@@ -456,4 +462,107 @@ public class Course {
     public void setBufferedImage(BufferedImage bufferedImage) {
         this.managedBufferedImage = bufferedImage;
     }
+
+    public Coordinate getNormal(int x, int y, int z) {
+
+
+        double avgX = 0;
+        double avgY = 0;
+        double avgZ = 0;
+
+
+        for (int dx = -3; dx <= 3; dx++) {
+            for (int dy = -3; dy <= 3; dy++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    int checkX = x+dx;
+                    int checkY = y+dy;
+                    int checkZ = z+dz;
+                    if (checkX<0||checkX>=dimension[0]||checkY<0||checkY>=dimension[1]||checkZ<0||checkZ>=dimension[2]
+                            ||playfield[checkX][checkY][checkZ]!= Type.Empty) {
+                        avgX -= dx;
+                        avgY -= dy;
+                        avgZ -= dz;
+                    }
+                }
+            }
+        }
+        double length = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ); // distance from avg to the center
+        avgX /= length;
+        avgZ /= length;
+        avgY /= length;
+
+        return new Coordinate(avgX, avgY, avgZ);
+    }
+
+    public void calculateSurfaceNormals(){
+        surfaceNormals = new Coordinate[dimension[0]][dimension[1]];
+
+        for (int x = 0; x <dimension[0];x++){
+            for (int y = 0; y <dimension[1];y++){
+                for (int z = 0; z <dimension[2]-1;z++){
+                    if (playfield[x][y][z+1] == Type.Empty){
+                        surfaceNormals[x][y] = getNormal(x,y,z);
+                        break;
+                    }
+                }
+            }
+;
+        }
+
+    }
+    public void calculateHeightMap(){
+        heightMap = new int[dimension[0]][dimension[1]];
+
+        for (int x = 0; x <dimension[0];x++){
+            for (int y = 0; y <dimension[1];y++){
+                for (int z = 0; z <dimension[2]-1;z++){
+                    if (playfield[x][y][z+1] == Type.Empty){
+                        heightMap[x][y] = z;
+                        break;
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    public void calculateShadingMap(){
+        double[] lv = Config.getLightningVector3d(); //lighting vector
+        shadingMap = new float[dimension[0]][dimension[1]];
+        if (surfaceNormals==null) calculateSurfaceNormals(); //this should actually never be executed
+        for (int x = 0; x <dimension[0];x++){
+            for (int y = 0; y <dimension[1];y++){
+                    //angle = acos(v1•v2)
+                     Coordinate c = surfaceNormals[x][y];
+                     double[] v = {c.getX(),c.getY(),c.getZ()};
+                     //normaliseV
+                    double length = Math.sqrt(v[0] * v[0] + v[1] * v[1]+v[2] * v[2]);
+                    v[0] /= length;
+                    v[1] /= length;
+                    v[2] /= length;
+                    double value = Math.acos(lv[0] *  v[0] + lv[1] *  v[1]+lv[2] *  v[2]);
+                    System.out.println("x: " + x + " y: " + y + " has the angle two north west " + Math.toDegrees(value) );
+                    value = value/Math.PI;
+
+                   if (Double.isNaN(value)) shadingMap[x][y] = 0; else shadingMap[x][y] = (float) value;
+            }
+
+        }
+
+    }
+
+    public Coordinate[][] getSurfaceNormals() {
+        return surfaceNormals;
+    }
+
+    public int[][] getHeightMap() {
+        return heightMap;
+    }
+
+    public float[][] getShadingMap() {
+        return shadingMap;
+    }
+
+
 }

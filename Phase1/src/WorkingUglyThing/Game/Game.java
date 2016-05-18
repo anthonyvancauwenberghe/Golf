@@ -29,14 +29,15 @@ public class Game {
 
     public Game(){
 
-        course = Course.loadCourse("GolfDeluxe.gol");
+        //course = Course.loadCourse("GolfDeluxe.gol");
         if (course == null) {
             course = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
 
-            course.addFrustrum(200,0,0,160,440,20,2,0,0,0,Type.OBJECT);
-            course.addFrustrum(420,220,0,160,340,20,0,-3,1,0,Type.OBJECT);
-            course.addFrustrum(520,320,0,330,240,40,2,-1,0,-4,Type.OBJECT);
-            course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
+            course.addFrustrum(200,0,0,160,440,20,2,0,0,0,Type.Grass);
+            course.addFrustrum(420,220,0,160,340,20,1,-3,1,-1,Type.Grass);
+            course.addFrustrum(620,320,0,330,240,40,2,-1,1,-4,Type.Grass);
+            course.addFrustrum(620,120,0,330,140,60,15,-4,15,-4,Type.Grass);
+            //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
@@ -46,10 +47,19 @@ public class Game {
            // course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
            // course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
            // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
-           // course.addPyramid(200, 200, 50, 100, 30, 20, Type.OBJECT);
+           //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
            // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
            // course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
+
+            System.out.println("CalculateSurfaceNormals");
+            course.calculateSurfaceNormals();
+            System.out.println("CalculateHightMap");
+            course.calculateHeightMap();
+            System.out.println("CalculateShadingMap");
+            course.calculateShadingMap();
+            System.out.println("CalculateDrawPanel");
             course.setBufferedImage(DrawPanel.createImage(course));
+
             course.saveCourse();
         }
 
