@@ -35,7 +35,7 @@ public class Config {
         return lightningVector3d;
     }
 
-    private static final double[] lightningVector3d = createLightningVector(0,0,1);
+    private static final double[] lightningVector3d = createLightningVector(-1,-1,1);
 
     private static double[] createLightningVector(double x, double y,double z) {
         double length = Math.sqrt(x * x + y * y+z*z);
