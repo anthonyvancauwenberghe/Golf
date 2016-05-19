@@ -2,12 +2,16 @@ package WorkingUglyThing.Game;
 
 
 import WorkingUglyThing.Game.Bots.TestBot;
+import javafx.geometry.Side;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by tony on 16/03/2016.
@@ -23,8 +27,10 @@ public class Game {
     private static ArrayList<Player> pp;
     private static boolean selectNextPlayer;
     private static int currentPlayer=0;
-
-
+    private static boolean editorVisible;
+    private static JPanel Sidebar;
+    private static Course previewMiniCourse;
+    private static JToggleButton select;
 
 
     public Game(){
@@ -50,15 +56,8 @@ public class Game {
            //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
            // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
            // course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
+            course.finalise();
 
-            System.out.println("CalculateSurfaceNormals");
-            course.calculateSurfaceNormals();
-            System.out.println("CalculateHightMap");
-            course.calculateHeightMap();
-            System.out.println("CalculateShadingMap");
-            course.calculateShadingMap();
-            System.out.println("CalculateDrawPanel");
-            course.setBufferedImage(DrawPanel.createImage(course));
 
             course.saveCourse();
         }
@@ -77,9 +76,6 @@ public class Game {
 
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
 
-
-
-
         pp.add(p);
         pp.add(p2);
 
@@ -91,7 +87,8 @@ public class Game {
         dp.setCourse(course);
 
         physics.init(course, p.getBall());
-        frame.add(dp);
+
+        frame.add(dp, BorderLayout.CENTER);
         addMenues(frame);
         frame.setVisible(true);
         dp.repaint();
@@ -195,6 +192,132 @@ public class Game {
         JMenuItem showScore = new JMenuItem("Show Scores");
         addListenerToShowScore(showScore);
         setting.add(showScore);
+
+        JMenuItem showEditorButton = new JMenuItem("Show Editor");
+        showEditorButton.setVisible(true);
+        //showEditorButton.setMinimumSize(setting.getSize());
+        //showEditorButton.setPreferredSize(setting.getSize());
+        //showEditorButton.setMaximumSize(setting.getSize());
+        showEditorButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showEditor();}});
+        JMB.add(showEditorButton);
+    }
+
+    private static void showEditor() {
+        editorVisible = !editorVisible;
+
+        if (editorVisible) {
+            int sidebarwidth = 200;
+            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+            Sidebar = new JPanel();
+            Dimension d = new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+            Sidebar.setMinimumSize(d);
+            Sidebar.setPreferredSize(d);
+            Sidebar.setMaximumSize(d);
+            //Sidebar.add(SidePann)
+            Sidebar.setLayout(new BoxLayout(Sidebar, BoxLayout.PAGE_AXIS));
+
+            JPanel label = new miniDraw(new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME - 400));
+            Sidebar.add(label);
+
+            JLabel widthL = new JLabel("Width");
+            JTextField widhtT = new JTextField("200");
+            JLabel heightL = new JLabel("Height");
+            JTextField heightT = new JTextField("50");
+            JLabel depthL = new JLabel("depth");
+            JTextField depthT = new JTextField("50");
+            JLabel zL = new JLabel("z");
+            JTextField zT = new JTextField("0");
+            JLabel deltaXLL = new JLabel("deltaX left per Layer");
+            JTextField deltaXL_T = new JTextField("1");
+            JLabel deltaXRL = new JLabel("deltaX right per Layer");
+            JTextField deltaXR_T = new JTextField("-1");
+            JLabel deltaYTL = new JLabel("deltaY top per Layer");
+            JTextField deltaYT_T = new JTextField("1");
+            JLabel deltaYBL = new JLabel("deltaY bottom per Layer");
+            JTextField deltaYB_T = new JTextField("-1");
+
+            JComboBox<String> typeBox = new JComboBox<>(Arrays.toString(Type.values()).replaceAll("^.|.$", "").split(", "));
+            select = new JToggleButton("select");
+            addSelectActionListener(select,widhtT,heightT,depthT,zT,deltaXL_T,deltaXR_T,deltaYT_T,deltaYB_T,typeBox);
+            JButton finalizeCourse = new JButton("FinalizeCourse");
+            finalizeCourse.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {
+                    course.finalise();
+                    dp.repaint();
+
+            }
+
+            });
+
+            Sidebar.add(widthL);
+            Sidebar.add(widhtT);
+            Sidebar.add(heightL);
+            Sidebar.add(heightT);
+            Sidebar.add(depthL);
+            Sidebar.add(depthT);
+            Sidebar.add(zL);
+            Sidebar.add(zT);
+
+            Sidebar.add(deltaXLL);
+            Sidebar.add(deltaXL_T);
+            Sidebar.add(deltaXRL);
+            Sidebar.add(deltaXR_T);
+            Sidebar.add(deltaYTL);
+            Sidebar.add(deltaYT_T);
+            Sidebar.add(deltaYBL);
+            Sidebar.add(deltaYB_T);
+
+            Sidebar.add(typeBox);
+            Sidebar.add(select);
+            Sidebar.add(finalizeCourse);
+
+
+        }else{
+            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+            if (Sidebar!= null)frame.remove(Sidebar);
+
+        }
+        //
+
+
+
+
+        frame.add(Sidebar,BorderLayout.EAST);
+    }
+
+    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox) {
+        select.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    if (select.isSelected()) {
+                        int width = Integer.parseInt(widhtT.getText());
+                        int height = Integer.parseInt(heightT.getText());
+                        int depth = Integer.parseInt(depthT.getText());
+                        int z = Integer.parseInt(zT.getText());
+                        double deltaXL = Double.parseDouble(deltaXLL.getText());
+                        double deltaXR = Double.parseDouble(deltaXRL.getText());
+                        double deltaYT = Double.parseDouble(deltaYT_t.getText());
+                        double deltaYB = Double.parseDouble(deltaYB_t.getText());
+
+                        Type t = Type.valueOf(typeBox.getSelectedItem().toString());
+
+                        previewMiniCourse = new Course("preview", width, height, course.getLength(), t, 0);
+                        previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
+                        previewMiniCourse.calculateHeightMap();
+                        previewMiniCourse.calculateSurfaceNormals();
+                        previewMiniCourse.calculateShadingMap();
+                        previewMiniCourse.setBufferedImage(dp.createImage(previewMiniCourse));
+                        dp.setPreviewObject(previewMiniCourse.getManagedBufferedImage());
+                    }else {
+                        previewMiniCourse = null;
+                        dp.setPreviewObject(null);
+                    }
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+
+            }
+        });
     }
 
     private static void addListenerToResetCourse(JMenuItem resetCourse) {
@@ -340,6 +463,19 @@ public class Game {
         });
     }
 
+    public static void placeObject(int x, int y) {
+        course.integrate(previewMiniCourse, x,y);
+        select.setSelected(false);
+        previewMiniCourse=null;
+        dp.setPreviewObject(null);
+        dp.repaint();
+    }
 
+
+    private static class miniDraw extends JPanel {
+        public miniDraw(Dimension dimension) {
+
+        }
+    }
 }
 

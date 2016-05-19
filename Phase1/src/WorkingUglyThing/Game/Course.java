@@ -3,6 +3,7 @@ package WorkingUglyThing.Game; /**
  */
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -385,7 +386,6 @@ public class Course {
      xDeltaLeft = 2 means that each layer the left boundery moves two to the right.
      xDeltaRight =-2 means that each layer the left boundery moves two to the left.
      yDeltaTop and Bottom do it respectifly
-
      * @param initialX
      * @param initialY
      * @param initialZ
@@ -398,14 +398,14 @@ public class Course {
      * @param bottomYDeltaPerLayer
      * @param t
      */
-    public void addFrustrum(int initialX, int initialY, int initialZ, int length, int height, int depth, int leftXDeltaPerLayer, int rightXDeltaPerLayer, int topYDeltaPerLayer, int bottomYDeltaPerLayer, Type t){
+    public void addFrustrum(int initialX, int initialY, int initialZ, double length, double height, int depth, double leftXDeltaPerLayer, double rightXDeltaPerLayer, double topYDeltaPerLayer, double bottomYDeltaPerLayer, Type t){
         oldTiles.add(new Tile(Type.$MARKER,-1,-1,-1));
-        int x=initialX;
-        int y=initialY;
+        double x=initialX;
+        double y=initialY;
 
         for (int z = initialZ; z < initialZ+depth; z++) {
 
-            addRectangle(x,y,z,length,height,t);
+            addRectangle((int)x,(int)y,z,(int)length,(int)height,t);
 
             oldTiles.pop(); //marker get set after every adding... as we add many objects
             x+=leftXDeltaPerLayer;
@@ -567,4 +567,37 @@ public class Course {
     }
 
 
+    public void finalise() {
+        System.out.println("CalculateSurfaceNormals");
+        calculateSurfaceNormals();
+        System.out.println("CalculateHightMap");
+        calculateHeightMap();
+        System.out.println("CalculateShadingMap");
+        calculateShadingMap();
+        System.out.println("CalculateDrawPanel");
+        setBufferedImage(DrawPanel.createImage(this));
+
+    }
+
+    public void integrate(Course previewMiniCourse, int x, int y) {
+        Type[][][] pmc = previewMiniCourse.getPlayfield();
+        int[] pmcD = previewMiniCourse.getDimension();
+        BufferedImage bi = previewMiniCourse.getManagedBufferedImage();
+
+        int insideX = 0;
+        int insideY = 0;
+
+
+
+        for ( insideX = 0; insideX+x<dimension[0]&&insideX<pmcD[0];insideX++) {
+            for ( insideY = 0; insideY + y < dimension[1] && insideY < pmcD[1]; insideY++) {
+                for (int z= 0; z<dimension[2];z++){
+                    playfield[insideX+x][insideY+y][z] = pmc[insideX][insideY][z];
+
+                }
+                managedBufferedImage.setRGB(insideX+x,insideY+y,bi.getRGB(insideX,insideY));
+            }
+        }
+
+    }
 }

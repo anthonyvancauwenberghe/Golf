@@ -29,7 +29,7 @@ public class Config {
 
     public static final boolean ENABLED3D=false;
     public static final float POWERLINEWIDTH = 3.f;
-    private static final String texturePath = "Phase1/out/Game/textures/";
+    private static final String texturePath = "Phase1/src/WorkingUglyThing/Game/textures/";
 
     public static double[] getLightningVector3d() {
         return lightningVector3d;

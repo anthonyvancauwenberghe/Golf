@@ -41,6 +41,7 @@ public class DrawPanel extends JPanel {
     public static TexturePaint ballP;
     public static BufferedImage ballTexture;
     public boolean prepareShoot;
+    private BufferedImage previewObject;
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -63,9 +64,10 @@ public class DrawPanel extends JPanel {
 
             @Override
             public void mouseMoved(MouseEvent e) {
-
+                if (previewObject!=null) repaint();
             }
         });
+        DrawPanel dp = this;
         this.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -73,6 +75,19 @@ public class DrawPanel extends JPanel {
                     System.out.print("SurfaceNormal:" + course.getSurfaceNormals()[e.getX()][e.getY()].toString());
                     System.out.print("Shading%:" + course.getShadingMap()[e.getX()][e.getY()]);
                     Editor.addObject(e.getPoint());
+
+                }
+
+                if (previewObject != null){
+                    Point mp = MouseInfo.getPointerInfo().getLocation();
+                    Point pp = dp.getLocationOnScreen();
+
+                    Point mousePosition = new Point(mp.x-pp.x,mp.y-pp.y);
+
+                    Game.placeObject(mousePosition.x,mousePosition.y);
+
+
+
 
                 }
 
@@ -232,7 +247,7 @@ public class DrawPanel extends JPanel {
 
         super.paintComponent(g);
 
-        if (managedBufferedImage != null) g.drawImage(managedBufferedImage, 0, 0, null);
+        if (managedBufferedImage != null) g.drawImage(course.getManagedBufferedImage(), 0, 0, null);
         drawHole(g);
 
         for (int i = 0; i < players.size(); i++) {
@@ -253,6 +268,14 @@ public class DrawPanel extends JPanel {
             g.drawOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius * 2, (int) radius * 2);
         }
 
+        if (previewObject!=null){
+            Point mp = MouseInfo.getPointerInfo().getLocation();
+            Point pp = this.getLocationOnScreen();
+
+            Point mousePosition = new Point(mp.x-pp.x,mp.y-pp.y);
+            g.drawImage(previewObject, mousePosition.x, mousePosition.y, null);
+
+        }
     }
 
     public void drawPowerLine(Graphics g, Ball b) {
@@ -321,5 +344,9 @@ public class DrawPanel extends JPanel {
 
     public void setFirstYClick(int firstYClick) {
         this.firstYClick = firstYClick;
+    }
+
+    public void setPreviewObject(BufferedImage previewObject) {
+        this.previewObject = previewObject;
     }
 }
