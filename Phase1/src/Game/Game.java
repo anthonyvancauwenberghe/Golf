@@ -255,7 +255,7 @@ public class Game {
         StringBuilder scores = new StringBuilder();
         for (int i = 0; i < pp.size(); i++) {
             Player p = pp.get(i);
-            scores.append("Player: " + p.getName() + "  Total Strokes: " + p.getTotalStrokes() + " Current Strokes: "  + p.getCurrentStrokes() + System.lineSeparator());
+            scores.append("Player: ").append(p.getName()).append("  Total Strokes: ").append(p.getTotalStrokes()).append(" Current Strokes: ").append(p.getCurrentStrokes()).append(System.lineSeparator());
         }
         JOptionPane.showMessageDialog(null, scores.toString(), "Scores", JOptionPane.INFORMATION_MESSAGE);
 

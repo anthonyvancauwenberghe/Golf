@@ -180,18 +180,18 @@ public class Course {
         int width = playfield[0].length;
         int height = playfield[0][0].length;
 
-        s.append("Name:" + name +"\n");
-        s.append("Par:" + par +"\n");
-        s.append("length:" + length +"\n");
-        s.append("width:" + width +"\n");
-        s.append("height:" + height +"\n");
+        s.append("Name:").append(name).append("\n");
+        s.append("Par:").append(par).append("\n");
+        s.append("length:").append(length).append("\n");
+        s.append("width:").append(width).append("\n");
+        s.append("height:").append(height).append("\n");
 
 
         for (int x = 0; x < length; x++) {
             for (int y = 0; y < width; y++) {
                 for (int z = 0; z < height; z++) {
                     if (!playfield[x][y][z].getType().equals(Type.Empty))
-                    s.append("x:" + x + "y:" + y + "z:" + z + "Type:" + playfield[x][y][z].getType().name() + "STOP\n");
+                    s.append("x:").append(x).append("y:").append(y).append("z:").append(z).append("Type:").append(playfield[x][y][z].getType().name()).append("STOP\n");
                 }
             }
         }

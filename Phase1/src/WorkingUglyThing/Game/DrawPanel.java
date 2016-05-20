@@ -42,6 +42,7 @@ public class DrawPanel extends JPanel {
     public static BufferedImage ballTexture;
     public boolean prepareShoot;
     private BufferedImage previewObject;
+    private Graphics2D g2;
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -56,6 +57,7 @@ public class DrawPanel extends JPanel {
 
     public DrawPanel() {
         loadTextures();
+
         this.addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -85,7 +87,6 @@ public class DrawPanel extends JPanel {
                     Point mousePosition = new Point(mp.x-pp.x,mp.y-pp.y);
 
                     Game.placeObject(mousePosition.x,mousePosition.y);
-
 
 
 
@@ -247,6 +248,9 @@ public class DrawPanel extends JPanel {
 
         super.paintComponent(g);
 
+        g2 = (Graphics2D)g;//this new object g2,will get the
+
+
         if (managedBufferedImage != null) g.drawImage(course.getManagedBufferedImage(), 0, 0, null);
         drawHole(g);
 
@@ -276,6 +280,8 @@ public class DrawPanel extends JPanel {
             g.drawImage(previewObject, mousePosition.x, mousePosition.y, null);
 
         }
+
+
     }
 
     public void drawPowerLine(Graphics g, Ball b) {
