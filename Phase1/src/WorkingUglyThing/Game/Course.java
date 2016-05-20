@@ -600,4 +600,9 @@ public class Course {
         }
 
     }
+
+    public Type getType(Coordinate newPosition) {
+
+        return null;
+    }
 }

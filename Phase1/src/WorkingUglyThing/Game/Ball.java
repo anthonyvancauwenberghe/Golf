@@ -7,13 +7,19 @@ public class Ball {
     //Color c;
     double mass = 1;
     double radius = Config.getBallRadius();
-    double bounciness;
-    public double speedX, speedY, speedZ;
+
+    public double x, y, z;
+    public double vX, vY, vZ;
+
+
+
+    public double aX, aY, aZ;
+
     public boolean isMoving = false;
     public boolean inHole = false;
     public boolean inPlay = true;
-    private Coordinate coordinate = new Coordinate();
-    private PhysicsEngine physics = new PhysicsEngine();
+
+
     private int speedLimiter = Config.speedLimiter;
     private double speedSlower = Config.speedSlower;
 
@@ -48,17 +54,17 @@ public class Ball {
         }
     }
 
-    public void shootBall(double speedX, double speedY, double speedZ) {
+    public void shootBall(double vX, double vY, double vZ) {
         System.out.println(inPlay());
         System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             isMoving = true;
-            this.speedX = (Math.abs(speedX)>=speedLimiter) ? getSign(speedX)*speedLimiter : speedX ;
-            this.speedY = (Math.abs(speedY)>=speedLimiter) ? getSign(speedY)*speedLimiter : speedY;
-            this.speedZ = (Math.abs(speedZ)>=speedLimiter) ? getSign(speedZ)*speedLimiter : speedZ;
-            this.speedX = this.speedX/speedSlower;
-            this.speedY = this.speedY/speedSlower;
-            this.speedZ = this.speedZ/speedSlower;
+            this.vX = (Math.abs(vX)>=speedLimiter) ? getSign(vX)*speedLimiter : vX ;
+            this.vY = (Math.abs(vY)>=speedLimiter) ? getSign(vY)*speedLimiter : vY;
+            this.vZ = (Math.abs(vZ)>=speedLimiter) ? getSign(vZ)*speedLimiter : vZ;
+            this.vX = this.vX/speedSlower;
+            this.vY = this.vY/speedSlower;
+            this.vZ = this.vZ/speedSlower;
             System.out.println("ball is still moving or not in play speedY: " + this.speedY);
         } else {
             System.out.println("ball is still moving or not in play");
@@ -97,15 +103,15 @@ public class Ball {
      * @return speedX
      */
     public double getSpeedX() {
-        return speedX;
+        return vX;
     }
 
     /**
      * getter to get the speed in the Y-axis
-     * @return speedY
+     * @return vY
      */
     public double getSpeedY() {
-        return speedY;
+        return vY;
     }
 
     /**
@@ -113,7 +119,7 @@ public class Ball {
      * @return speedZ
      */
     public double getSpeedZ() {
-        return speedZ;
+        return vZ;
     }
 
     /**
@@ -128,19 +134,19 @@ public class Ball {
      * formula to reverse the direction of the ball in X-axis
      */
     public void reverseBallDirectionX() {
-        speedX = -speedX;
+        vX = -vX;
     }
     /**
      * formula to reverse the direction of the ball in Y-axis
      */
     public void reverseBallDirectionY() {
-        speedY = -speedY;
+        vY = -vY;
     }
     /**
      * formula to reverse the direction of the ball in Z-axis
      */
     public void reverseBallDirectionZ() {
-        speedZ = -speedZ;
+        vZ = -vZ;
     }
 
     /**
@@ -148,16 +154,10 @@ public class Ball {
      * @return coordinate
      */
     public Coordinate getCoordinate() {
-        return coordinate;
+        return new Coordinate(x,y,z);
     }
 
-    /**
-     * getter to get the physics of the PhysicsEngine class
-     * @return physics
-     */
-    public PhysicsEngine getPhysics() {
-        return physics;
-    }
+
 
 
     /**
@@ -165,7 +165,7 @@ public class Ball {
      * if ball is stopped, isMoving is false
      */
     public boolean checkBallStopped(){
-        if(Math.abs(speedX)<=0.2 && Math.abs(speedY)<=0.3 && Math.abs(speedZ)<=1){
+        if(Math.abs(vX)<=0.2 && Math.abs(vY)<=0.3 && Math.abs(vZ)<=1){
             isMoving=false;
             System.out.println("ballStopped");
             return true;
@@ -180,12 +180,12 @@ public class Ball {
      * method that prints the information about the ball
      */
     public void printBallInfo(){
-        System.out.println("X: " + getCoordinate().getX());
-        System.out.println("Y: " + getCoordinate().getY());
-        System.out.println("Z: " + getCoordinate().getZ());
-        System.out.println("SpeedX: " + speedX);
-        System.out.println("SpeedY: " + speedY);
-        System.out.println("SpeedZ: " + speedZ);
+        System.out.println("X: " +x);
+        System.out.println("Y: " +y);
+        System.out.println("Z: " +z);
+        System.out.println("SpeedX: " + vX);
+        System.out.println("SpeedY: " + vY);
+        System.out.println("SpeedZ: " + vZ);
         System.out.println("ball radius: " + getRadius());
         if(!isMoving)
             System.out.println("ballStopped");
@@ -196,7 +196,7 @@ public class Ball {
      * @return formula to get the speed (with Pythagoras)
      */
     public double getSpeed() {
-       return Math.sqrt(speedX*speedX+speedY*speedY+speedZ*speedZ);
+       return Math.sqrt(vX*vX+vY*vY+vZ*vZ);
     }
 
     /**
@@ -206,20 +206,66 @@ public class Ball {
      */
     public void redirect(Coordinate c, double factor) {
         double redirectSpeed = 0;
-        redirectSpeed += factor *Math.abs(speedX);
-        redirectSpeed += factor *Math.abs(speedY);
-        redirectSpeed += factor *Math.abs(speedZ);
-        speedX*=1-factor;
-        speedY*=1-factor;
-        speedZ*=1-factor;
+        redirectSpeed += factor *Math.abs(vX);
+        redirectSpeed += factor *Math.abs(vY);
+        redirectSpeed += factor *Math.abs(vZ);
+        vX*=1-factor;
+        vY*=1-factor;
+        vZ*=1-factor;
         double length = Math.sqrt(c.getX()*c.getX()+c.getY()*c.getY()+c.getZ()*c.getZ());
-        speedX+=(c.getX()/length*redirectSpeed);
-        speedY+=(c.getY()/length*redirectSpeed);
-        speedZ+=(c.getZ() / length * redirectSpeed);
+        vX+=(c.getX()/length*redirectSpeed);
+        vY+=(c.getY()/length*redirectSpeed);
+        vZ+=(c.getZ() / length * redirectSpeed);
 
 
 
 
 
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public double getZ() {
+        return z;
+    }
+
+    public static boolean collide(Ball a, Ball b) {
+        double r = a.getRadius();
+        double r2 = b.getRadius();
+        double dx = a.getX()-b.getX();
+        double dy = a.getY()-b.getY();
+        double dz = a.getZ()-b.getZ();
+        return (r*r2<=dx*dx+dy*dy+dz*dz);
+    }
+
+    public double getaX() {
+        return aX;
+    }
+
+    public void setaX(double aX) {
+        this.aX = aX;
+    }
+
+    public double getaY() {
+        return aY;
+    }
+
+    public void setaY(double aY) {
+        this.aY = aY;
+    }
+
+    public double getaZ() {
+        return aZ;
+    }
+
+    public void setaZ(double aZ) {
+        this.aZ = aZ;
+    }
+
 }

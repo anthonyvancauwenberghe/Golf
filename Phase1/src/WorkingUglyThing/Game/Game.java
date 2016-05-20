@@ -85,8 +85,10 @@ public class Game {
         dp.setPlayers(pp);
         dp.setCurrentPlayer(p);
         dp.setCourse(course);
-
-        physics.init(course, p.getBall());
+        ArrayList<Ball> balls = new ArrayList<>(2);
+        balls.add(p.getBall());
+        balls.add(p2.getBall());
+        physics.init(course, balls);
 
         frame.add(dp, BorderLayout.CENTER);
         addMenues(frame);
@@ -99,9 +101,7 @@ public class Game {
                         Player cp = pp.get(currentPlayer);
 
                         selectNextPlayer=true;
-                        cp.getBall().getPhysics().init(course, cp.getBall());
-                        cp.getBall().getPhysics().processPhysics();
-                        cp.getBall().getPhysics().processNaturalForces();
+                        physics.processPhysics();
                         cp.getBall().checkBallStopped();
                         cp.getBall().printBallInfo();
                         try {
@@ -131,11 +131,7 @@ public class Game {
                                 if (i!=currentPlayer) otherBalls.add(pp.get(i).getBall());
                             }
 
-
-
-                            pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
                             dp.setCurrentPlayer(pp.get(currentPlayer));
-
                             pp.get(currentPlayer).nextMove(course,otherBalls);
 
                             dp.repaint();
@@ -404,7 +400,7 @@ public class Game {
             Tile t = course.getStartTile();
             p.setBallPosition(t.x,t.y,t.z);
         }
-        physics.init(course, pp.get(0).getBall());
+        physics.init(pp,course);
         dp.setCourse(course);
         dp.setCurrentPlayer(pp.get(0));
         currentPlayer=0;
