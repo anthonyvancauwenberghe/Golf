@@ -65,7 +65,7 @@ public class Ball {
             this.vX = this.vX/speedSlower;
             this.vY = this.vY/speedSlower;
             this.vZ = this.vZ/speedSlower;
-            System.out.println("ball is still moving or not in play speedY: " + this.speedY);
+            System.out.println("ball is still moving or not in play speedY: " + this.vY);
         } else {
             System.out.println("ball is still moving or not in play");
         }
