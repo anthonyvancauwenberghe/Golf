@@ -60,13 +60,13 @@ public class Main extends JPanel {
         dp.repaint();
 
 
-        physics.init(course, p.getBall());
+        physics.init(pp,course);
         dp.repaint();
         while (true) {
             if (p.getBall().isMoving) {
-                p.getBall().getPhysics().init(course, p.getBall());
-                p.getBall().getPhysics().processPhysics();
-                p.getBall().getPhysics().processNaturalForces();
+
+                physics.processPhysics(1);
+
                 p.getBall().checkBallStopped();
                 p.getBall().printBallInfo();
                 try {

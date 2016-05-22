@@ -94,19 +94,28 @@ public class Game {
         addMenues(frame);
         frame.setVisible(true);
         dp.repaint();
+
+
+// ... do something ...
+
         Thread gameThread = new Thread(){
+            long lastTime = System.currentTimeMillis();
+
             public void run(){
                 while (true) {
+                    long elapsedTime = System.currentTimeMillis() - lastTime;
+                    lastTime = elapsedTime;
+
                     if (pp.get(currentPlayer).getBall().isMoving) {
                         Player cp = pp.get(currentPlayer);
 
                         selectNextPlayer=true;
-                        physics.processPhysics();
+                        physics.processPhysics(elapsedTime);
                         cp.getBall().checkBallStopped();
                         cp.getBall().printBallInfo();
                         try {
                             dp.repaint();
-                            Thread.sleep(REFRESH_RATE);
+                            Thread.sleep(1);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

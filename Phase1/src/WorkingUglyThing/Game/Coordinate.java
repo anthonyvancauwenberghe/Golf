@@ -1,6 +1,7 @@
 package WorkingUglyThing.Game;
 
 
+import java.util.ArrayList;
 
 /**
  * This is the coordinate class which holds the x, y, z coordinates and the type of object the coordinate is
@@ -116,4 +117,158 @@ public class Coordinate {
     public String toString(){
         return "X: " + this.xCoord + " Y: " + this.yCoord + " Z: "  + this.zCoord;
     }
+
+    public static ArrayList<Coordinate> getPixelBetweenToPoints(Coordinate coordinate1, Coordinate coordinate2) {
+
+
+        int xNew = 0;
+        int yNew = 0;
+        int zNew = 0;
+        int dx, dy, dz = 0;
+        int dx2, dy2, dz2 = 0;
+        int aDx = 0;
+        int aDy = 0;
+        int aDz = 0;
+        int x_inc, y_inc, z_inc = 0;
+        int xxx, yyy, zzz = 0;
+        int xOld, yOld, zOld = 0;
+        int err_1, err_2 = 0;
+
+        int expectedPoints = (int) (Math.abs(coordinate2.getX() - coordinate1.getX()) + Math.abs(coordinate2.getY() - coordinate1.getY()) + Math.abs(coordinate2.getZ() - coordinate1.getZ()));
+
+
+        ArrayList<Coordinate> passedPoints = new ArrayList<>(expectedPoints * 2);
+
+        xOld = (int) coordinate1.getX();
+        yOld = (int) coordinate1.getY();
+        zOld = (int) coordinate1.getZ();
+
+        xNew = (int) coordinate2.getX();
+        yNew = (int) coordinate2.getY();
+        zNew = (int) coordinate2.getZ();
+        passedPoints.add(new Coordinate(xOld,yOld,zOld));
+
+        xxx = xOld;
+        yyy = yOld;
+        zzz = zOld;
+        dx = xNew - xOld;
+        dy = yNew - yOld;
+        dz = zNew - zOld;
+
+        if (dx < 0) {
+            x_inc = -1;
+        } else {
+            x_inc = 1;
+        }
+        if (dy < 0) {
+            y_inc = -1;
+        } else {
+            y_inc = 1;
+        }
+        if (dz < 0) {
+            z_inc = -1;
+        } else {
+            z_inc = 1;
+        }
+
+
+        aDx = Math.abs(dx);
+        aDy = Math.abs(dy);
+        aDz = Math.abs(dz);
+
+        dx2 = aDx * 2;
+        dy2 = aDy * 2;
+        dz2 = aDz * 2;
+
+        if ((aDx >= aDy) && (aDx >= aDz)) {
+
+            err_1 = dy2 - aDx;
+            err_2 = dz2 - aDx;
+
+            for (int cont = 0; cont < aDx - 1; cont++) {
+
+
+                if (err_1 > 0) {
+                    yyy += y_inc;
+                    err_1 -= dx2;
+                }
+
+                if (err_2 > 0) {
+                    zzz += z_inc;
+                    err_2 -= dx2;
+                }
+
+                err_1 += dy2;
+                err_2 += dz2;
+                xxx += x_inc;
+
+                passedPoints.add(new Coordinate(xxx, yyy, zzz));
+
+            }
+
+        }
+
+        if ((aDy > aDx) && (aDy >= aDz)) {
+
+            err_1 = dx2 - aDy;
+            err_2 = dz2 - aDy;
+
+            for (int cont = 0; cont <= aDy - 1; cont++) {
+
+
+                if (err_1 > 0) {
+                    xxx += x_inc;
+                    err_1 -= dy2;
+                }
+
+                if (err_2 > 0) {
+                    zzz += z_inc;
+                    err_2 -= dy2;
+                }
+
+                err_1 += dx2;
+                err_2 += dz2;
+                yyy += y_inc;
+
+                passedPoints.add(new Coordinate(xxx, yyy, zzz));
+
+            }
+
+        }
+
+        if ((aDz > aDx) && (aDz > aDy)) {
+
+            err_1 = dy2 - aDz;
+            err_2 = dx2 - aDz;
+
+            for (int cont = 0; cont <= aDz - 1; cont++) {
+
+
+                if (err_1 > 0) {
+                    yyy += y_inc;
+                    err_1 -= dz2;
+                }
+
+                if (err_2 > 0) {
+                    xxx += x_inc;
+                    err_2 -= dz2;
+                }
+
+                err_1 += dy2;
+                err_2 += dx2;
+                zzz += z_inc;
+
+                passedPoints.add(new Coordinate(xxx, yyy, zzz));
+
+            }
+
+            //xOld=xNew;
+            //yOld=yNew;
+            //zOld=zNew;
+
+
+        }
+        return passedPoints;
+    }
+
 }
