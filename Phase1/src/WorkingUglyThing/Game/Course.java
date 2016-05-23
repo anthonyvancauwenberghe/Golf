@@ -165,8 +165,8 @@ public class Course {
         }
         if (c.startTile == null){
 
-            c.setTile(20, 20, 0, Type.Start);
-            c.startTile = new Tile(Type.Start,20, 20, 0);
+            c.setTile(20, 20, 1, Type.Start);
+            c.startTile = new Tile(Type.Start,20, 20, 1);
         }
         if (c.hole == null){
             int x = (int) (length*0.8);

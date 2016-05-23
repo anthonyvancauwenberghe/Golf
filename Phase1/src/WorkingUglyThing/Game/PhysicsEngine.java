@@ -2,7 +2,6 @@ package WorkingUglyThing.Game;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -30,6 +29,9 @@ public class PhysicsEngine {
     public void init(Course course, ArrayList<Ball> balls) {
         this.course = course;
         this.balls = balls;
+        for(Ball b : balls){
+
+        }
     }
 
     public void init(ArrayList<Player> players, Course course) {
@@ -48,58 +50,160 @@ public class PhysicsEngine {
 
 
         Type[][][] playfield = course.getPlayfield();
-        gravity();
-        accelerate(elapsedTime);
-        collide();
-        border_collide();
-        inertia(delta);
-
-
+        Coordinate [][] normals = course.getSurfaceNormals();
         for (int i = 0; i < balls.size(); i++) {
 
 
             Ball b = balls.get(i);
+            if (!b.inPlay) continue;
+            gravity(b);
+            accelerate(b,elapsedTime);
+            hover(b,playfield,normals);
+            resetA(b);
+            collide(b,playfield);
 
-            double speedx = b.getSpeedX();
-            double speedy = b.getSpeedY();
-            double speedz = b.getSpeedZ();
-            //applyForces
-
-            //calculateV
-
-            //calculateDeltaPos
-            Coordinate newPosition = new Coordinate(b.getX() + b.getSpeedX() * elapsedTime,b.getY() + b.getSpeedY() * elapsedTime,b.getZ() + b.getSpeedZ() * elapsedTime);
-            //check for Collision with surroundings
-            checkForCollision(b, newPosition);
             //check for Collision with different balls
             for (int j = i+1; j < balls.size(); j++) {
                 //check for collision between two balls
                 Ball bd = balls.get(j);
-                if (Ball.collide(b,bd)) {
-                    //reposition?
-                    //
-                }
-
-            }
-            //apply friction
-            b.speedX=b.getSpeedX()* Type.Grass.getFriction();
-            b.speedY=b.getSpeedY()* Type.Grass.getFriction();
-            b.speedZ=b.getSpeedZ()* Type.Grass.getFriction();
-
-            if (b.getSpeed()<Config.MINSPEED){
-                b.speedX=0;
-                b.speedY=0;
-                b.speedZ=0;
-                b.isMoving=false;
+                if (!bd.inPlay) continue;
+                ballCollision(b,bd);
             }
 
+            inertia(b,elapsedTime);
+            //b.checkBallStopped();
         }
     }
 
-    private void gravity() {
-        for (int i = 0; i < balls.size(); i++) {
+    private void collide(Ball b, Type[][][] playfield) {
 
+    }
+
+    private void hover(Ball b, Type[][][] playfield, Coordinate[][] normals) {
+        double aX = 0;
+        double aY = 0;
+        double aZ = 0;
+        int count = 0;
+
+        int[][] surfaceBall = b.getSurfacePoints();
+        int l = surfaceBall[0].length;
+        for (int i = 0; i < l; i++) {
+            int x = surfaceBall[i][0];
+            int y = surfaceBall[i][1];
+            int z = surfaceBall[i][2];
+
+            if (playfield[x][y][z] != Type.Empty){
+                Coordinate c = normals[x][y];
+                aX += c.getX();
+                aY += c.getY();
+                aZ += c.getZ();
+                count++;
+            }
         }
+
+       if (count!=0){
+           aX/=count;
+           aY/=count;
+           aZ/=count;
+
+           b.aX+=aX;
+           b.aY+=aY;
+           b.aZ+=aZ;
+           //friction should come in here
+       }
+
+
+
+    }
+
+    private void accelerate(Ball b, double elapsedTime) {
+        double e = elapsedTime*elapsedTime;
+        b.x+=b.aX*e;
+        b.y+=b.aY*e;
+        b.z+=b.aZ*e;
+
+    }
+
+    private void ballCollision(Ball b, Ball bd) {
+
+        double dx = b.getX()-bd.getX();
+        double dy = b.getY()-bd.getY();
+        double dz = b.getZ()-bd.getZ();
+
+        double slength = dx*dx+dy*dy+dz*dz;
+        double length = Math.sqrt(slength);
+        double target = b.getRadius()+bd.getRadius();
+
+        //if spheres are closer then radii combined
+        if(length<target){
+            // record previous velocity
+            double v1x = b.x - b.previousX;
+            double v1y = b.y - b.previousY;
+            double v1z = b.z - b.previousZ;
+
+            double v2x = bd.x - bd.previousX;
+            double v2y = bd.y - bd.previousY;
+            double v2z = bd.z - bd.previousZ;
+
+            // resolve the body overlap conflict
+            double factor = (length-target)/length;
+            b.x -= dx*factor*0.5;
+            b.y -= dy*factor*0.5;
+            b.z -= dy*factor*0.5;
+
+            bd.x += dx*factor*0.5;
+            bd.y += dy*factor*0.5;
+            bd.z += dz*factor*0.5;
+
+            // compute the projected component factors
+            double f1 = (Config.DAMPING*(dx*v1x+dy*v1y+dz*v1z))/slength;
+            double f2 = (Config.DAMPING*(dx*v2x+dy*v2y+dz*v2z))/slength;
+
+
+            // swap the projected components
+            v1x += f2*dx-f1*dx;
+            v2x += f1*dx-f2*dx;
+            v1y += f2*dy-f1*dy;
+            v2y += f1*dy-f2*dy;
+            v1z += f2*dy-f1*dy;
+            v2z += f1*dz-f2*dz;
+
+            // the previous position is adjusted
+            // to represent the new velocity
+            b.previousX = b.x - v1x;
+            b.previousY = b.y - v1y;
+            b.previousZ = b.z - v1z;
+
+            bd.previousX = bd.x - v2x;
+            bd.previousY = bd.y - v2y;
+            bd.previousZ = bd.z - v2z;
+        }
+
+    }
+
+    private void inertia(Ball b, double elapsedTime) {
+        double x = b.getX()*2-b.getPreviousX();
+        double y = b.getY()*2-b.getPreviousY();
+        double z = b.getZ()*2-b.getPreviousZ();
+        b.previousX = b.x;
+        b.previousY = b.y;
+        b.previousZ = b.z;
+        b.x = x;
+        b.y = y;
+        b.z = z;
+
+    }
+
+    private void resetA(Ball b) {
+        b.setaZ(0);
+        b.setaX(0);
+        b.setaY(0);
+    }
+
+    private void gravity(Ball b) {
+
+            b.setaZ(Config.GRAVITY_FORCE);
+
     }
 
 
@@ -108,6 +212,8 @@ public class PhysicsEngine {
         angle = Math.atan(speedY / speedX);
         return angle;
     }
+
+    /*
     private void checkIfObjectIsBetweenBallAndFutureBall(int coordinateX, int coordinateY, int futureXCoordinate, int futureYCoordinate, double v, double angle, double radius) {
         int collisionX=-6666666;
         int collisionY=-6666666;
@@ -135,11 +241,11 @@ public class PhysicsEngine {
     }
 
 
+*/
 
 
 
-
-
+/*
     private void checkForCollision(Ball b, Coordinate newPosition) {
         ArrayList<Coordinate> checkThose = Coordinate.getPxelBetweenToPoints(b.getCoordinate(),newPosition);
         int indexOfLastFree = checkThose.size()-1;
@@ -185,7 +291,8 @@ public class PhysicsEngine {
             e.printStackTrace();
         }
     }
-
+*/
+    /*
     public void checkColission() {
         double angle = calculateAngle(ball.getSpeedX(), ball.getSpeedY());
         double coordinateX, coordinateY, futureXCoordinate, futureYCoordinate;
@@ -263,11 +370,11 @@ public class PhysicsEngine {
             }
         }
     }
+*/
 
 
 
-
-    public void processHole() {
+    public void processHole(Ball ball) {
 
         Type ballCoordinateType = null;
         Coordinate b = ball.getCoordinate();
@@ -292,15 +399,15 @@ public class PhysicsEngine {
             if (distance + ball.getRadius() < +h.radius) {
                 //inAir
                 if (ballSpeed < (2 * ball.radius - h.radius) * Math.sqrt(10 / 2 * h.radius)) {
-                    ball.speedX = 0;
-                    ball.speedZ = 0;
-                    ball.speedY = 0;
+                    ball.previousX = ball.x;
+                    ball.previousZ = ball.z;
+                    ball.previousY = ball.y;
                     ball.setInHole(true);
                 }
             } else if (distance <= ball.getRadius() + h.radius) {
                 Coordinate c = new Coordinate(h.getX() - b.getX(), h.getY() - b.getY(), h.getZ() - b.getZ());
                 double factor = (1 - distance / (ball.getRadius() + h.radius)) * h.getFriction();
-                ball.redirect(c, factor);
+                //ball.redirect(c, factor);
 
 
             }

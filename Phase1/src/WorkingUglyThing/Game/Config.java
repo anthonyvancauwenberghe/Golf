@@ -31,6 +31,8 @@ public class Config {
     public static final float POWERLINEWIDTH = 3.f;
     private static final String texturePath = "Phase1/src/WorkingUglyThing/Game/textures/";
     public static final double MINSPEED = 1;
+    public static final double DAMPING = 0.99;
+    public static final int BALLRESOLUTION = 40;
 
     public static double[] getLightningVector3d() {
         return lightningVector3d;

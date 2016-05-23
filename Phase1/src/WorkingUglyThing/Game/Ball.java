@@ -1,6 +1,10 @@
 package WorkingUglyThing.Game;
 
 
+import java.util.ArrayList;
+
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 
 public class Ball {
 
@@ -8,12 +12,20 @@ public class Ball {
     double mass = 1;
     double radius = Config.getBallRadius();
 
+    public double previousX, previousY, previousZ;
+
+
+
     public double x, y, z;
-    public double vX, vY, vZ;
-
-
-
     public double aX, aY, aZ;
+    public double[] surfaceX;
+    public double[] surfaceY;
+    public double[] surfaceZ;
+    public double[] surfaceXBig;
+    public double[] surfaceYBig;
+    public double[] surfaceZBig;
+    public int[][] surfaceColection;
+    public int[][] surfaceColectionBig;
 
     public boolean isMoving = false;
     public boolean inHole = false;
@@ -32,6 +44,119 @@ public class Ball {
     public Ball(double mass, double radius) {
         this.mass = mass;
         this.radius = radius;
+
+        calculateSurfacePoints();
+    }
+
+
+    /**cant work. stupid paper
+     * https://www.cmu.edu/biolphys/deserno/pdf/sphere_equi.pdf
+     */
+    private void calculateSurfacePointsWrong() {
+
+        int N = Config.BALLRESOLUTION;
+        ArrayList<Double> xses = new ArrayList<Double>((int) (N*1.3));
+        ArrayList<Double> yses = new ArrayList<Double>((int)(N*1.3));
+        ArrayList<Double> zses = new ArrayList<Double>((int)(N*1.3));
+        ArrayList<Double> xses2 = new ArrayList<Double>((int) (N*1.3));
+        ArrayList<Double> yses2 = new ArrayList<Double>((int)(N*1.3));
+        ArrayList<Double> zses2 = new ArrayList<Double>((int)(N*1.3));
+
+
+        int Ncount = 0;
+        double a = (4*Math.PI*radius*radius)/N;
+        double d = Math.sqrt(a);
+        double mLamba = Math.round(d/Math.PI);
+        double dLamba = Math.PI/mLamba;
+        double dPhi = a/dLamba;
+        for (int m = 0; m < mLamba; m++) {
+            double lambda = Math.PI*(m+0.5)/mLamba;
+            double mPhi = Math.round(2*Math.PI* sin(lambda/dPhi));
+            for (int n = 0; n < mPhi; n++) {
+                double phi = 2 * Math.PI * n/mPhi;
+                double x = new Double(radius* sin(lambda)* cos(phi));
+                double y = new Double(radius* sin(lambda)* sin(phi));
+                double z = new Double(radius* cos(lambda));
+                xses.add(x);
+                yses.add(y);
+                zses.add(z);
+                xses2.add(x*1.2);
+                yses2.add(y*1.2);
+                zses2.add(z*1.2);
+                Ncount++;
+            }
+        }
+        System.out.println("Points on surface" +Ncount);
+        surfaceX = new double[xses.size()];
+        surfaceY = new double[yses.size()];
+        surfaceZ = new double[zses.size()];
+        surfaceXBig = new double[xses.size()];
+        surfaceYBig = new double[yses.size()];
+        surfaceZBig = new double[zses.size()];
+
+        for (int i = 0; i < xses.size(); i++) {
+            surfaceX[i] = xses.get(i);
+            surfaceY[i] = yses.get(i);
+            surfaceZ[i] = zses.get(i);
+            surfaceXBig[i] = xses2.get(i);
+            surfaceYBig[i] = yses2.get(i);
+            surfaceZBig[i] = zses2.get(i);
+        }
+
+        surfaceColection = new int[3][xses.size()];
+        surfaceColectionBig = new int[3][xses.size()];
+
+    }
+
+    private void calculateSurfacePoints() {
+
+        int N = Config.BALLRESOLUTION;
+        ArrayList<Double> xses = new ArrayList<Double>((int) (N*1.3));
+        ArrayList<Double> yses = new ArrayList<Double>((int)(N*1.3));
+        ArrayList<Double> zses = new ArrayList<Double>((int)(N*1.3));
+        ArrayList<Double> xses2 = new ArrayList<Double>((int) (N*1.3));
+        ArrayList<Double> yses2 = new ArrayList<Double>((int)(N*1.3));
+        ArrayList<Double> zses2 = new ArrayList<Double>((int)(N*1.3));
+
+
+        int Ncount=0;
+        for (double theta = 0; theta <= 2*Math.PI; theta=theta+ (2*Math.PI/16.)) {
+
+            for (double arpha = 0; arpha <= Math.PI; arpha=arpha+(Math.PI/8.)) {
+
+
+                double x = radius*cos(theta)*sin(arpha);
+                double y = radius*sin(theta)*sin(arpha);
+                double z = radius* cos(arpha);
+                xses.add(x);
+                yses.add(y);
+                zses.add(z);
+                xses2.add(x*1.2);
+                yses2.add(y*1.2);
+                zses2.add(z*1.2);
+                Ncount++;
+            }
+        }
+        System.out.println("Points on surface" +Ncount);
+        surfaceX = new double[xses.size()];
+        surfaceY = new double[yses.size()];
+        surfaceZ = new double[zses.size()];
+        surfaceXBig = new double[xses.size()];
+        surfaceYBig = new double[yses.size()];
+        surfaceZBig = new double[zses.size()];
+
+        for (int i = 0; i < xses.size(); i++) {
+            surfaceX[i] = xses.get(i);
+            surfaceY[i] = yses.get(i);
+            surfaceZ[i] = zses.get(i);
+            surfaceXBig[i] = xses2.get(i);
+            surfaceYBig[i] = yses2.get(i);
+            surfaceZBig[i] = zses2.get(i);
+        }
+
+        surfaceColection = new int[xses.size()][3];
+        surfaceColectionBig = new int[xses.size()][3];
+
     }
 
     /**
@@ -41,6 +166,18 @@ public class Ball {
      */
     public boolean isMoving() {
         return isMoving;
+    }
+
+    public double getPreviousX() {
+        return previousX;
+    }
+
+    public double getPreviousY() {
+        return previousY;
+    }
+
+    public double getPreviousZ() {
+        return previousZ;
     }
 
     /**
@@ -54,32 +191,24 @@ public class Ball {
         }
     }
 
-    public void shootBall(double vX, double vY, double vZ) {
+    public void shootBall(double aX, double aY, double aZ) {
         System.out.println(inPlay());
         System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             isMoving = true;
-            this.vX = (Math.abs(vX)>=speedLimiter) ? getSign(vX)*speedLimiter : vX ;
-            this.vY = (Math.abs(vY)>=speedLimiter) ? getSign(vY)*speedLimiter : vY;
-            this.vZ = (Math.abs(vZ)>=speedLimiter) ? getSign(vZ)*speedLimiter : vZ;
-            this.vX = this.vX/speedSlower;
-            this.vY = this.vY/speedSlower;
-            this.vZ = this.vZ/speedSlower;
-            System.out.println("ball is still moving or not in play speedY: " + this.vY);
+            this.aX = (Math.abs(aX)>=speedLimiter) ? getSign(aX)*speedLimiter : aX ;
+            this.aY = (Math.abs(aY)>=speedLimiter) ? getSign(aY)*speedLimiter : aY;
+            this.aZ = (Math.abs(aZ)>=speedLimiter) ? getSign(aZ)*speedLimiter : aZ;
+            this.aX = this.aX/speedSlower;
+            this.aY = this.aY/speedSlower;
+            this.aZ = this.aZ/speedSlower;
+            System.out.println("ball is still moving or not in play speedY: " + this.aY);
         } else {
             System.out.println("ball is still moving or not in play");
         }
     }
 
-    /**
-     * What is shootBall3D doing?
-     * @param speed1
-     * @param speed2
-     * @param angle
-     */
-    public void shootBall3D(double speed1, double speed2, double angle) {
 
-    }
 
     /**
      * ??
@@ -103,7 +232,7 @@ public class Ball {
      * @return speedX
      */
     public double getSpeedX() {
-        return vX;
+        return this.x*2 - this.previousX;
     }
 
     /**
@@ -111,7 +240,7 @@ public class Ball {
      * @return vY
      */
     public double getSpeedY() {
-        return vY;
+        return this.y*2 - this.previousY;
     }
 
     /**
@@ -119,7 +248,7 @@ public class Ball {
      * @return speedZ
      */
     public double getSpeedZ() {
-        return vZ;
+        return this.z*2 - this.previousZ;
     }
 
     /**
@@ -130,24 +259,6 @@ public class Ball {
         return radius;
     }
 
-    /**
-     * formula to reverse the direction of the ball in X-axis
-     */
-    public void reverseBallDirectionX() {
-        vX = -vX;
-    }
-    /**
-     * formula to reverse the direction of the ball in Y-axis
-     */
-    public void reverseBallDirectionY() {
-        vY = -vY;
-    }
-    /**
-     * formula to reverse the direction of the ball in Z-axis
-     */
-    public void reverseBallDirectionZ() {
-        vZ = -vZ;
-    }
 
     /**
      * getter to get the coordinate of the ball of the Coordinate class
@@ -165,7 +276,7 @@ public class Ball {
      * if ball is stopped, isMoving is false
      */
     public boolean checkBallStopped(){
-        if(Math.abs(vX)<=0.2 && Math.abs(vY)<=0.3 && Math.abs(vZ)<=1){
+        if(Math.abs(getSpeedX())<=0.2 && Math.abs(getSpeedY())<=0.2 && Math.abs(getSpeedZ())<=0.2){
             isMoving=false;
             System.out.println("ballStopped");
             return true;
@@ -183,9 +294,9 @@ public class Ball {
         System.out.println("X: " +x);
         System.out.println("Y: " +y);
         System.out.println("Z: " +z);
-        System.out.println("SpeedX: " + vX);
-        System.out.println("SpeedY: " + vY);
-        System.out.println("SpeedZ: " + vZ);
+        System.out.println("SpeedX: " + getSpeedX());
+        System.out.println("SpeedY: " + getSpeedY());
+        System.out.println("SpeedZ: " + getSpeedZ());
         System.out.println("ball radius: " + getRadius());
         if(!isMoving)
             System.out.println("ballStopped");
@@ -196,32 +307,14 @@ public class Ball {
      * @return formula to get the speed (with Pythagoras)
      */
     public double getSpeed() {
-       return Math.sqrt(vX*vX+vY*vY+vZ*vZ);
+       double speedX = getSpeedX();
+        double speedY = getSpeedY();
+        double speedZ = getSpeedZ();
+
+        return Math.sqrt(speedX*speedX+speedY*speedY+speedZ*speedZ);
     }
 
-    /**
-     *
-     * @param c
-     * @param factor
-     */
-    public void redirect(Coordinate c, double factor) {
-        double redirectSpeed = 0;
-        redirectSpeed += factor *Math.abs(vX);
-        redirectSpeed += factor *Math.abs(vY);
-        redirectSpeed += factor *Math.abs(vZ);
-        vX*=1-factor;
-        vY*=1-factor;
-        vZ*=1-factor;
-        double length = Math.sqrt(c.getX()*c.getX()+c.getY()*c.getY()+c.getZ()*c.getZ());
-        vX+=(c.getX()/length*redirectSpeed);
-        vY+=(c.getY()/length*redirectSpeed);
-        vZ+=(c.getZ() / length * redirectSpeed);
 
-
-
-
-
-    }
 
     public double getX() {
         return x;
@@ -235,14 +328,7 @@ public class Ball {
         return z;
     }
 
-    public static boolean collide(Ball a, Ball b) {
-        double r = a.getRadius();
-        double r2 = b.getRadius();
-        double dx = a.getX()-b.getX();
-        double dy = a.getY()-b.getY();
-        double dz = a.getZ()-b.getZ();
-        return (r*r2<=dx*dx+dy*dy+dz*dz);
-    }
+
 
     public double getaX() {
         return aX;
@@ -268,4 +354,23 @@ public class Ball {
         this.aZ = aZ;
     }
 
+    public int[][] getSurfacePoints() {
+        for (int i = 0; i < surfaceX.length; i++) {
+            surfaceColection[i][0] = (int) (surfaceX[i]+x);
+            surfaceColection[i][1] = (int) (surfaceY[i]+y);
+            surfaceColection[i][2] = (int) (surfaceZ[i]+z);
+
+        }
+        return surfaceColection;
+    }
+
+    public int[][] getSurfacePointsBig() {
+        for (int i = 0; i < surfaceXBig.length; i++) {
+            surfaceColectionBig[i][0] = (int) (surfaceX[i]+x);
+            surfaceColectionBig[i][1] = (int) (surfaceY[i]+y);
+            surfaceColectionBig[i][2] = (int) (surfaceZ[i]+z);
+
+        }
+        return surfaceColection;
+    }
 }

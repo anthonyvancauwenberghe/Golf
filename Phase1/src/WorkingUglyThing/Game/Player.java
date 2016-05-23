@@ -38,9 +38,9 @@ public abstract class Player {
     }
 
     public void setBallPosition(double x, double y, double z){
-        b.getCoordinate().setX(x);
-        b.getCoordinate().setY(y);
-        b.getCoordinate().setZ(z);
+        b.x = x;
+        b.y=y;
+        b.z=z;
     }
 
     public Player(String name){

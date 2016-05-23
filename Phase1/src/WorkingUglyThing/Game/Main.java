@@ -67,7 +67,7 @@ public class Main extends JPanel {
 
                 physics.processPhysics(1);
 
-                p.getBall().checkBallStopped();
+
                 p.getBall().printBallInfo();
                 try {
                     dp.repaint();

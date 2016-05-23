@@ -77,7 +77,7 @@ public class Game {
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
 
         pp.add(p);
-        pp.add(p2);
+        //pp.add(p2);
 
         loadCourse(course);
 
@@ -87,7 +87,7 @@ public class Game {
         dp.setCourse(course);
         ArrayList<Ball> balls = new ArrayList<>(2);
         balls.add(p.getBall());
-        balls.add(p2.getBall());
+       // balls.add(p2.getBall());
         physics.init(course, balls);
 
         frame.add(dp, BorderLayout.CENTER);
@@ -103,15 +103,17 @@ public class Game {
 
             public void run(){
                 while (true) {
-                    long elapsedTime = System.currentTimeMillis() - lastTime;
-                    lastTime = elapsedTime;
+                    long currentTime = System.currentTimeMillis();
+                    long elapsedTime = currentTime - lastTime;
+                    System.out.println(elapsedTime);
+                    lastTime = currentTime;
 
                     if (pp.get(currentPlayer).getBall().isMoving) {
                         Player cp = pp.get(currentPlayer);
 
                         selectNextPlayer=true;
-                        physics.processPhysics(elapsedTime);
-                        cp.getBall().checkBallStopped();
+                        physics.processPhysics(0.016);
+
                         cp.getBall().printBallInfo();
                         try {
                             dp.repaint();
