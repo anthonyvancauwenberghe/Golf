@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class PhysicsEngine {
     private Course course;
+    public boolean atLeastOneBallMoving;
 
     public void setBall(ArrayList<Ball> balls) {
         this.balls = balls;
@@ -18,7 +19,7 @@ public class PhysicsEngine {
     private final double AIR_FRICTION = Config.AIR_FRICTION;
     private final double GRAVITY_FORCE = Config.GRAVITY_FORCE;
     private final double WALL_ENERGY_LOSS = Config.WALL_ENERGY_LOSS;
-    private final double SAND_ENERGY_LOSS = Config.SAND_ENERGY_LOSS;
+    private final double SAND_ENERGY_LOSS = Config.SAND_FRICTION;
     private final double WATER_ENERGY_LOSS = Config.WATER_ENERGY_LOSS;
 
 
@@ -43,7 +44,7 @@ public class PhysicsEngine {
 
 
     public void processPhysics(double elapsedTime) {
-
+        atLeastOneBallMoving = false;
 
 
 
@@ -56,7 +57,7 @@ public class PhysicsEngine {
             if (!b.inPlay) continue;
             gravity(b);
 
-            hover(b,playfield,normals,course.getDimension());
+            hover(b,elapsedTime,playfield,normals,course.getDimension());
             accelerate(b,elapsedTime);
             resetA(b);
             //collide(b,playfield,normals,course.getDimension());
@@ -71,8 +72,10 @@ public class PhysicsEngine {
 
             inertia(b,elapsedTime);
             //b.checkBallStopped();
+            atLeastOneBallMoving = !b.checkBallStopped();
         }
     }
+
 
     private void collide(Ball b, Type[][][] playfield,  Coordinate[][] normals, int[] dimension) {
         double aX = 0;
@@ -145,7 +148,7 @@ public class PhysicsEngine {
 
     }
 
-    private void hover(Ball b, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
+    private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
         double aX = 0;
         double aY = 0;
         double aZ = 0;
@@ -212,7 +215,7 @@ public class PhysicsEngine {
            aY/=count;
            aZ/=count;
            addedFriction/=count;
-           addedFriction = 1-addedFriction;
+           addedFriction = (1-addedFriction*elapsedTime);
            double dx = b.previousX - b.x;
            double dy = b.previousY - b.y;
            double dz = b.previousZ - b.z;

@@ -199,6 +199,7 @@ public class Ball {
             previousY-=impulsY*Config.STEPSIZE;
             previousZ-=impulsZ*Config.STEPSIZE;
             isMoving = true;
+
             /*
             this.aX = (Math.abs(aX)>=speedLimiter) ? getSign(aX)*speedLimiter : aX ;
             this.aY = (Math.abs(aY)>=speedLimiter) ? getSign(aY)*speedLimiter : aY;
@@ -238,7 +239,7 @@ public class Ball {
      * @return speedX
      */
     public double getSpeedX() {
-        return this.x*2 - this.previousX;
+        return this.x - this.previousX;
     }
 
     /**
@@ -246,7 +247,7 @@ public class Ball {
      * @return vY
      */
     public double getSpeedY() {
-        return this.y*2 - this.previousY;
+        return this.y - this.previousY;
     }
 
     /**
@@ -254,7 +255,7 @@ public class Ball {
      * @return speedZ
      */
     public double getSpeedZ() {
-        return this.z*2 - this.previousZ;
+        return this.z - this.previousZ;
     }
 
     /**
@@ -282,7 +283,7 @@ public class Ball {
      * if ball is stopped, isMoving is false
      */
     public boolean checkBallStopped(){
-        if(Math.abs(getSpeedX())<=0.2 && Math.abs(getSpeedY())<=0.2 && Math.abs(getSpeedZ())<=0.2){
+        if(Math.abs(getSpeedX())<=0.02 && Math.abs(getSpeedY())<=0.02 && Math.abs(getSpeedZ())<=0.01){
             isMoving=false;
             System.out.println("ballStopped");
             return true;

@@ -14,12 +14,12 @@ public class Config {
     private static final double ballMass = 1;
     private static final double ballRadius = 14;
     private static final double holeRadius = 24;
-    public static final double GRASS_FRICTION = 0.12;
+    public static final double GRASS_FRICTION = 0.06;
     public static final double AIR_FRICTION = 0.01;
     public static final double GRAVITY_FORCE = 9.81;
-    public static final double WALL_ENERGY_LOSS = 0.7;
+    public static final double WALL_ENERGY_LOSS = 0.03;
     public static final double WATER_ENERGY_LOSS  = 0.3;
-    public static final double SAND_ENERGY_LOSS = 0.3;
+    public static final double SAND_FRICTION = 0.3;
     public static final int OFFSET_X_GAME=16;
     public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;

@@ -260,7 +260,7 @@ public class DrawPanel extends JPanel {
 
             Ball b = players.get(i).getBall();
             drawBallShadow(g,b);
-           // drawBall(g,b);
+            drawBall(g,b);
 
 
         }
@@ -368,6 +368,31 @@ public class DrawPanel extends JPanel {
         //if (c != null)
         g2.setPaint(ballP);
         g2.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius*2, (int) radius*2);
+
+        for (int x = (int) -radius; x < radius; x++) {
+            for (int y = (int) -radius; y < radius; y++) {
+                for (int z = 0; z < radius; z++) {
+                    double length = Math.sqrt(x*x+y*y+z*z);
+                    double xt = x;
+                    double yt = y;
+                    double zt = z;
+                    if (length<=radius){
+
+                        xt /= length;
+                        yt /= length;
+                        zt /= length;
+                        float value = (float) Math.acos(Config.getLightningVector3d()[0] * xt + Config.getLightningVector3d()[1] *  yt+Config.getLightningVector3d()[2] *  zt);
+                        System.out.println("x: " + x + " y: " + y + " has the angle two north west " + Math.toDegrees(value) );
+                        value = (float)(value/Math.PI);
+                        Color shadingC = new Color(0,0,0,value*0.5f);
+                        g2.setColor(shadingC);
+                        g2.fillRect((int)(c.getX()+x),(int)(c.getY()+y),1,1);
+                    }
+                }
+            }
+
+        }
+
 
     }
 

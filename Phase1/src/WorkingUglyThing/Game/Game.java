@@ -107,7 +107,7 @@ public class Game {
                     System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
 
-                    if (pp.get(currentPlayer).getBall().isMoving) {
+                    if (physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving()) {
                         Player cp = pp.get(currentPlayer);
 
                         selectNextPlayer=true;
