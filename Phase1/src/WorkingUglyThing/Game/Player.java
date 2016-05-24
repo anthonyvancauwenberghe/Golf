@@ -14,6 +14,7 @@ public abstract class Player {
 
     int currentStrokes;
     int totalStrokes;
+    private boolean pregame;
 
 
     public Ball getBall(){
@@ -91,4 +92,6 @@ public abstract class Player {
     public void resetBall() {
         this.b = new Ball(Config.getBallMass(), Config.getBallRadius());
     }
+
+
 }

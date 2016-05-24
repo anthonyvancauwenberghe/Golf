@@ -75,7 +75,7 @@ public class Game {
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
 
         pp.add(p);
-        //pp.add(p2);
+        pp.add(p2);
 
         loadCourse(course);
 
@@ -140,7 +140,7 @@ public class Game {
                                 balls.add(pp.get(i).getBall());
                                 if (i!=currentPlayer) otherBalls.add(pp.get(i).getBall());
                             }
-
+                            pp.get(currentPlayer).getBall().pregame=false;
                             dp.setCurrentPlayer(pp.get(currentPlayer));
                             pp.get(currentPlayer).nextMove(course,otherBalls);
 
@@ -407,9 +407,11 @@ public class Game {
             p.resetBall();
             p.resetCurrentStrokes();
             p.setInPlay(true);
+            p.getBall().setPregame(true);
             Tile t = course.getStartTile();
             p.setBallPositionAndSpeed0(t.x,t.y,t.z);
         }
+        if (pp.size()!=0)pp.get(0).getBall().setPregame(false);
         physics.init(pp,course);
         dp.setCourse(course);
         dp.setCurrentPlayer(pp.get(0));

@@ -40,6 +40,7 @@ public class DrawPanel extends JPanel {
     public static TexturePaint holeP;
     public static TexturePaint ballP;
     public static BufferedImage ballTexture;
+    public static BufferedImage ballImage;
     public boolean prepareShoot;
     private BufferedImage previewObject;
     private Graphics2D g2;
@@ -165,10 +166,50 @@ public class DrawPanel extends JPanel {
 
         holeP = new TexturePaint(holeTexture,new Rectangle(0,0,32,32));
         ballP = new TexturePaint(ballTexture,new Rectangle(0,0,32,32));
-
+        precalcBallImage();
     }
 
+    private static void precalcBallImage() {
+        ballImage = new BufferedImage((int)(Config.getBallRadius()*2),(int)(Config.getBallRadius()*2),BufferedImage.TYPE_INT_ARGB);
+        double radius = Config.getBallRadius();
+        Graphics2D g2 = ballImage.createGraphics();
+        Color[][] colorMap = new Color[(int) radius*2][(int) radius*2];
+        for (int x = (int) -radius; x < radius; x++) {
+            for (int y = (int) -radius; y < radius; y++) {
+                for (int z = 0; z < radius; z++) {
+                    double length = Math.sqrt(x*x+y*y+z*z);
+                    double xt = x;
+                    double yt = y;
+                    double zt = z;
+                    if (length<=radius){
 
+                        xt /= length;
+                        yt /= length;
+                        zt /= length;
+                        float value = (float) Math.acos(Config.getLightningVector3d()[0] * xt + Config.getLightningVector3d()[1] *  yt+Config.getLightningVector3d()[2] *  zt);
+                        System.out.println("x: " + x + " y: " + y + " has the angle two north west " + Math.toDegrees(value) );
+                        value = (float)(value/Math.PI);
+                        colorMap[(int)(x+radius)][(int)(y+radius)] = new Color(0,0,0,value*0.7f);
+                    }
+                }
+            }
+
+        }
+
+        for (int x = 0; x < colorMap.length; x++) {
+            for (int y = 0; y < colorMap[0].length; y++) {
+                Color c = colorMap[x][y];
+                if (c!=null){
+                    g2.setColor(c);
+                    g2.fillRect(x, y, 1, 1);
+                    g2.fillRect(x, y, 1, 1);
+                }
+
+            }
+
+        }
+
+    }
 
 
     public void setCourse(Course c) {
@@ -369,29 +410,7 @@ public class DrawPanel extends JPanel {
         g2.setPaint(ballP);
         g2.fillOval((int) (c.getX() - radius), (int) (c.getY() - radius), (int) radius*2, (int) radius*2);
 
-        for (int x = (int) -radius; x < radius; x++) {
-            for (int y = (int) -radius; y < radius; y++) {
-                for (int z = 0; z < radius; z++) {
-                    double length = Math.sqrt(x*x+y*y+z*z);
-                    double xt = x;
-                    double yt = y;
-                    double zt = z;
-                    if (length<=radius){
-
-                        xt /= length;
-                        yt /= length;
-                        zt /= length;
-                        float value = (float) Math.acos(Config.getLightningVector3d()[0] * xt + Config.getLightningVector3d()[1] *  yt+Config.getLightningVector3d()[2] *  zt);
-                        System.out.println("x: " + x + " y: " + y + " has the angle two north west " + Math.toDegrees(value) );
-                        value = (float)(value/Math.PI);
-                        Color shadingC = new Color(0,0,0,value*0.5f);
-                        g2.setColor(shadingC);
-                        g2.fillRect((int)(c.getX()+x),(int)(c.getY()+y),1,1);
-                    }
-                }
-            }
-
-        }
+        g2.drawImage(ballImage, (int) (c.getX() - radius), (int) (c.getY() - radius),null );
 
 
     }

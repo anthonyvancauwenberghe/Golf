@@ -54,7 +54,7 @@ public class PhysicsEngine {
 
 
             Ball b = balls.get(i);
-            if (!b.inPlay) continue;
+            if (!b.inPlay||b.pregame) continue;
             gravity(b);
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
@@ -66,7 +66,7 @@ public class PhysicsEngine {
             for (int j = i+1; j < balls.size(); j++) {
                 //check for collision between two balls
                 Ball bd = balls.get(j);
-                if (!bd.inPlay) continue;
+                if (!bd.inPlay||bd.pregame) continue;
                 ballCollision(b,bd);
             }
 

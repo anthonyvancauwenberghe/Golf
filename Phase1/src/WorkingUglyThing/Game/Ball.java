@@ -1,7 +1,9 @@
 package WorkingUglyThing.Game;
 
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Map;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -34,6 +36,11 @@ public class Ball {
 
     private int speedLimiter = Config.speedLimiter;
     private double speedSlower = Config.speedSlower;
+    private int stopcounter;
+
+
+
+    public boolean pregame = true;
 
 
     /**
@@ -48,6 +55,9 @@ public class Ball {
         calculateSurfacePoints();
     }
 
+    public boolean isPregame() {
+        return pregame;
+    }
 
     /**cant work. stupid paper
      * https://www.cmu.edu/biolphys/deserno/pdf/sphere_equi.pdf
@@ -284,10 +294,17 @@ public class Ball {
      */
     public boolean checkBallStopped(){
         if(Math.abs(getSpeedX())<=0.02 && Math.abs(getSpeedY())<=0.02 && Math.abs(getSpeedZ())<=0.01){
-            isMoving=false;
-            System.out.println("ballStopped");
-            return true;
 
+            stopcounter++;
+            if (stopcounter>=10){
+                isMoving=false;
+                System.out.println("ballStopped");
+                return true;
+            }
+
+
+        }else{
+            stopcounter=0;
         }
         return false;
 
@@ -383,5 +400,9 @@ public class Ball {
 
         }
         return surfaceColectionBig;
+    }
+
+    public void setPregame(boolean pregame) {
+        this.pregame = pregame;
     }
 }
