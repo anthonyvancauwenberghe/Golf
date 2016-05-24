@@ -8,13 +8,13 @@ import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 /**
  * Created by nibbla on 16.03.16.
@@ -259,7 +259,8 @@ public class DrawPanel extends JPanel {
                 continue;
 
             Ball b = players.get(i).getBall();
-            drawBall(g,b);
+            drawBallShadow(g,b);
+           // drawBall(g,b);
 
 
         }
@@ -282,6 +283,62 @@ public class DrawPanel extends JPanel {
         }
 
 
+    }
+
+    private void drawBallShadow(Graphics g, Ball b) {
+
+        Graphics2D g2 = (Graphics2D) g;
+        int[] dim = course.getDimension();
+        int[][] bbb = b.getSurfacePoints();
+        g.setColor(new Color(0,0,0,0.9f));
+        int[] xs = new int[bbb.length] ;
+        int[] ys = new int[bbb.length] ;
+        ArrayList<Point> shadow = new ArrayList<>(bbb.length);
+
+        outerloop:for (int i =  bbb.length-1; i >=0; i--) {
+
+            double[] d = Config.getLightningVector3d();
+            double x = bbb[i][0];
+            double y = bbb[i][1];
+            double z = bbb[i][2];
+
+            while (true){
+                x -= d[0];
+                y -= d[1];
+                z -= d[2];
+
+                if (x<0||x>dim[0]||y<0||y>dim[1]||z<0||z>dim[2]){
+                    continue outerloop;
+                }
+
+
+
+                if (course.getTile((int)x,(int)y,(int)z) !=Type.Empty){
+                    shadow.add(new Point((int) x, (int) y));
+
+
+                    continue outerloop;
+                }
+
+            }
+
+        }
+
+
+
+        QuickHull qh = new QuickHull();
+        ArrayList<Point> p = qh.quickHull(shadow);
+        int[] xs2 = new int[p.size()];
+        int[] ys2 = new int[p.size()];
+        int n = p.size();
+
+        for (int i = 0; i < p.size(); i++) {
+            Point ps =  p.get(i);
+            xs2[i] = ps.x;
+            ys2[i] = ps.y;
+        }
+        g2.setColor(new Color(0,0,0,0.3f));
+        g2.fillPolygon(xs2,ys2,n);
     }
 
     public void drawPowerLine(Graphics g, Ball b) {

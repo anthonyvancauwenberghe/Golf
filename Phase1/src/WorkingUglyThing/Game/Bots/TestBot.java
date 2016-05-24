@@ -16,7 +16,7 @@ public class TestBot extends AIPlayer {
         Ball b = this.getBall();
         Hole h = c.getHole();
         Type[][][] playfield = c.getPlayfield();
-        ArrayList<Coordinate> pixelBetweenToPoints = Utils.getPxelBetweenToPoints(new Coordinate(0,0,0),new Coordinate(20,20,20));
+        ArrayList<Coordinate> pixelBetweenToPoints = Coordinate.getPixelBetweenToPoints(new Coordinate(0,0,0),new Coordinate(20,20,20));
         Random r = new Random();
         h.getCoordinate();
         double vx= r.nextDouble()*200-100;

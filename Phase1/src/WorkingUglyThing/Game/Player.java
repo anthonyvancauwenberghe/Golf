@@ -37,10 +37,16 @@ public abstract class Player {
         addStroke();
     }
 
-    public void setBallPosition(double x, double y, double z){
+    public void setBallPositionAndSpeed0(double x, double y, double z){
         b.x = x;
         b.y=y;
         b.z=z;
+
+        b.previousX=x;
+        b.previousY=y;
+        b.previousZ=z;
+
+
     }
 
     public Player(String name){

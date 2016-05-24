@@ -14,12 +14,12 @@ public class Config {
     private static final double ballMass = 1;
     private static final double ballRadius = 14;
     private static final double holeRadius = 24;
-    public static final double GROUND_FRICTION = 0.88;
-    public static final double AIR_FRICTION = 0.995;
+    public static final double GRASS_FRICTION = 0.12;
+    public static final double AIR_FRICTION = 0.01;
     public static final double GRAVITY_FORCE = 9.81;
     public static final double WALL_ENERGY_LOSS = 0.7;
     public static final double WATER_ENERGY_LOSS  = 0.3;
-    public static final double SAND_ENERGY_LOSS = 0.6;
+    public static final double SAND_ENERGY_LOSS = 0.3;
     public static final int OFFSET_X_GAME=16;
     public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;
@@ -33,6 +33,7 @@ public class Config {
     public static final double MINSPEED = 1;
     public static final double DAMPING = 0.99;
     public static final int BALLRESOLUTION = 40;
+    public static final double STEPSIZE = 0.016;
 
     public static double[] getLightningVector3d() {
         return lightningVector3d;

@@ -53,7 +53,7 @@ public class Main extends JPanel {
 
 
         Tile t = course.getStartTile();
-        p.setBallPosition(t.x,t.y,t.z);
+        p.setBallPositionAndSpeed0(t.x,t.y,t.z);
         dp.setPlayers(pp);
         dp.setCurrentPlayer(p);
         dp.setCourse(course);

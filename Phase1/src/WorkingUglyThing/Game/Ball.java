@@ -191,11 +191,15 @@ public class Ball {
         }
     }
 
-    public void shootBall(double aX, double aY, double aZ) {
+    public void shootBall(double impulsX, double impulsY, double impulsZ) {
         System.out.println(inPlay());
         System.out.println(isMoving);
         if (!isMoving && inPlay()) {
+            previousX-=impulsX*Config.STEPSIZE;
+            previousY-=impulsY*Config.STEPSIZE;
+            previousZ-=impulsZ*Config.STEPSIZE;
             isMoving = true;
+            /*
             this.aX = (Math.abs(aX)>=speedLimiter) ? getSign(aX)*speedLimiter : aX ;
             this.aY = (Math.abs(aY)>=speedLimiter) ? getSign(aY)*speedLimiter : aY;
             this.aZ = (Math.abs(aZ)>=speedLimiter) ? getSign(aZ)*speedLimiter : aZ;
@@ -203,6 +207,8 @@ public class Ball {
             this.aY = this.aY/speedSlower;
             this.aZ = this.aZ/speedSlower;
             System.out.println("ball is still moving or not in play speedY: " + this.aY);
+            */
+
         } else {
             System.out.println("ball is still moving or not in play");
         }
@@ -294,6 +300,10 @@ public class Ball {
         System.out.println("X: " +x);
         System.out.println("Y: " +y);
         System.out.println("Z: " +z);
+        System.out.println("previousX: " +previousX);
+        System.out.println("previousY: " +previousY);
+        System.out.println("previousZ: " +previousZ);
+
         System.out.println("SpeedX: " + getSpeedX());
         System.out.println("SpeedY: " + getSpeedY());
         System.out.println("SpeedZ: " + getSpeedZ());
@@ -366,11 +376,11 @@ public class Ball {
 
     public int[][] getSurfacePointsBig() {
         for (int i = 0; i < surfaceXBig.length; i++) {
-            surfaceColectionBig[i][0] = (int) (surfaceX[i]+x);
-            surfaceColectionBig[i][1] = (int) (surfaceY[i]+y);
-            surfaceColectionBig[i][2] = (int) (surfaceZ[i]+z);
+            surfaceColectionBig[i][0] = (int) (surfaceXBig[i]+x);
+            surfaceColectionBig[i][1] = (int) (surfaceYBig[i]+y);
+            surfaceColectionBig[i][2] = (int) (surfaceZBig[i]+z);
 
         }
-        return surfaceColection;
+        return surfaceColectionBig;
     }
 }

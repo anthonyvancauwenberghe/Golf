@@ -1,7 +1,5 @@
 package WorkingUglyThing.Game;
 
-import java.awt.*;
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +14,7 @@ public class PhysicsEngine {
 
     private ArrayList<Ball> balls = new ArrayList<>(2);
 
-    private final double GROUND_FRICTION = Config.GROUND_FRICTION;
+    private final double GROUND_FRICTION = Config.GRASS_FRICTION;
     private final double AIR_FRICTION = Config.AIR_FRICTION;
     private final double GRAVITY_FORCE = Config.GRAVITY_FORCE;
     private final double WALL_ENERGY_LOSS = Config.WALL_ENERGY_LOSS;
@@ -57,10 +55,11 @@ public class PhysicsEngine {
             Ball b = balls.get(i);
             if (!b.inPlay) continue;
             gravity(b);
+
+            hover(b,playfield,normals,course.getDimension());
             accelerate(b,elapsedTime);
-            hover(b,playfield,normals);
             resetA(b);
-            collide(b,playfield);
+            //collide(b,playfield,normals,course.getDimension());
 
             //check for Collision with different balls
             for (int j = i+1; j < balls.size(); j++) {
@@ -75,29 +74,136 @@ public class PhysicsEngine {
         }
     }
 
-    private void collide(Ball b, Type[][][] playfield) {
-
-    }
-
-    private void hover(Ball b, Type[][][] playfield, Coordinate[][] normals) {
+    private void collide(Ball b, Type[][][] playfield,  Coordinate[][] normals, int[] dimension) {
         double aX = 0;
         double aY = 0;
         double aZ = 0;
         int count = 0;
+        double g = 1*Config.GRAVITY_FORCE;
 
-        int[][] surfaceBall = b.getSurfacePoints();
-        int l = surfaceBall[0].length;
+        int[][] surfaceBall = b.getSurfacePointsBig();
+        int l = surfaceBall.length;
         for (int i = 0; i < l; i++) {
             int x = surfaceBall[i][0];
             int y = surfaceBall[i][1];
             int z = surfaceBall[i][2];
+            boolean skipCheck = false;
+            if (y<0||x<0||z<0||x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) {
+                skipCheck = true;
+                if (x < 0) {
+                    aX += 1;
+                }
 
-            if (playfield[x][y][z] != Type.Empty){
+                if (y < 0) {
+                    aY += 1;
+
+                }
+                if (z < 0) {
+                    aZ += 2;
+
+                }
+
+                if (x >= dimension[0]) {
+                    aX -= 1;
+
+                }
+                if (y >= dimension[1]) {
+                    aY -= 1;
+
+                }
+                if (z >= dimension[2]) {
+                    //aZ -= 1;
+                    count--;
+                    //count++;
+                }
+                skipCheck = true;
+                count++;
+            }
+
+            if (!skipCheck&&playfield[x][y][z] != Type.Empty){
                 Coordinate c = normals[x][y];
                 aX += c.getX();
                 aY += c.getY();
                 aZ += c.getZ();
                 count++;
+
+            }
+        }
+
+        if (count!=0){
+            aX/=count;
+            aY/=count;
+            aZ/=count;
+
+            b.aX+=aX*g;
+            b.aY+=aY*g;
+            b.aZ+=aZ*g;
+            //friction should come in here
+        }
+
+
+
+    }
+
+    private void hover(Ball b, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
+        double aX = 0;
+        double aY = 0;
+        double aZ = 0;
+        int count = 0;
+        double g = 1*Config.GRAVITY_FORCE;
+        double addedFriction = 0;
+        int[][] surfaceBall = b.getSurfacePointsBig();
+        int l = surfaceBall.length;
+        for (int i = 0; i < l; i++) {
+            int x = surfaceBall[i][0];
+            int y = surfaceBall[i][1];
+            int z = surfaceBall[i][2];
+            boolean skipCheck = false;
+            if (y<0||x<0||z<0||x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) {
+                skipCheck = true;
+                if (x < 0) {
+                    aX += 1;
+                }
+
+                if (y < 0) {
+                    aY += 1;
+
+                }
+                if (z < 0) {
+                    aZ += 1.2;
+
+                }
+
+                if (x >= dimension[0]) {
+                    aX -= 1;
+
+                }
+                if (y >= dimension[1]) {
+                    aY -= 1;
+
+                }
+                if (z >= dimension[2]) {
+                    //aZ -= 1;
+                    count--;
+                    //count++;
+                }
+                addedFriction+=Type.Grass.getFriction();
+                skipCheck = true;
+                count++;
+            }
+
+            if (!skipCheck){
+                Type t = playfield[x][y][z];
+                 if (t!= Type.Empty) {
+                     addedFriction+=t.getFriction();
+
+                     Coordinate c = normals[x][y];
+                     aX += c.getX();
+                     aY += c.getY();
+                     aZ += c.getZ();
+                     count++;
+                 }
+
             }
         }
 
@@ -105,11 +211,24 @@ public class PhysicsEngine {
            aX/=count;
            aY/=count;
            aZ/=count;
+           addedFriction/=count;
+           addedFriction = 1-addedFriction;
+           double dx = b.previousX - b.x;
+           double dy = b.previousY - b.y;
+           double dz = b.previousZ - b.z;
 
-           b.aX+=aX;
-           b.aY+=aY;
-           b.aZ+=aZ;
+           b.previousX = b.x +  dx*addedFriction;
+           b.previousY = b.y +  dy*addedFriction;
+           b.previousZ = b.z +  dz*addedFriction;
+
+           b.aX+=aX*g;
+           b.aY+=aY*g;
+           b.aZ+=aZ*g;
            //friction should come in here
+
+
+
+
        }
 
 
@@ -202,7 +321,7 @@ public class PhysicsEngine {
 
     private void gravity(Ball b) {
 
-            b.setaZ(Config.GRAVITY_FORCE);
+            b.setaZ(-Config.GRAVITY_FORCE);
 
     }
 

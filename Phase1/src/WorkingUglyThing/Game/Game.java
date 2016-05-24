@@ -2,14 +2,12 @@ package WorkingUglyThing.Game;
 
 
 import WorkingUglyThing.Game.Bots.TestBot;
-import javafx.geometry.Side;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -103,16 +101,17 @@ public class Game {
 
             public void run(){
                 while (true) {
+
                     long currentTime = System.currentTimeMillis();
                     long elapsedTime = currentTime - lastTime;
-                    System.out.println(elapsedTime);
+                    System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
 
                     if (pp.get(currentPlayer).getBall().isMoving) {
                         Player cp = pp.get(currentPlayer);
 
                         selectNextPlayer=true;
-                        physics.processPhysics(0.016);
+                        physics.processPhysics(0.016); //
 
                         cp.getBall().printBallInfo();
                         try {
@@ -409,7 +408,7 @@ public class Game {
             p.resetCurrentStrokes();
             p.setInPlay(true);
             Tile t = course.getStartTile();
-            p.setBallPosition(t.x,t.y,t.z);
+            p.setBallPositionAndSpeed0(t.x,t.y,t.z);
         }
         physics.init(pp,course);
         dp.setCourse(course);
@@ -464,7 +463,7 @@ public class Game {
 
                 Player p = new HumanPlayer(s);
                 Tile t = course.getStartTile();
-                p.setBallPosition(t.x,t.y,t.z);
+                p.setBallPositionAndSpeed0(t.x,t.y,t.z);
                 pp.add(p);
             }
         });

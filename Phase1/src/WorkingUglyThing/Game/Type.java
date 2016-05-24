@@ -6,11 +6,11 @@ import java.awt.*;
  * Created by nibbla on 14.03.16.
  */
 public enum Type {
-    Empty(Color.GREEN,0.1),
+    Empty(Color.GREEN,Config.AIR_FRICTION),
     Water(Color.BLUE,1.0),
-    Sand(Color.YELLOW,0.8),
+    Sand(Color.YELLOW,Config.SAND_ENERGY_LOSS),
     Hole(Color.WHITE,0.9),
-    Grass(Color.GREEN,0.3),
+    Grass(Color.GREEN,Config.GRASS_FRICTION),
     Start(Color.RED,0.0),
     OBJECT(Color.gray, Config.WALL_ENERGY_LOSS),$MARKER(Color.black,0);
 
