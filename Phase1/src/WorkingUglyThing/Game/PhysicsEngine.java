@@ -72,7 +72,22 @@ public class PhysicsEngine {
             inertia(b,elapsedTime);
             //b.checkBallStopped();
             atLeastOneBallMoving = !b.checkBallStopped();
+
+            checkIfInHole(b);
+
         }
+    }
+
+    private void checkIfInHole(Ball b) {
+        Hole h = course.getHole();
+        double dx =b.x-h.x;
+        double dy =b.y-h.y;
+        double dz =b.z-h.z;
+
+        if ((h.isBallIntersectingHole(b))&&b.getSpeed()<0.2){
+            b.setInHole(true);
+        }
+
     }
 
 
@@ -86,7 +101,7 @@ public class PhysicsEngine {
         int[][] surfaceBall = b.getSurfacePoints();
         int l = surfaceBall.length;
 
-
+        double vOld = b.getSpeed();
 
         for (int i = 0; i < l; i++) {
             int x = surfaceBall[i][0];
@@ -159,20 +174,21 @@ public class PhysicsEngine {
 
             // project velocity onto the normal using dot product
             double scalarProjection = dx * normalX + dy * normalY + dz *normalZ;
-            if (scalarProjection<0){
+           // if (scalarProjection<0){
 
             //
             double dxNew = dx -  normalX * scalarProjection * 2;
             double dyNew = dy -  normalY * scalarProjection * 2;
             double dzNew = dz -  normalZ * scalarProjection * 2;
-
-            BounceFriction=0.8;
-            b.previousX = b.x -  dxNew*(1-BounceFriction*elapsedTime);
-            b.previousY = b.y -  dyNew*(1-BounceFriction*elapsedTime);
-            b.previousZ = b.z -  dzNew*(1-BounceFriction*elapsedTime);
+           // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
+                BounceFriction = 0.3;
+                b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
+                b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
+                b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
 
                 System.out.println("woop");
-            }
+           // }
+           // }
             //friction should come in here
 
 

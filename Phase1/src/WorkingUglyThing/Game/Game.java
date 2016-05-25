@@ -30,6 +30,7 @@ public class Game {
     private static Course previewMiniCourse;
     private static JToggleButton select;
     private static Thread gameThread;
+    private static boolean loadCourse;
 
 
     public Game(){
@@ -37,18 +38,18 @@ public class Game {
         course = Course.loadCourse("GolfDeluxe.gol");
         if (course == null) {
             course = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-
-            course.addFrustrum(200,0,0,160,440,20,2,0,0,0,Type.OBJECT);
-            course.addFrustrum(420,220,0,160,340,20,1,-3,1,-1,Type.OBJECT);
-            course.addFrustrum(620,320,0,330,240,40,2,-1,1,-4,Type.OBJECT);
-            course.addFrustrum(620,120,0,330,140,60,15,-4,15,-4,Type.OBJECT);
+            course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+            course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+            course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+            course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+            course.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
             //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
 
-            course.setTile(800, 600, 0, Type.Hole);
-            course.setTile(100, 100, 0, Type.Start);
+            course.setTile(800, 600, 1, Type.Hole);
+            course.setTile(100, 100, 4, Type.Start);
            // course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
            // course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
            // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
@@ -95,7 +96,8 @@ public class Game {
 
 
         loadCourse(course);
-
+        gameThread = createGameThead();
+        gameThread.run();
 
     }
 
@@ -110,54 +112,54 @@ public class Game {
                     long elapsedTime = currentTime - lastTime;
                     System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
+                    if (!loadCourse) {
+                        if ((physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole) {
+                            Player cp = pp.get(currentPlayer);
 
-                    if (physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving()) {
-                        Player cp = pp.get(currentPlayer);
+                            selectNextPlayer = true;
+                            physics.processPhysics(0.016); //
 
-                        selectNextPlayer=true;
-                        physics.processPhysics(0.016); //
-
-                        cp.getBall().printBallInfo();
-                        try {
-                            dp.repaint();
-                            Thread.sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                            cp.getBall().printBallInfo();
+                            try {
+                                dp.repaint();
+                                Thread.sleep(1);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
 
-                    } else {
-                        if (selectNextPlayer){
-                            if (!IsGameStillOn()){
+                        } else {
+                            if (selectNextPlayer) {
+                                if (!IsGameStillOn()) {
+                                    selectNextPlayer = false;
+                                    JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
+                                    showScoreOnScreen();
+                                }
                                 selectNextPlayer = false;
-                                JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
-                                showScoreOnScreen();
+
+                                do {
+                                    currentPlayer = (currentPlayer + 1) % (pp.size());
+                                } while (!pp.get(currentPlayer).getBall().inPlay);
+                                ArrayList<Ball> balls = new ArrayList<>(8);
+                                ArrayList<Ball> otherBalls = new ArrayList<>(8);
+                                for (int i = 0; i < pp.size(); i++) {
+                                    balls.add(pp.get(i).getBall());
+                                    if (i != currentPlayer) otherBalls.add(pp.get(i).getBall());
+                                }
+                                pp.get(currentPlayer).getBall().pregame = false;
+                                dp.setCurrentPlayer(pp.get(currentPlayer));
+                                pp.get(currentPlayer).nextMove(course, otherBalls);
+
+                                dp.repaint();
                             }
-                            selectNextPlayer = false;
-
-                            do {
-                                currentPlayer=(currentPlayer+1)%(pp.size());
-                            }while (!pp.get(currentPlayer).getBall().inPlay);
-                            ArrayList<Ball> balls = new ArrayList<>(8);
-                            ArrayList<Ball> otherBalls = new ArrayList<>(8);
-                            for (int i = 0; i < pp.size(); i++) {
-                                balls.add(pp.get(i).getBall());
-                                if (i!=currentPlayer) otherBalls.add(pp.get(i).getBall());
+                            try {
+                                Thread.sleep(1);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
                             }
-                            pp.get(currentPlayer).getBall().pregame=false;
-                            dp.setCurrentPlayer(pp.get(currentPlayer));
-                            pp.get(currentPlayer).nextMove(course,otherBalls);
 
-                            dp.repaint();
                         }
-                        try {
-                            Thread.sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
                     }
-
                 }
             }
         };
@@ -235,7 +237,7 @@ public class Game {
             JLabel depthL = new JLabel("depth");
             JTextField depthT = new JTextField("50");
             JLabel zL = new JLabel("z");
-            JTextField zT = new JTextField("0");
+            JTextField zT = new JTextField("10");
             JLabel deltaXLL = new JLabel("deltaX left per Layer");
             JTextField deltaXL_T = new JTextField("1");
             JLabel deltaXRL = new JLabel("deltaX right per Layer");
@@ -256,7 +258,14 @@ public class Game {
             }
 
             });
+            JButton saveCourse = new JButton("SaveCourse");
+            finalizeCourse.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {
+                course.saveCourse();
+                dp.repaint();
 
+            }
+
+            });
             Sidebar.add(widthL);
             Sidebar.add(widhtT);
             Sidebar.add(heightL);
@@ -278,6 +287,7 @@ public class Game {
             Sidebar.add(typeBox);
             Sidebar.add(select);
             Sidebar.add(finalizeCourse);
+            Sidebar.add(saveCourse);
 
 
         }else{
@@ -403,7 +413,7 @@ public class Game {
         loadCourse(course);
     }
     private static void loadCourse(Course course) {
-
+        loadCourse = true;
         ArrayList<Ball> balls = new ArrayList<>(2);
 
         selectNextPlayer=false;
@@ -429,11 +439,8 @@ public class Game {
         physics.init(course, balls);
 
         dp.repaint();
-        if(gameThread!=null){
-            gameThread.stop();
-        }
-        gameThread = createGameThead();
-        gameThread.run();
+
+        loadCourse = false;
 
     }
 

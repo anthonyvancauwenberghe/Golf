@@ -12,7 +12,7 @@ public enum Type {
     Hole(Color.WHITE,0.9,1),
     Grass(Color.GREEN,Config.GRASS_FRICTION,0.3),
     Start(Color.RED,0,1),
-    OBJECT(Color.gray, Config.OBJECT_FRICTION,0.1),
+    OBJECT(Color.gray, Config.OBJECT_FRICTION,0.3),
     $MARKER(Color.black,0,0);
 
 

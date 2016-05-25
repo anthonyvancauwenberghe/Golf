@@ -299,13 +299,13 @@ public class DrawPanel extends JPanel {
             if (players.get(i).currentStrokes==0&&!currentPlayer.equals(players.get(i)))
                 continue;
             Ball b = players.get(i).getBall();
-            drawBallShadow(g,b);
+            if (!b.inHole)drawBallShadow(g,b);
         }
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).currentStrokes==0&&!currentPlayer.equals(players.get(i)))
                 continue;
             Ball b = players.get(i).getBall();
-            drawBall(g,b);
+            if (!b.inHole)drawBall(g,b);
         }
 
         if (currentPlayer != null){
@@ -425,8 +425,8 @@ public class DrawPanel extends JPanel {
 
 
         Hole t = course.getHole();
-        g2.setPaint(holeP);
-        g2.fillOval((int) (t.getX() - t.radius), (int) (t.getY() - t.radius), (int) (t.radius*2), (int) (t.radius*2));
+        g2.setPaint(Color.BLACK);
+        g2.fillOval((int) (t.getX() - t.radius+2), (int) (t.getY() - t.radius+2), (int) (t.radius*2-4), (int) (t.radius*2-4));
 
 
     }
