@@ -223,7 +223,7 @@ public class PhysicsEngine {
 
                 }
                 if (z < 0) {
-                    aZ += 1.2;
+                    aZ += Config.UPPush;
 
                 }
 

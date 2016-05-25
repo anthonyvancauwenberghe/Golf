@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Created by tony on 16/03/2016.
  */
 public class Game {
-    private static Course course;
+    public static Course course;
     public static JFrame frame;
     private static PhysicsEngine physics;
 
@@ -26,7 +26,9 @@ public class Game {
     private static boolean selectNextPlayer;
     private static int currentPlayer=0;
     private static boolean editorVisible;
-    private static JPanel Sidebar;
+    private static boolean variablesVisible;
+    private static JPanel RightSidebar;
+    private static JPanel LeftSidebar;
     private static Course previewMiniCourse;
     private static JToggleButton select;
     private static Thread gameThread;
@@ -205,11 +207,21 @@ public class Game {
         frame.setJMenuBar(JMB);
         JMenu setting = new JMenu("Players");
         JMB.add(setting);
+
+        JMenu course = new JMenu("Course");
+        JMB.add(course);
+
+
+        //course.add(new JMenuItem("Next Course"));
+
+
+
         JMenuItem addPlayer = new JMenuItem("Add Player");
         JMenuItem resetCourse = new JMenuItem("Reset Course");
         JMenuItem removePlayer = new JMenuItem("Remove Player");
-        JMenuItem selectCourse = new JMenuItem("Select Course");
+
         JMenuItem resetStrokes = new JMenuItem("Reset Strokes");
+        JMenuItem selectCourse = new JMenuItem("Select Course");
         setting.add(addPlayer);
         setting.add(removePlayer);
         setting.add(resetCourse);
@@ -241,7 +253,176 @@ public class Game {
         jm3.add(courseSelect2);
         JMB.add(jm3);
         JMB.add(showEditorButton);
+
+        JMenuItem showVariablesButton = new JMenuItem("Show Variables");
+        showVariablesButton.setVisible(true);
+        //showEditorButton.setMinimumSize(setting.getSize());
+        //showEditorButton.setPreferredSize(setting.getSize());
+        //showEditorButton.setMaximumSize(setting.getSize());
+        showVariablesButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showVariables();}
+
+
+        });
+        JMB.add(showVariablesButton);
     }
+
+    private static void showVariables() {
+        variablesVisible = !variablesVisible;
+
+        if (variablesVisible) {
+            int sidebarwidth = 200;
+
+            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+            LeftSidebar = new JPanel();
+            Dimension d = new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+            LeftSidebar.setMinimumSize(d);
+            LeftSidebar.setPreferredSize(d);
+            LeftSidebar.setMaximumSize(d);
+            //RightSidebar.add(SidePann)
+            LeftSidebar.setLayout(new BoxLayout(LeftSidebar, BoxLayout.PAGE_AXIS));
+
+            JPanel label = new miniDraw(new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME - 400));
+            LeftSidebar.add(label);
+
+            JLabel BallRadius = new JLabel("BallRadius");
+            JTextField BallRadiusT = new JTextField(""+Config.ballRadius);
+
+
+
+            JLabel collitionSurfacePointRatio = new JLabel("collitionSurfacePointRatio");
+            JTextField collitionSurfacePointRatioT = new JTextField(""+Config.collitionSurfacePointRatio);
+
+            JLabel hoverSurfacePointRatio = new JLabel("hoverSurfacePointRatio");
+            JTextField hoverSurfacePointRatioT = new JTextField(""+Config.hoverSurfacePointRatio);
+
+
+
+            JLabel GrassFriction = new JLabel("GrassFriction");
+            JTextField GrassFrictionT = new JTextField(""+Config.GRASS_FRICTION);
+
+
+            JLabel GrassDampness = new JLabel("GrassDampness");
+            JTextField GrassDampnessT = new JTextField(""+Config.GRASS_DAMPNESS);
+
+
+            JLabel ObjectFriction = new JLabel("ObjectFriction");
+            JTextField ObjectFrictionT = new JTextField(""+Config.OBJECT_FRICTION);
+
+
+            JLabel ObjectDampness = new JLabel("ObjectDampness");
+            JTextField ObjectDampnessT = new JTextField(""+Config.OBJECT_DAMPNESS);
+
+            JLabel Gravity = new JLabel("Gravity");
+            JTextField GravityT = new JTextField(""+Config.GRAVITY_FORCE);
+
+
+
+
+
+
+
+
+            JButton select = new JButton("Physic apply");
+            select.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try{
+
+
+                   Config.collitionSurfacePointRatio = Double.parseDouble(collitionSurfacePointRatioT.getText());
+                    Config.hoverSurfacePointRatio = Double.parseDouble(hoverSurfacePointRatioT.getText());
+                    Config.GRASS_FRICTION = Double.parseDouble(GrassFrictionT.getText());
+
+                    Config.GRASS_DAMPNESS = Double.parseDouble(GrassDampnessT.getText());
+
+                    Config.OBJECT_FRICTION = Double.parseDouble(ObjectFrictionT.getText());
+
+                    Config.OBJECT_DAMPNESS = Double.parseDouble(ObjectDampnessT.getText());
+
+                    Config.GRAVITY_FORCE = Double.parseDouble(GravityT.getText());
+
+                        Type.reset();
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                }
+            });
+
+            JButton recalcBall = new JButton("recalcBall");
+            recalcBall.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    try{
+
+                        Config.ballRadius =Double.parseDouble(BallRadiusT.getText());
+                        Config.collitionSurfacePointRatio = Double.parseDouble(collitionSurfacePointRatioT.getText());
+                        Config.hoverSurfacePointRatio = Double.parseDouble(hoverSurfacePointRatioT.getText());
+
+                        for (Player p  : pp) {
+
+                            p.resetBall();
+
+                        }
+                        physics.init(pp,course);
+                        dp.precalcBallImage();
+                        loadCourse(course);
+                    }catch (Exception ex){
+                        ex.printStackTrace();
+                    }
+                    dp.repaint();
+                }
+            });
+
+            LeftSidebar.add(BallRadius);
+            LeftSidebar.add(BallRadiusT);
+
+            LeftSidebar.add(collitionSurfacePointRatio);
+            LeftSidebar.add(collitionSurfacePointRatioT);
+
+            LeftSidebar.add(hoverSurfacePointRatio);
+            LeftSidebar.add(hoverSurfacePointRatioT);
+
+            LeftSidebar.add(GrassFriction);
+            LeftSidebar.add(GrassFrictionT);
+
+            LeftSidebar.add(GrassDampness);
+            LeftSidebar.add(GrassDampnessT);
+
+            LeftSidebar.add(ObjectFriction);
+            LeftSidebar.add(ObjectFrictionT);
+
+
+            LeftSidebar.add(ObjectDampness);
+            LeftSidebar.add(ObjectDampnessT);
+
+            LeftSidebar.add(Gravity);
+            LeftSidebar.add(GravityT);
+
+
+            LeftSidebar.add(select);
+            LeftSidebar.add(recalcBall);
+
+
+
+
+        }else{
+
+            if (LeftSidebar != null)frame.remove(LeftSidebar);
+            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+
+        }
+        //
+
+
+
+
+        frame.add(LeftSidebar,BorderLayout.WEST);
+    }
+
+    private static void addSelectActionListener(JToggleButton select, JTextField collitionSurfacePointRatioT, JTextField hoverSurfacePointRatioT, JTextField grassFrictionT, JTextField grassDampnessT, JTextField objectFrictionT, JTextField objectDampnessT) {
+
+    }
+
 
     private static void showEditor() {
         editorVisible = !editorVisible;
@@ -249,16 +430,16 @@ public class Game {
         if (editorVisible) {
             int sidebarwidth = 200;
             frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
-            Sidebar = new JPanel();
+            RightSidebar = new JPanel();
             Dimension d = new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
-            Sidebar.setMinimumSize(d);
-            Sidebar.setPreferredSize(d);
-            Sidebar.setMaximumSize(d);
-            //Sidebar.add(SidePann)
-            Sidebar.setLayout(new BoxLayout(Sidebar, BoxLayout.PAGE_AXIS));
+            RightSidebar.setMinimumSize(d);
+            RightSidebar.setPreferredSize(d);
+            RightSidebar.setMaximumSize(d);
+            //RightSidebar.add(SidePann)
+            RightSidebar.setLayout(new BoxLayout(RightSidebar, BoxLayout.PAGE_AXIS));
 
             JPanel label = new miniDraw(new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME - 400));
-            Sidebar.add(label);
+            RightSidebar.add(label);
 
             JLabel widthL = new JLabel("Width");
             JTextField widhtT = new JTextField("200");
@@ -296,33 +477,33 @@ public class Game {
             }
 
             });
-            Sidebar.add(widthL);
-            Sidebar.add(widhtT);
-            Sidebar.add(heightL);
-            Sidebar.add(heightT);
-            Sidebar.add(depthL);
-            Sidebar.add(depthT);
-            Sidebar.add(zL);
-            Sidebar.add(zT);
+            RightSidebar.add(widthL);
+            RightSidebar.add(widhtT);
+            RightSidebar.add(heightL);
+            RightSidebar.add(heightT);
+            RightSidebar.add(depthL);
+            RightSidebar.add(depthT);
+            RightSidebar.add(zL);
+            RightSidebar.add(zT);
 
-            Sidebar.add(deltaXLL);
-            Sidebar.add(deltaXL_T);
-            Sidebar.add(deltaXRL);
-            Sidebar.add(deltaXR_T);
-            Sidebar.add(deltaYTL);
-            Sidebar.add(deltaYT_T);
-            Sidebar.add(deltaYBL);
-            Sidebar.add(deltaYB_T);
+            RightSidebar.add(deltaXLL);
+            RightSidebar.add(deltaXL_T);
+            RightSidebar.add(deltaXRL);
+            RightSidebar.add(deltaXR_T);
+            RightSidebar.add(deltaYTL);
+            RightSidebar.add(deltaYT_T);
+            RightSidebar.add(deltaYBL);
+            RightSidebar.add(deltaYB_T);
 
-            Sidebar.add(typeBox);
-            Sidebar.add(select);
-            Sidebar.add(finalizeCourse);
-            Sidebar.add(saveCourse);
+            RightSidebar.add(typeBox);
+            RightSidebar.add(select);
+            RightSidebar.add(finalizeCourse);
+            RightSidebar.add(saveCourse);
 
 
         }else{
             frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
-            if (Sidebar!= null)frame.remove(Sidebar);
+            if (RightSidebar != null)frame.remove(RightSidebar);
 
         }
         //
@@ -330,7 +511,7 @@ public class Game {
 
 
 
-        frame.add(Sidebar,BorderLayout.EAST);
+        frame.add(RightSidebar,BorderLayout.EAST);
     }
 
     private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox) {
@@ -440,6 +621,7 @@ public class Game {
     }
     private static void loadCourse(String path) {
         Course course = Course.loadCourse(path);
+
         loadCourse(course);
     }
     private static void loadCourse(Course course) {

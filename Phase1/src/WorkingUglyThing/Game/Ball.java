@@ -1,9 +1,7 @@
 package WorkingUglyThing.Game;
 
 
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Map;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -138,12 +136,12 @@ public class Ball {
                 double x = radius*cos(theta)*sin(arpha);
                 double y = radius*sin(theta)*sin(arpha);
                 double z = radius* cos(arpha);
-                xses.add(x*0.9);
-                yses.add(y*0.9);
-                zses.add(z*0.9);
-                xses2.add(x);
-                yses2.add(y);
-                zses2.add(z);
+                xses.add(x*Config.collitionSurfacePointRatio);
+                yses.add(y*Config.collitionSurfacePointRatio);
+                zses.add(z*Config.collitionSurfacePointRatio);
+                xses2.add(x*Config.hoverSurfacePointRatio);
+                yses2.add(y*Config.hoverSurfacePointRatio);
+                zses2.add(z*Config.hoverSurfacePointRatio);
                 Ncount++;
             }
         }

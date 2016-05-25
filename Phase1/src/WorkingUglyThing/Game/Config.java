@@ -11,16 +11,20 @@ public class Config {
     private static final int depth = 100;
 
     public static final double maxSpeedToFallIntoHole = 3;
-    private static final double ballMass = 1;
-    private static final double ballRadius = 14;
+
+    protected static double ballRadius = 14;
     private static final double holeRadius = 24;
-    public static final double GRASS_FRICTION = 0.8;
-    public static final double AIR_FRICTION = 0.001;
-    public static final double GRAVITY_FORCE = 9.81;
-    public static final double WALL_ENERGY_LOSS = 0.04;
-    public static final double WATER_ENERGY_LOSS  = 0.3;
-    public static final double SAND_FRICTION = 0.95;
-    public static final double OBJECT_FRICTION = 0.75;
+    public static final double SAND_DAMPNESS = 0.3;
+    public static  Double GRASS_FRICTION = 0.8;
+    public static final Double AIR_FRICTION = 0.001;
+    public static  Double GRAVITY_FORCE = 9.81;
+    public static  Double WALL_ENERGY_LOSS = 0.04;
+    public static  Double WATER_ENERGY_LOSS  = 0.3;
+    public static  double SAND_FRICTION = 0.95;
+    public static  double OBJECT_FRICTION = 0.75;
+
+
+
     public static final int OFFSET_X_GAME=16;
     public static final int OFFSET_Y_GAME=39;
     public static final int OFFSET_X_EDITOR=16;
@@ -35,6 +39,11 @@ public class Config {
     public static final double DAMPING = 0.99;
     public static final int BALLRESOLUTION = 40;
     public static final double STEPSIZE = 0.016;
+    public static  double GRASS_DAMPNESS = 0.3;
+    public static  double OBJECT_DAMPNESS = 0.3;
+    public static double collitionSurfacePointRatio = 0.9;
+    public static double hoverSurfacePointRatio = 1.1;
+    public static double UPPush = 1.2;
 
 
     public static double[] getLightningVector3d() {
@@ -58,7 +67,7 @@ public class Config {
      * @return ballMass
      */
     public static double getBallMass() {
-        return ballMass;
+        return 1;
     }
 
     /**

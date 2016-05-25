@@ -3,18 +3,16 @@ package WorkingUglyThing.Game;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.BasicStroke;
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 /**
  * Created by nibbla on 16.03.16.
@@ -169,7 +167,7 @@ public class DrawPanel extends JPanel {
         precalcBallImage();
     }
 
-    private static void precalcBallImage() {
+    public static void precalcBallImage() {
         ballImage = new BufferedImage((int)(Config.getBallRadius()*2),(int)(Config.getBallRadius()*2),BufferedImage.TYPE_INT_ARGB);
         double radius = Config.getBallRadius();
         Graphics2D g2 = ballImage.createGraphics();
