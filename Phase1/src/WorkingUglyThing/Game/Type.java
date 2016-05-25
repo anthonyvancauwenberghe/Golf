@@ -6,7 +6,7 @@ import java.awt.*;
  * Created by nibbla on 14.03.16.
  */
 public enum Type {
-    Empty(Color.GREEN,Config.AIR_FRICTION,0),
+    Empty(Color.GREEN,Config.AIR_FRICTION,0.1),
     Water(Color.BLUE,1.0,0.1),
     Sand(Color.YELLOW,Config.SAND_FRICTION,Config.SAND_DAMPNESS),
     Hole(Color.WHITE,0.9,1),

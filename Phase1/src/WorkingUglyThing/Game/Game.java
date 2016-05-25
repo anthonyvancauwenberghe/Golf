@@ -1,7 +1,7 @@
 package WorkingUglyThing.Game;
 
 
-import WorkingUglyThing.Game.Bots.TestBot;
+import WorkingUglyThing.Game.Bots.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class Game {
     public static Course course;
     public static JFrame frame;
     private static PhysicsEngine physics;
-
+    public static Stroke2Bot AI= new Stroke2Bot("Player 2");
     public static DrawPanel dp;
 
     final static private int REFRESH_RATE = 33;
@@ -33,15 +33,15 @@ public class Game {
     private static JToggleButton select;
     private static Thread gameThread;
     private static boolean loadCourse;
-    private static Course course1;
-    private static Course course2;
+    private static Course course1,course2, course3;
+
 
 
     public Game(){
 
         course1 = Course.loadCourse("GolfDeluxe1.gol");
         course2 = Course.loadCourse("GolfDeluxe2.gol");
-
+        course3 = Course.loadCourse("GolfDeluxe3.gol");
         if (course1 == null) {
             course1 = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course1.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
@@ -54,10 +54,11 @@ public class Game {
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
 
+            //course.addRectangle(600, 400, 50, 100, 100, Type.OBJECT);
             course1.setTile(800, 600, 1, Type.Hole);
             course1.setTile(100, 100, 4, Type.Start);
-           // course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
-           // course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
+            //course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
+            //course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
            // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
            //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
            // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
@@ -70,7 +71,7 @@ public class Game {
         if (course2 == null) {
             course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-            course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+            course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.Sand);
             //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
             //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
             course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
@@ -83,6 +84,32 @@ public class Game {
 
             course2.saveCourse();
         }
+        if (course3 == null) {
+            course3 = new Course("GolfDeluxe3", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+            course3.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+            //course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+            //course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+            //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+            //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+            //course.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
+            //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
+            //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
+            //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
+            //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
+
+            course3.setTile(800, 600, 1, Type.Hole);
+            course3.setTile(100, 100, 4, Type.Start);
+            //course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
+            //course3.addRectangle(400, 400, 50, 100, 100, Type.OBJECT);
+            // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
+            //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
+            // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
+            // course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
+            course3.finalise();
+
+
+            course3.saveCourse();
+        }
         course = course1;
         physics = new PhysicsEngine();
         frame = new JFrame();
@@ -93,7 +120,8 @@ public class Game {
         pp = new ArrayList<Player>(2);
 
         Player p = new HumanPlayer("Player 1");
-        Player p2 = new TestBot("Player 2");
+
+        Player p2 = AI;
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
@@ -132,7 +160,7 @@ public class Game {
 
                     long currentTime = System.currentTimeMillis();
                     long elapsedTime = currentTime - lastTime;
-                    System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
+                    //System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
                     if (!loadCourse) {
                         if ((physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole) {
@@ -141,7 +169,7 @@ public class Game {
                             selectNextPlayer = true;
                             physics.processPhysics(0.016); //
 
-                            cp.getBall().printBallInfo();
+                            //cp.getBall().printBallInfo();
                             try {
                                 dp.repaint();
                                 Thread.sleep(1);
@@ -208,13 +236,6 @@ public class Game {
         JMenu setting = new JMenu("Players");
         JMB.add(setting);
 
-        JMenu course = new JMenu("Course");
-        JMB.add(course);
-
-
-        //course.add(new JMenuItem("Next Course"));
-
-
 
         JMenuItem addPlayer = new JMenuItem("Add Player");
         JMenuItem resetCourse = new JMenuItem("Reset Course");
@@ -248,9 +269,12 @@ public class Game {
         courseSelect1.addActionListener(e -> loadCourse(course1));
         JMenuItem courseSelect2 = new JMenuItem("Course2");
         courseSelect2.addActionListener(e -> loadCourse(course2));
+        JMenuItem courseSelect3 = new JMenuItem("Course3");
+        courseSelect3.addActionListener(e -> loadCourse(course3));
 
         jm3.add(courseSelect1);
         jm3.add(courseSelect2);
+        jm3.add(courseSelect3);
         JMB.add(jm3);
         JMB.add(showEditorButton);
 
@@ -643,6 +667,8 @@ public class Game {
         if (pp.size()!=0)pp.get(0).getBall().setPregame(false);
         physics.init(pp,course);
         dp.setCourse(course);
+        AI.setCourse(course);
+
         currentPlayer=0;
         dp.setCurrentPlayer(pp.get(currentPlayer));
         dp.setPlayers(pp);

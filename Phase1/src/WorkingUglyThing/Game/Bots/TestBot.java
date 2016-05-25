@@ -2,7 +2,9 @@ package WorkingUglyThing.Game.Bots;
 
 
 
-import WorkingUglyThing.Game.*;
+
+
+import WorkingUglyThing.Game.Course;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,6 +12,8 @@ import java.util.Random;
 /**
  * Created by Nibbla on 13.04.2016.
  */
+
+/*
 public class TestBot extends AIPlayer {
     @Override
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
@@ -26,9 +30,10 @@ public class TestBot extends AIPlayer {
         shoot(vx,vy,vz);
     }
 
-    public TestBot(String s) {
-        super(s);
+    public TestBot(String s; Course c) {
+        super(s, c);
     }
 
 
 }
+ */

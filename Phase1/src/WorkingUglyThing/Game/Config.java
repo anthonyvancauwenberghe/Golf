@@ -13,32 +13,30 @@ public class Config {
     public static final double maxSpeedToFallIntoHole = 3;
 
     protected static double ballRadius = 14;
-    private static final double holeRadius = 24;
-    public static final double SAND_DAMPNESS = 0.3;
-    public static  Double GRASS_FRICTION = 0.8;
-    public static final Double AIR_FRICTION = 0.001;
-    public static  Double GRAVITY_FORCE = 9.81;
-    public static  Double WALL_ENERGY_LOSS = 0.04;
-    public static  Double WATER_ENERGY_LOSS  = 0.3;
+    private static  double holeRadius = 24;
+    public static  double SAND_DAMPNESS = 0.3;
+    public static  double AI_OFFSET = 0.65;
+    public static  double GRASS_FRICTION = 0.8;
+    public static  double AIR_FRICTION = 0.1;
+    public static  double GRAVITY_FORCE = 9.81;
+    public static  double WALL_ENERGY_LOSS = 0.04;
+    public static  double WATER_ENERGY_LOSS  = 0.3;
     public static  double SAND_FRICTION = 0.95;
     public static  double OBJECT_FRICTION = 0.75;
+    public static  int OFFSET_X_GAME=50;
+    public static  int OFFSET_Y_GAME=70;
+    public static  int OFFSET_X_EDITOR=16;
+    public static  int OFFSET_Y_EDITOR=62;
+    public static  int speedLimiter=120;
+    public static  double speedSlower=1.3;
 
-
-
-    public static final int OFFSET_X_GAME=16;
-    public static final int OFFSET_Y_GAME=39;
-    public static final int OFFSET_X_EDITOR=16;
-    public static final int OFFSET_Y_EDITOR=62;
-    public static final int speedLimiter=120;
-    public static final double speedSlower=1.3;
-
-    public static final boolean ENABLED3D=false;
-    public static final float POWERLINEWIDTH = 3.f;
-    private static final String texturePath = "Phase1/src/WorkingUglyThing/Game/textures/";
-    public static final double MINSPEED = 1;
-    public static final double DAMPING = 0.99;
-    public static final int BALLRESOLUTION = 40;
-    public static final double STEPSIZE = 0.016;
+    public static  boolean ENABLED3D=false;
+    public static  float POWERLINEWIDTH = 3.f;
+    private static  String texturePath = "Phase1/src/WorkingUglyThing/Game/textures/";
+    public static  double MINSPEED = 1;
+    public static  double DAMPING = 0.99;
+    public static  int BALLRESOLUTION = 40;
+    public static  double STEPSIZE = 0.016;
     public static  double GRASS_DAMPNESS = 0.3;
     public static  double OBJECT_DAMPNESS = 0.3;
     public static double collitionSurfacePointRatio = 0.9;

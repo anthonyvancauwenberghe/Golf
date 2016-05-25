@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
@@ -618,5 +619,18 @@ public class Course {
     public Type getType(Coordinate newPosition) {
 
         return null;
+    }
+    public boolean wayIsObstacleFree(Coordinate c1, Coordinate c2){
+        ArrayList<Coordinate> all = Coordinate.getPixelBetweenToPoints(c1, c2);
+        for (int i = 1; i<all.size()-1; i++){
+            Coordinate c = all.get(i);
+            if (playfield[(int)c.getX()][(int)c.getY()][(int)c.getZ()] != ((Type.Grass))){
+                if (playfield[(int)c.getX()][(int)c.getY()][(int)c.getZ()] != ((Type.Empty))){
+                    System.out.println("Would colide with " + playfield[(int)c.getX()][(int)c.getY()][(int)c.getZ()]);
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

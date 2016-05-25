@@ -296,7 +296,7 @@ public class Ball {
             stopcounter++;
             if (stopcounter>=10){
                 isMoving=false;
-                System.out.println("ballStopped");
+                //System.out.println("ballStopped");
                 previousX = x;
                 previousY = y;
                 previousZ = z;

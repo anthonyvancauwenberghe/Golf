@@ -213,8 +213,6 @@ public class DrawPanel extends JPanel {
     public void setCourse(Course c) {
         this.course = c;
         managedBufferedImage = c.getManagedBufferedImage();
-
-
     }
 
     public static BufferedImage createImage(Course course) {
@@ -323,9 +321,17 @@ public class DrawPanel extends JPanel {
             g.drawImage(previewObject, mousePosition.x, mousePosition.y, null);
 
         }
+        if(Game.AI.getShootLocation()!=null){
+            Coordinate c = Game.AI.getShootLocation();
+            g2.setStroke(new BasicStroke(3));
+            g2.setColor(Color.red);
+            g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
+            g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
 
+        }
 
     }
+
 
     private void drawBallShadow(Graphics g, Ball b) {
 

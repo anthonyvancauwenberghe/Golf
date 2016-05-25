@@ -186,7 +186,7 @@ public class PhysicsEngine {
                 b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
                 b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
 
-                System.out.println("woop");
+                //System.out.println("woop");
            // }
            // }
             //friction should come in here
