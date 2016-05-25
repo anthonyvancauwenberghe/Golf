@@ -35,6 +35,7 @@ public class Game {
     private static boolean loadCourse;
     private static Course course1;
     private static Course course2;
+    private static int sidebarwidth=200;
 
 
     public Game(){
@@ -268,9 +269,9 @@ public class Game {
 
     private static void showVariables() {
         variablesVisible = !variablesVisible;
-
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (variablesVisible) {
-            int sidebarwidth = 200;
+             sidebarwidth = 200;
 
             frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
             LeftSidebar = new JPanel();
@@ -407,8 +408,8 @@ public class Game {
 
         }else{
 
-            if (LeftSidebar != null)frame.remove(LeftSidebar);
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+            if (LeftSidebar != null)LeftSidebar.setVisible(false);
+
 
         }
         //
@@ -426,10 +427,10 @@ public class Game {
 
     private static void showEditor() {
         editorVisible = !editorVisible;
-
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (editorVisible) {
             int sidebarwidth = 200;
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+
             RightSidebar = new JPanel();
             Dimension d = new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
             RightSidebar.setMinimumSize(d);
@@ -502,8 +503,9 @@ public class Game {
 
 
         }else{
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
-            if (RightSidebar != null)frame.remove(RightSidebar);
+
+
+            if (RightSidebar != null)RightSidebar.setVisible(false);
 
         }
         //
