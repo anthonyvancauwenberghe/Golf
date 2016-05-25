@@ -37,11 +37,11 @@ public class Game {
 
     public Game(){
 
-        course1 = Course.loadCourse("GolfDeluxe.gol");
+        course1 = Course.loadCourse("GolfDeluxe1.gol");
         course2 = Course.loadCourse("GolfDeluxe2.gol");
         course = course1;
         if (course == null) {
-            course = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+            course = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
             course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
             course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
@@ -66,7 +66,7 @@ public class Game {
             course.saveCourse();
         }
         if (course2 == null) {
-            course2 = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+            course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
             course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
