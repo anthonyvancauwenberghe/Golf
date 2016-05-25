@@ -39,31 +39,31 @@ public class Game {
 
         course1 = Course.loadCourse("GolfDeluxe1.gol");
         course2 = Course.loadCourse("GolfDeluxe2.gol");
-        course = course1;
-        if (course == null) {
-            course = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-            course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-            course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
-            course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
-            course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
-            course.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
+
+        if (course1 == null) {
+            course1 = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+            course1.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+            course1.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+            course1.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+            course1.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+            course1.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
             //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
 
-            course.setTile(800, 600, 1, Type.Hole);
-            course.setTile(100, 100, 4, Type.Start);
+            course1.setTile(800, 600, 1, Type.Hole);
+            course1.setTile(100, 100, 4, Type.Start);
            // course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
            // course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
            // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
            //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
            // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
            // course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
-            course.finalise();
+            course1.finalise();
 
 
-            course.saveCourse();
+            course1.saveCourse();
         }
         if (course2 == null) {
             course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
@@ -81,7 +81,7 @@ public class Game {
 
             course2.saveCourse();
         }
-
+        course = course1;
         physics = new PhysicsEngine();
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
