@@ -273,7 +273,7 @@ public class Game {
         if (variablesVisible) {
              sidebarwidth = 200;
 
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+
             LeftSidebar = new JPanel();
             Dimension d = new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
             LeftSidebar.setMinimumSize(d);
