@@ -298,13 +298,16 @@ public class DrawPanel extends JPanel {
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).currentStrokes==0&&!currentPlayer.equals(players.get(i)))
                 continue;
-
             Ball b = players.get(i).getBall();
             drawBallShadow(g,b);
-            drawBall(g,b);
-
-
         }
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).currentStrokes==0&&!currentPlayer.equals(players.get(i)))
+                continue;
+            Ball b = players.get(i).getBall();
+            drawBall(g,b);
+        }
+
         if (currentPlayer != null){
             drawPowerLine(g,currentPlayer.getBall());
             Coordinate c = currentPlayer.getBall().getCoordinate();

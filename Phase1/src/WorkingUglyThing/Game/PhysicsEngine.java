@@ -9,9 +9,7 @@ public class PhysicsEngine {
     private Course course;
     public boolean atLeastOneBallMoving;
 
-    public void setBall(ArrayList<Ball> balls) {
-        this.balls = balls;
-    }
+
 
     private ArrayList<Ball> balls = new ArrayList<>(2);
 
@@ -27,10 +25,9 @@ public class PhysicsEngine {
 
     public void init(Course course, ArrayList<Ball> balls) {
         this.course = course;
+        this.balls.clear();
         this.balls = balls;
-        for(Ball b : balls){
-
-        }
+        atLeastOneBallMoving = false;
     }
 
     public void init(ArrayList<Player> players, Course course) {
@@ -40,6 +37,7 @@ public class PhysicsEngine {
         for (int i = 0; i < players.size(); i++) {
             balls.add(players.get(i).getBall());
         }
+        atLeastOneBallMoving = false;
     }
 
 
@@ -58,9 +56,10 @@ public class PhysicsEngine {
             gravity(b);
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
+            collide(b,elapsedTime,playfield,normals,course.getDimension());
             accelerate(b,elapsedTime);
             resetA(b);
-            //collide(b,playfield,normals,course.getDimension());
+
 
             //check for Collision with different balls
             for (int j = i+1; j < balls.size(); j++) {
@@ -77,15 +76,18 @@ public class PhysicsEngine {
     }
 
 
-    private void collide(Ball b, Type[][][] playfield,  Coordinate[][] normals, int[] dimension) {
-        double aX = 0;
-        double aY = 0;
-        double aZ = 0;
+    private void collide(Ball b,double elapsedTime, Type[][][] playfield,  Coordinate[][] normals, int[] dimension) {
+        double normalX = 0;
+        double normalY = 0;
+        double normalZ = 0;
         int count = 0;
         double g = 1*Config.GRAVITY_FORCE;
-
-        int[][] surfaceBall = b.getSurfacePointsBig();
+        double BounceFriction = 0;
+        int[][] surfaceBall = b.getSurfacePoints();
         int l = surfaceBall.length;
+
+
+
         for (int i = 0; i < l; i++) {
             int x = surfaceBall[i][0];
             int y = surfaceBall[i][1];
@@ -94,24 +96,25 @@ public class PhysicsEngine {
             if (y<0||x<0||z<0||x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) {
                 skipCheck = true;
                 if (x < 0) {
-                    aX += 1;
+                    normalX += 1;
+
                 }
 
                 if (y < 0) {
-                    aY += 1;
+                    normalY += 1;
 
                 }
                 if (z < 0) {
-                    aZ += 2;
+                    normalZ += 1;
 
                 }
 
                 if (x >= dimension[0]) {
-                    aX -= 1;
+                    normalX -= 1;
 
                 }
                 if (y >= dimension[1]) {
-                    aY -= 1;
+                    normalY -= 1;
 
                 }
                 if (z >= dimension[2]) {
@@ -119,33 +122,63 @@ public class PhysicsEngine {
                     count--;
                     //count++;
                 }
+                BounceFriction+=Type.Grass.getBounceDampness();
                 skipCheck = true;
                 count++;
             }
 
-            if (!skipCheck&&playfield[x][y][z] != Type.Empty){
-                Coordinate c = normals[x][y];
-                aX += c.getX();
-                aY += c.getY();
-                aZ += c.getZ();
-                count++;
+            if (!skipCheck){
+                Type t = playfield[x][y][z];
+                if (t!= Type.Empty) {
+                    BounceFriction+=t.getBounceDampness();
+
+                    Coordinate c = normals[x][y];
+
+
+
+                    normalX += c.getX();
+                    normalY += c.getY();
+                    normalZ += c.getZ();
+                    count++;
+                }
 
             }
         }
 
         if (count!=0){
-            aX/=count;
-            aY/=count;
-            aZ/=count;
+            normalX/=count;
+            normalY/=count;
+            normalZ/=count;
+            BounceFriction/=count;
+            //addedFriction = (1-addedFriction*elapsedTime);
+            double dx =  b.x -b.previousX;
+            double dy = b.y - b.previousY ;
+            double dz = b.z - b.previousZ ;
 
-            b.aX+=aX*g;
-            b.aY+=aY*g;
-            b.aZ+=aZ*g;
+            // Project velocity onto the normal, multiply by 2, and subtract it from velocity
+
+            // project velocity onto the normal using dot product
+            double scalarProjection = dx * normalX + dy * normalY + dz *normalZ;
+            if (scalarProjection<0){
+
+            //
+            double dxNew = dx -  normalX * scalarProjection * 2;
+            double dyNew = dy -  normalY * scalarProjection * 2;
+            double dzNew = dz -  normalZ * scalarProjection * 2;
+
+            BounceFriction=0.8;
+            b.previousX = b.x -  dxNew*(1-BounceFriction*elapsedTime);
+            b.previousY = b.y -  dyNew*(1-BounceFriction*elapsedTime);
+            b.previousZ = b.z -  dzNew*(1-BounceFriction*elapsedTime);
+
+                System.out.println("woop");
+            }
             //friction should come in here
+
+
+
+
         }
-
-
-
     }
 
     private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
@@ -153,6 +186,7 @@ public class PhysicsEngine {
         double aY = 0;
         double aZ = 0;
         int count = 0;
+
         double g = 1*Config.GRAVITY_FORCE;
         double addedFriction = 0;
         int[][] surfaceBall = b.getSurfacePointsBig();
@@ -193,6 +227,7 @@ public class PhysicsEngine {
                 addedFriction+=Type.Grass.getFriction();
                 skipCheck = true;
                 count++;
+
             }
 
             if (!skipCheck){
@@ -205,17 +240,30 @@ public class PhysicsEngine {
                      aY += c.getY();
                      aZ += c.getZ();
                      count++;
+
+                 }else{
+                     addedFriction+=t.getFriction();
                  }
 
             }
         }
 
        if (count!=0){
+
            aX/=count;
            aY/=count;
            aZ/=count;
-           addedFriction/=count;
+           addedFriction/=l;
            addedFriction = (1-addedFriction*elapsedTime);
+
+           //Vector3 planeOrigin;
+           //Vector3 planeNormal;
+           //Vector3 point;
+
+           //Vector3 v = point - planeOrigin;
+           //Vector3 d = Vector3.Project(v, planeNormal.normalized);
+           //Vector3 projectedPoint = point - d;
+
            double dx = b.previousX - b.x;
            double dy = b.previousY - b.y;
            double dz = b.previousZ - b.z;

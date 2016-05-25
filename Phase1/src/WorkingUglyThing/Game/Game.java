@@ -29,6 +29,7 @@ public class Game {
     private static JPanel Sidebar;
     private static Course previewMiniCourse;
     private static JToggleButton select;
+    private static Thread gameThread;
 
 
     public Game(){
@@ -77,26 +78,29 @@ public class Game {
         pp.add(p);
         pp.add(p2);
 
-        loadCourse(course);
 
 
-        dp.setPlayers(pp);
-        dp.setCurrentPlayer(p);
-        dp.setCourse(course);
-        ArrayList<Ball> balls = new ArrayList<>(2);
-        balls.add(p.getBall());
-       // balls.add(p2.getBall());
-        physics.init(course, balls);
+
+
+
 
         frame.add(dp, BorderLayout.CENTER);
         addMenues(frame);
         frame.setVisible(true);
-        dp.repaint();
+
+
 
 
 // ... do something ...
 
-        Thread gameThread = new Thread(){
+
+        loadCourse(course);
+
+
+    }
+
+    private static Thread createGameThead() {
+        Thread t =  new Thread(){
             long lastTime = System.currentTimeMillis();
 
             public void run(){
@@ -157,10 +161,9 @@ public class Game {
                 }
             }
         };
-        gameThread.start();
-
-
+        return t;
     }
+
     public static void main(String[] args) {
         Game g = new Game();
 
@@ -401,22 +404,37 @@ public class Game {
     }
     private static void loadCourse(Course course) {
 
+        ArrayList<Ball> balls = new ArrayList<>(2);
 
+        selectNextPlayer=false;
         for (int i = 0; i < pp.size(); i++) {
             Player p = pp.get(i);
+
             p.resetBall();
             p.resetCurrentStrokes();
             p.setInPlay(true);
             p.getBall().setPregame(true);
+            balls.add(p.getBall());
             Tile t = course.getStartTile();
-            p.setBallPositionAndSpeed0(t.x,t.y,t.z);
+            p.setBallPositionAndSpeed0(t.x,t.y,t.z+p.getBall().getRadius());
         }
         if (pp.size()!=0)pp.get(0).getBall().setPregame(false);
         physics.init(pp,course);
         dp.setCourse(course);
-        dp.setCurrentPlayer(pp.get(0));
         currentPlayer=0;
+        dp.setCurrentPlayer(pp.get(currentPlayer));
+        dp.setPlayers(pp);
+
+
+        physics.init(course, balls);
+
         dp.repaint();
+        if(gameThread!=null){
+            gameThread.stop();
+        }
+        gameThread = createGameThead();
+        gameThread.run();
+
     }
 
     private static void addListenerToRemovePlayer(JMenuItem removePlayer) {

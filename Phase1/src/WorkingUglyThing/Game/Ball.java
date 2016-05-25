@@ -138,12 +138,12 @@ public class Ball {
                 double x = radius*cos(theta)*sin(arpha);
                 double y = radius*sin(theta)*sin(arpha);
                 double z = radius* cos(arpha);
-                xses.add(x);
-                yses.add(y);
-                zses.add(z);
-                xses2.add(x*1.2);
-                yses2.add(y*1.2);
-                zses2.add(z*1.2);
+                xses.add(x*0.9);
+                yses.add(y*0.9);
+                zses.add(z*0.9);
+                xses2.add(x);
+                yses2.add(y);
+                zses2.add(z);
                 Ncount++;
             }
         }
@@ -299,6 +299,9 @@ public class Ball {
             if (stopcounter>=10){
                 isMoving=false;
                 System.out.println("ballStopped");
+                previousX = x;
+                previousY = y;
+                previousZ = z;
                 return true;
             }
 

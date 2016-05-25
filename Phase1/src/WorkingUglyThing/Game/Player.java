@@ -47,6 +47,9 @@ public abstract class Player {
         b.previousY=y;
         b.previousZ=z;
 
+        b.aZ=0;
+        b.aY=0;
+        b.aX=0;
 
     }
 
