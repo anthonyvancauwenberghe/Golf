@@ -31,11 +31,15 @@ public class Game {
     private static JToggleButton select;
     private static Thread gameThread;
     private static boolean loadCourse;
+    private static Course course1;
+    private static Course course2;
 
 
     public Game(){
 
-        course = Course.loadCourse("GolfDeluxe.gol");
+        course1 = Course.loadCourse("GolfDeluxe.gol");
+        course2 = Course.loadCourse("GolfDeluxe2.gol");
+        course = course1;
         if (course == null) {
             course = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
@@ -60,6 +64,22 @@ public class Game {
 
 
             course.saveCourse();
+        }
+        if (course2 == null) {
+            course2 = new Course("GolfDeluxe", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+            course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+            course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+            //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+            //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+            course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
+
+            course2.setTile(800, 600, 1, Type.Hole);
+            course2.setTile(100, 100, 4, Type.Start);
+
+            course2.finalise();
+
+
+            course2.saveCourse();
         }
 
         physics = new PhysicsEngine();
@@ -210,6 +230,16 @@ public class Game {
         //showEditorButton.setPreferredSize(setting.getSize());
         //showEditorButton.setMaximumSize(setting.getSize());
         showEditorButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showEditor();}});
+
+        JMenu jm3 = new JMenu("Courses");
+        JMenuItem courseSelect1 = new JMenuItem("Course1");
+        courseSelect1.addActionListener(e -> loadCourse(course1));
+        JMenuItem courseSelect2 = new JMenuItem("Course2");
+        courseSelect2.addActionListener(e -> loadCourse(course2));
+
+        jm3.add(courseSelect1);
+        jm3.add(courseSelect2);
+        JMB.add(jm3);
         JMB.add(showEditorButton);
     }
 

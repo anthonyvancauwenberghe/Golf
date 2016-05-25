@@ -4,7 +4,7 @@ package WorkingUglyThing.Game;
  * Created by nibbla on 16.03.16.
  */
 public class Hole extends Tile {
-    public double radius = 4;
+    public double radius = Config.getHoleRadius();
     public Hole(double radius, int x, int y, int z) {
         super(Type.Hole, x, y, z);
         this.radius = radius;

@@ -216,5 +216,59 @@ While (1)
     }
 
 
+    public static void saveCourse(Course course) {
+        BufferedWriter writer = null;
+        try
+        {
+            writer = new BufferedWriter( new FileWriter(course.name+".gol"));
 
+            int length = course.playfield.length;
+            int width = course.playfield[0].length;
+            int height = course.playfield[0][0].length;
+            StringBuilder s = new StringBuilder(50);
+            s.append("Name:").append(course.name).append("\n");
+            s.append("Par:").append(course.par).append("\n");
+            s.append("length:").append(length).append("\n");
+            s.append("width:").append(width).append("\n");
+            s.append("height:").append(height).append("\n");
+            writer.write(s.toString());
+
+            for (int x = 0; x < length; x++) {
+                for (int y = 0; y < width; y++) {
+                    for (int z = 0; z < height; z++) {
+                        if (!course.playfield[x][y][z].equals(Type.Empty)) {
+                            StringBuilder b = new StringBuilder(10);
+                            b.append("x").append(x).append("y").append(y).append("z").append(z).append("T").append(course.playfield[x][y][z].ordinal()).append("$\n");
+                            writer.write(b.toString());
+                        }
+                    }
+                }
+            }
+
+        }
+        catch ( IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if ( writer != null)
+                    writer.close( );
+            }
+            catch ( IOException e)
+            {
+            }
+        }
+
+
+
+        if (course.managedBufferedImage==null){//(true){//
+            course.managedBufferedImage = DrawPanel.createImage(course);
+        }
+        Utils.saveManagedBufferedImage(course.name,"png",course.managedBufferedImage);
+
+
+    }
 }

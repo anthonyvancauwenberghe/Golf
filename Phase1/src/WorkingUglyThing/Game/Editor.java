@@ -84,6 +84,7 @@ public class Editor {
         JMenuItem selectHeight = new JMenuItem("Select Height");
 
 
+
         selectShapeAddStuff(selectShape);
         frame.setJMenuBar(jmb);
         jmb.add(jm);

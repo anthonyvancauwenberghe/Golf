@@ -5,8 +5,7 @@ package WorkingUglyThing.Game; /**
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Random;
 import java.util.Stack;
 
@@ -34,7 +33,7 @@ public class Course {
     public Tile startTile;
     public Hole hole;
     public Stack<Tile> oldTiles = new Stack<Tile>();
-    private BufferedImage managedBufferedImage;
+    BufferedImage managedBufferedImage;
 
 
 
@@ -92,28 +91,52 @@ public class Course {
      * @param t
      */
     public void setTile(int x, int y, int z, Type t){
-        Type originalTile;
-        try {
-            originalTile = playfield[x][y][z];
-        }catch (ArrayIndexOutOfBoundsException a){
-            a.printStackTrace();
+        if (x < 0) {
+            return;
+        }
+
+        if (y < 0) {
+            return;
+        }
+        if (z < 0) {
+            return;
+        }
+
+        if (x >= dimension[0]) {
+            return;
+        }
+        if (y >= dimension[1]) {
+            return;
+        }
+        if (z >= dimension[2]) {
             return;
         }
 
 
-        Type newTile = originalTile;
+
+        Type newTile;
 
 
         newTile=t;
         if (t== Type.Hole){
             hole = new Hole(Config.getHoleRadius(), x,y,z) ;
+            for (int zd = 0+z; zd < 10; zd++) {
+                for (int xd = (int) -Config.getHoleRadius()+x; xd < Config.getHoleRadius()+x; xd++) {
+                    for (int yd = (int) -Config.getHoleRadius()+y; yd < Config.getHoleRadius()+y; yd++) {
+                        if (Math.sqrt((x-xd)*(x-xd)+(y-yd)*(y-yd))< Config.getHoleRadius()){
+                            setTile(xd,yd,zd,Type.Empty);
+                        }
+                    }
+                }
+            }
+            playfield[x][y][z] = t;
         }else if (t == Type.Start) {
             startTile = new Tile(newTile,x,y,z);
-
+            playfield[x][y][z] = t;
         }else{
-
+            playfield[x][y][z] = t;
         }
-        playfield[x][y][z] = t;
+
     }
 
     Type getTile(int x, int y, int z){
@@ -135,33 +158,42 @@ public class Course {
     public static Course loadCourse(String path){
         System.out.println("Working Directory = " +
                 System.getProperty("user.dir"));
-        String content = Utils.readFile(path);
-        if (content==null||content=="")return null;
-        String[] lines = content.split(System.lineSeparator());
-        String name = lines[0].split(":")[1];
+        Course c = null;
+        try {
+            BufferedReader b = new BufferedReader(new FileReader(path));
 
-        int par = Integer.parseInt(lines[1].split(":")[1]);
-        int length = Integer.parseInt(lines[2].split(":")[1]);
-        int width = Integer.parseInt(lines[3].split(":")[1]);
-        int height = Integer.parseInt(lines[4].split(":")[1]);
-        Course c = new Course(name, length,width,height, Type.Empty,par);
+       // String content = Utils.readFile(path);
+       // if (content==null||content=="")return null;
+      //  String[] lines = content.split(System.lineSeparator());
+        String name = b.readLine().split(":")[1];
 
-        for (int i = 5; i < lines.length; i++) {
-            String currentLine = lines[i];
-            int indexPosX = currentLine.indexOf("x:");
-            int indexPosY = currentLine.indexOf("y:");
-            int indexPosZ = currentLine.indexOf("z:");
-            int indexType = currentLine.indexOf("Type:");
-            int indexSTOP = currentLine.indexOf("STOP");
+        int par = Integer.parseInt(b.readLine().split(":")[1]);
+        int length = Integer.parseInt(b.readLine().split(":")[1]);
+        int width = Integer.parseInt(b.readLine().split(":")[1]);
+        int height = Integer.parseInt(b.readLine().split(":")[1]);
+        c = new Course(name, length,width,height, Type.Empty,par);
+            String currentLine;
 
-            int x = Integer.parseInt(currentLine.substring(indexPosX + 2, indexPosY));
-            int y = Integer.parseInt(currentLine.substring(indexPosY+2,indexPosZ));
-            int z = Integer.parseInt(currentLine.substring(indexPosZ+2,indexType));
-            Type type = Type.valueOf(currentLine.substring(indexType + 5, indexSTOP));
+            while ((currentLine = b.readLine()) != null) {
+
+            int indexPosX = currentLine.indexOf("x");
+            int indexPosY = currentLine.indexOf("y");
+            int indexPosZ = currentLine.indexOf("z");
+            int indexType = currentLine.indexOf("T");
+            int indexSTOP = currentLine.indexOf("$");
+
+            int x = Integer.parseInt(currentLine.substring(indexPosX + 1, indexPosY));
+            int y = Integer.parseInt(currentLine.substring(indexPosY+1,indexPosZ));
+            int z = Integer.parseInt(currentLine.substring(indexPosZ+1,indexType));
+            Type type = Type.values()[Integer.parseInt(currentLine.substring(indexType + 1, indexSTOP))];
+
             c.setTile(x,y,z,type);
-
-
-
+            if (type==Type.Start){
+                c.startTile  = new Tile(Type.Start,x, y, z);
+            }
+                if (type==Type.Hole) {
+                    c.hole = new Hole(Config.getHoleRadius(), x, y, 0);
+                }
         }
         if (c.startTile == null){
 
@@ -174,15 +206,19 @@ public class Course {
             c.setTile(x, y, 0, Type.Hole);
             c.hole = new Hole(Config.getHoleRadius(),x, y, 0);
         }
-
-
-        try {
             System.out.println("try to read " + c.getName()+".png");
-           c.setBufferedImage(ImageIO.read(new File(c.getName()+".png")));
+            c.setBufferedImage(ImageIO.read(new File(c.getName()+".png")));
+
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
         } catch (IOException e) {
             e.printStackTrace();
-
+            return null;
         }
+
+
         c.calculateSurfaceNormals();
         return c;
 
@@ -192,33 +228,7 @@ public class Course {
      * method saveCourse saves the course as a .txt file
      */
     public void saveCourse(){
-        StringBuilder s = new StringBuilder();
-        int length = playfield.length;
-        int width = playfield[0].length;
-        int height = playfield[0][0].length;
-
-        s.append("Name:").append(name).append("\n");
-        s.append("Par:").append(par).append("\n");
-        s.append("length:").append(length).append("\n");
-        s.append("width:").append(width).append("\n");
-        s.append("height:").append(height).append("\n");
-
-
-        for (int x = 0; x < length; x++) {
-            for (int y = 0; y < width; y++) {
-                for (int z = 0; z < height; z++) {
-                    if (!playfield[x][y][z].equals(Type.Empty))
-                    s.append("x:").append(x).append("y:").append(y).append("z:").append(z).append("Type:").append(playfield[x][y][z].name()).append("STOP\n");
-                }
-            }
-        }
-
-        Utils.saveFile(name + ".gol", s.toString());
-        if (managedBufferedImage==null){//(true){//
-            managedBufferedImage = DrawPanel.createImage(this);
-        }
-        Utils.saveManagedBufferedImage(name,"png",managedBufferedImage);
-
+        Utils.saveCourse(this);
 
 
 
@@ -570,13 +580,17 @@ public class Course {
     public void finalise() {
         System.out.println("CalculateSurfaceNormals");
         calculateSurfaceNormals();
+        System.gc();
         System.out.println("CalculateHightMap");
         calculateHeightMap();
+        System.gc();
         System.out.println("CalculateShadingMap");
         calculateShadingMap();
+        System.gc();
         System.out.println("CalculateDrawPanel");
+        System.gc();
         setBufferedImage(DrawPanel.createImage(this));
-
+        System.gc();
     }
 
     public void integrate(Course previewMiniCourse, int x, int y) {
