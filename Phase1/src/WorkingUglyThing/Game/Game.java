@@ -34,7 +34,7 @@ public class Game {
     private static Thread gameThread;
     private static boolean loadCourse;
     private static Course course1,course2, course3;
-
+    private static int sidebarwidth=200;
 
 
     public Game(){
@@ -54,11 +54,10 @@ public class Game {
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
 
-            //course.addRectangle(600, 400, 50, 100, 100, Type.OBJECT);
             course1.setTile(800, 600, 1, Type.Hole);
             course1.setTile(100, 100, 4, Type.Start);
-            //course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
-            //course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
+           // course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
+           // course.addRectangle(400, 400, 50, 100, 1, Type.OBJECT);
            // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
            //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
            // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
@@ -292,9 +291,9 @@ public class Game {
 
     private static void showVariables() {
         variablesVisible = !variablesVisible;
-
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (variablesVisible) {
-            int sidebarwidth = 200;
+             sidebarwidth = 200;
 
             frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
             LeftSidebar = new JPanel();
@@ -431,8 +430,8 @@ public class Game {
 
         }else{
 
-            if (LeftSidebar != null)frame.remove(LeftSidebar);
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+            if (LeftSidebar != null)LeftSidebar.setVisible(false);
+
 
         }
         //
@@ -450,10 +449,10 @@ public class Game {
 
     private static void showEditor() {
         editorVisible = !editorVisible;
-
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (editorVisible) {
             int sidebarwidth = 200;
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME + sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+
             RightSidebar = new JPanel();
             Dimension d = new Dimension(sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
             RightSidebar.setMinimumSize(d);
@@ -526,8 +525,9 @@ public class Game {
 
 
         }else{
-            frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
-            if (RightSidebar != null)frame.remove(RightSidebar);
+
+
+            if (RightSidebar != null)RightSidebar.setVisible(false);
 
         }
         //
