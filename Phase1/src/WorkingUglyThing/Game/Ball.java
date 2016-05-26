@@ -200,8 +200,8 @@ public class Ball {
     }
 
     public void shootBall(double impulsX, double impulsY, double impulsZ) {
-        System.out.println(inPlay());
-        System.out.println(isMoving);
+        //System.out.println(inPlay());
+        //System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             previousX-=impulsX*Config.STEPSIZE;
             previousY-=impulsY*Config.STEPSIZE;
@@ -219,7 +219,7 @@ public class Ball {
             */
 
         } else {
-            System.out.println("ball is still moving or not in play");
+            //System.out.println("ball is still moving or not in play");
         }
     }
 

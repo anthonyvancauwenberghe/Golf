@@ -70,7 +70,7 @@ public class Game {
         if (course2 == null) {
             course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-            course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.Sand);
+            course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
             //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
             //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
             course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
@@ -145,12 +145,12 @@ public class Game {
 
 
         loadCourse(course);
-        gameThread = createGameThead();
+        gameThread = createGameThread();
         gameThread.run();
 
     }
 
-    private static Thread createGameThead() {
+    private static Thread createGameThread() {
         Thread t =  new Thread(){
             long lastTime = System.currentTimeMillis();
 

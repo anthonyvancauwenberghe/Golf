@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.FileSystemNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
@@ -140,7 +141,7 @@ public class Course {
 
     }
 
-    Type getTile(int x, int y, int z){
+    public Type getTile(int x, int y, int z){
         return playfield[x][y][z];
     }
 
@@ -624,9 +625,10 @@ public class Course {
         ArrayList<Coordinate> all = Coordinate.getPixelBetweenToPoints(c1, c2);
         for (int i = 1; i<all.size()-1; i++){
             Coordinate c = all.get(i);
-            if (playfield[(int)c.getX()][(int)c.getY()][(int)c.getZ()] != ((Type.Grass))){
-                if (playfield[(int)c.getX()][(int)c.getY()][(int)c.getZ()] != ((Type.Empty))){
-                    System.out.println("Would colide with " + playfield[(int)c.getX()][(int)c.getY()][(int)c.getZ()]);
+            System.out.println(c.getX() + " q" + c.getY() + " " + c.getZ());
+            if (playfield[(int)c.getX()][(int)c.getY()][(int)(c.getZ() )] != ((Type.Grass))){
+                if (playfield[(int)c.getX()][(int)c.getY()][(int)(c.getZ() )] != ((Type.Empty))){
+                    System.out.println("Would colide with " + playfield[(int)c.getX()][(int)c.getY()][(int)(c.getZ())]);
                     return false;
                 }
             }
