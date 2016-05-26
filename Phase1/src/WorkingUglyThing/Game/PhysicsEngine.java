@@ -175,7 +175,7 @@ public class PhysicsEngine {
                    // count--;
                     //count++;
                 }
-                BounceFriction+=Type.Grass.getBounceDampness();
+               // BounceFriction+=Type.Grass.getBounceDampness();
                 skipCheck = true;
                // count++;
             }
@@ -234,15 +234,22 @@ public class PhysicsEngine {
 
         }else{
             double air= Config.AIR_FRICTION;
-            double dx = b.previousX-b.x;
-            double dy = b.previousY-b.y ;
-            double dz = b.previousZ-b.z ;
+
+            double speed = b.getSpeed();
+            double drag = air * (speed * speed);
+
+            double nx = drag*b.getSpeedX()/speed;
+            double ny = drag*b.getSpeedY()/speed;
+            double nz = drag*b.getSpeedZ()/speed;
 
 
 
-            b.previousX = dx * ((1 - air* elapsedTime) )+b.x;
-            b.previousY = dy * ((1 - air* elapsedTime) )+b.y;
-            b.previousZ = dz * ((1 - air* elapsedTime) )+b.z;
+            b.aX-=nx;
+            b.aY-=ny;
+            b.aZ-=nz;
+
+
+
 
         }
     }
@@ -290,7 +297,7 @@ public class PhysicsEngine {
                     count--;
                     //count++;
                 }*/
-                addedFriction+=Type.Grass.getFriction();
+                //addedFriction+=Type.Grass.getFriction();
                 skipCheck = true;
                 //count++;
 
@@ -333,7 +340,7 @@ public class PhysicsEngine {
            double dx = b.previousX - b.x;
            double dy = b.previousY - b.y;
            double dz = b.previousZ - b.z;
-
+           addedFriction = (1-addedFriction*elapsedTime);
            b.previousX = b.x +  dx*addedFriction;
            b.previousY = b.y +  dy*addedFriction;
            b.previousZ = b.z +  dz*addedFriction;

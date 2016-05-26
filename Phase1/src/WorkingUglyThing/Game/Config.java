@@ -17,7 +17,7 @@ public class Config {
     public static  double SAND_DAMPNESS = 0.3;
     public static  double AI_OFFSET = 0.65;
     public static  double GRASS_FRICTION = 0.8;
-    public static  double AIR_FRICTION = 0.001;
+    public static  double AIR_FRICTION = 0.999;
     public static  double GRAVITY_FORCE = 9.81;
     public static  double WALL_ENERGY_LOSS = 0.04;
     public static  double WATER_ENERGY_LOSS  = 0.3;
@@ -40,7 +40,7 @@ public class Config {
     public static  double GRASS_DAMPNESS = 0.3;
     public static  double OBJECT_DAMPNESS = 0.3;
     public static double collitionSurfacePointRatio = 0.9;
-    public static double hoverSurfacePointRatio = 1.1;
+    public static double hoverSurfacePointRatio = 1.3;
     public static double UPPush = 1.2;
 
 

@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,13 +37,14 @@ public class Game {
     private static boolean loadCourse;
     private static Course course1,course2, course3;
     private static int sidebarwidth=200;
+    private static boolean pause = false;
 
 
     public Game(){
 
         course1 = Course.loadCourse("GolfDeluxe1.gol");
-        course2 = Course.loadCourse("GolfDeluxe2.gol");
-        course3 = Course.loadCourse("GolfDeluxe3.gol");
+        //course2 = Course.loadCourse("GolfDeluxe2.gol");
+        //course3 = Course.loadCourse("GolfDeluxe3.gol");
         if (course1 == null) {
             course1 = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course1.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
@@ -67,6 +70,7 @@ public class Game {
 
             course1.saveCourse();
         }
+        /*
         if (course2 == null) {
             course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
@@ -109,6 +113,7 @@ public class Game {
 
             course3.saveCourse();
         }
+        */
         course = course1;
         physics = new PhysicsEngine();
         frame = new JFrame();
@@ -123,7 +128,7 @@ public class Game {
         Player p2 = AI;
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+
 
         pp.add(p);
        // pp.add(p2);
@@ -133,11 +138,11 @@ public class Game {
 
 
 
-
+        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
         frame.add(dp, BorderLayout.CENTER);
         addMenues(frame);
         frame.setVisible(true);
-
+        addKeyListenerToFrame(frame);
 
 
 
@@ -148,6 +153,37 @@ public class Game {
         gameThread = createGameThread();
         gameThread.run();
 
+    }
+
+    private void addKeyListenerToFrame(JFrame frame) {
+        frame.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyChar()=='q'){
+                    for (Player p: pp){
+                        p.getBall().printBallInfo();
+                        System.out.println();
+                    }
+                }
+                if(e.getKeyChar()=='w'){
+                    physics.processPhysics(Config.STEPSIZE);
+                    dp.repaint();
+                }
+                if(e.getKeyChar()=='p'){
+                    pause = !pause;
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
     }
 
     private static Thread createGameThread() {
@@ -166,7 +202,7 @@ public class Game {
                             Player cp = pp.get(currentPlayer);
 
                             selectNextPlayer = true;
-                            physics.processPhysics(0.016); //
+                            if(!pause) physics.processPhysics(0.016); //
 
                             //cp.getBall().printBallInfo();
                             try {
@@ -318,7 +354,8 @@ public class Game {
             JLabel hoverSurfacePointRatio = new JLabel("hoverSurfacePointRatio");
             JTextField hoverSurfacePointRatioT = new JTextField(""+Config.hoverSurfacePointRatio);
 
-
+            JLabel AirFriction = new JLabel("GrassFriction");
+            JTextField AirFrictionT = new JTextField(""+Config.AIR_FRICTION);
 
             JLabel GrassFriction = new JLabel("GrassFriction");
             JTextField GrassFrictionT = new JTextField(""+Config.GRASS_FRICTION);
@@ -354,6 +391,7 @@ public class Game {
 
                    Config.collitionSurfacePointRatio = Double.parseDouble(collitionSurfacePointRatioT.getText());
                     Config.hoverSurfacePointRatio = Double.parseDouble(hoverSurfacePointRatioT.getText());
+                        Config.AIR_FRICTION = Double.parseDouble(AirFrictionT.getText());
                     Config.GRASS_FRICTION = Double.parseDouble(GrassFrictionT.getText());
 
                     Config.GRASS_DAMPNESS = Double.parseDouble(GrassDampnessT.getText());
