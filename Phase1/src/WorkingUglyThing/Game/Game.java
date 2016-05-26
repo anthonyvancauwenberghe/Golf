@@ -354,7 +354,7 @@ public class Game {
             JLabel hoverSurfacePointRatio = new JLabel("hoverSurfacePointRatio");
             JTextField hoverSurfacePointRatioT = new JTextField(""+Config.hoverSurfacePointRatio);
 
-            JLabel AirFriction = new JLabel("GrassFriction");
+            JLabel AirFriction = new JLabel("AirDrag");
             JTextField AirFrictionT = new JTextField(""+Config.AIR_FRICTION);
 
             JLabel GrassFriction = new JLabel("GrassFriction");
@@ -433,6 +433,9 @@ public class Game {
                     dp.repaint();
                 }
             });
+
+            LeftSidebar.add(AirFriction);
+            LeftSidebar.add(AirFrictionT);
 
             LeftSidebar.add(BallRadius);
             LeftSidebar.add(BallRadiusT);

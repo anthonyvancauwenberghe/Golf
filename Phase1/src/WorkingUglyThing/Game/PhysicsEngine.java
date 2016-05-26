@@ -13,12 +13,7 @@ public class PhysicsEngine {
 
     private ArrayList<Ball> balls = new ArrayList<>(2);
 
-    private final double GROUND_FRICTION = Config.GRASS_FRICTION;
-    private final double AIR_FRICTION = Config.AIR_FRICTION;
-    private final double GRAVITY_FORCE = Config.GRAVITY_FORCE;
-    private final double WALL_ENERGY_LOSS = Config.WALL_ENERGY_LOSS;
-    private final double SAND_ENERGY_LOSS = Config.SAND_FRICTION;
-    private final double WATER_ENERGY_LOSS = Config.WATER_ENERGY_LOSS;
+
 
 
     public static boolean enable3D = Config.ENABLED3D;
@@ -56,7 +51,7 @@ public class PhysicsEngine {
             gravity(b);
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
-            collide(b,elapsedTime,playfield,normals,course.getDimension());
+            //collide(b,elapsedTime,playfield,normals,course.getDimension());
             checkborder(b);
             accelerate(b,elapsedTime);
             resetA(b);
@@ -219,10 +214,10 @@ public class PhysicsEngine {
             double dyNew = dy -  normalY * scalarProjection * 2;
             double dzNew = dz -  normalZ * scalarProjection * 2;
            // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
-                BounceFriction = 0.3;
-                b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
-                b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
-                b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
+
+               b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
+               b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
+               b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
 
                 //System.out.println("woop");
            // }
@@ -315,7 +310,7 @@ public class PhysicsEngine {
                      count++;
 
                  }else{
-                     addedFriction+=t.getFriction();
+
                  }
 
             }
