@@ -57,6 +57,7 @@ public class PhysicsEngine {
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
             collide(b,elapsedTime,playfield,normals,course.getDimension());
+            checkborder(b);
             accelerate(b,elapsedTime);
             resetA(b);
 
@@ -89,7 +90,44 @@ public class PhysicsEngine {
         }
 
     }
+    private void checkborder(Ball b){
+        int height = Game.course.getHeight();
+        int width = Game.course.getWidth();
 
+        double dx = Math.abs(b.getX()-b.getPreviousX());
+        double dy = Math.abs(b.getY()-b.getPreviousY());
+        double dz = Math.abs(b.getZ()-b.getPreviousZ());
+
+
+
+        if(b.getX()+b.getRadius()>width-1){
+            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            b.x = width-1-b.getRadius();
+            b.previousX=b.x+dx;
+
+        }
+
+        if(b.getX()-b.getRadius()<=0){
+            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            b.x = b.getRadius()+1;
+            b.previousX=b.x-dx;
+        }
+
+        if(b.getY()+b.getRadius()>height-1){
+            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            b.y = height-1-b.getRadius();
+            b.previousY=b.y+dy;
+        }
+
+        if(b.getY()-b.getRadius()<=0){
+            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            b.y = 1+b.getRadius();
+            b.previousY=b.y-dy;
+        }
+
+
+
+    }
 
     private void collide(Ball b,double elapsedTime, Type[][][] playfield,  Coordinate[][] normals, int[] dimension) {
         double normalX = 0;
@@ -111,35 +149,35 @@ public class PhysicsEngine {
             if (y<0||x<0||z<0||x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) {
                 skipCheck = true;
                 if (x < 0) {
-                    normalX += 1;
+                    //normalX += 1;
 
                 }
 
                 if (y < 0) {
-                    normalY += 1;
+                    //normalY += 1;
 
                 }
                 if (z < 0) {
-                    normalZ += 1;
+                   // normalZ += 1;
 
                 }
 
                 if (x >= dimension[0]) {
-                    normalX -= 1;
+                   // normalX -= 1;
 
                 }
                 if (y >= dimension[1]) {
-                    normalY -= 1;
+                   // normalY -= 1;
 
                 }
                 if (z >= dimension[2]) {
                     //aZ -= 1;
-                    count--;
+                   // count--;
                     //count++;
                 }
                 BounceFriction+=Type.Grass.getBounceDampness();
                 skipCheck = true;
-                count++;
+               // count++;
             }
 
             if (!skipCheck){
@@ -194,6 +232,18 @@ public class PhysicsEngine {
 
 
 
+        }else{
+            double air= Config.AIR_FRICTION;
+            double dx = b.previousX-b.x;
+            double dy = b.previousY-b.y ;
+            double dz = b.previousZ-b.z ;
+
+
+
+            b.previousX = dx * ((1 - air* elapsedTime) )+b.x;
+            b.previousY = dy * ((1 - air* elapsedTime) )+b.y;
+            b.previousZ = dz * ((1 - air* elapsedTime) )+b.z;
+
         }
     }
 
@@ -214,7 +264,7 @@ public class PhysicsEngine {
             boolean skipCheck = false;
             if (y<0||x<0||z<0||x>=dimension[0]||y>=dimension[1]||z>=dimension[2]) {
                 skipCheck = true;
-                if (x < 0) {
+                /*if (x < 0) {
                     aX += 1;
                 }
 
@@ -239,10 +289,10 @@ public class PhysicsEngine {
                     //aZ -= 1;
                     count--;
                     //count++;
-                }
+                }*/
                 addedFriction+=Type.Grass.getFriction();
                 skipCheck = true;
-                count++;
+                //count++;
 
             }
 
@@ -292,9 +342,6 @@ public class PhysicsEngine {
            b.aY+=aY*g;
            b.aZ+=aZ*g;
            //friction should come in here
-
-
-
 
        }
 

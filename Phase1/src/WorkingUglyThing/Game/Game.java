@@ -126,7 +126,7 @@ public class Game {
         frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
 
         pp.add(p);
-        pp.add(p2);
+       // pp.add(p2);
 
 
 

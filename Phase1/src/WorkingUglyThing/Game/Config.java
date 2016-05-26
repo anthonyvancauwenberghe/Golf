@@ -17,7 +17,7 @@ public class Config {
     public static  double SAND_DAMPNESS = 0.3;
     public static  double AI_OFFSET = 0.65;
     public static  double GRASS_FRICTION = 0.8;
-    public static  double AIR_FRICTION = 0.1;
+    public static  double AIR_FRICTION = 0.001;
     public static  double GRAVITY_FORCE = 9.81;
     public static  double WALL_ENERGY_LOSS = 0.04;
     public static  double WATER_ENERGY_LOSS  = 0.3;
