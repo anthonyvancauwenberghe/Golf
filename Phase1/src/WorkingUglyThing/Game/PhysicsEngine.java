@@ -178,16 +178,18 @@ public class PhysicsEngine {
             if (!skipCheck){
                 Type t = playfield[x][y][z];
                 if (t!= Type.Empty) {
-                    BounceFriction+=t.getBounceDampness();
+                    BounceFriction += t.getBounceDampness();
 
-                    Coordinate c = normals[x][y];
+                     Coordinate c = normals[x][y];
 
-
-
-                    normalX += c.getX();
+                    //Coordinate c = course.getNormal(x, y, z);
+                    if (!Double.isNaN(c.getX())){
+                        normalX += c.getX();
                     normalY += c.getY();
                     normalZ += c.getZ();
                     count++;
+
+                    }
                 }
 
             }
@@ -228,25 +230,26 @@ public class PhysicsEngine {
 
 
         }else{
-            double air= Config.AIR_FRICTION;
 
-            double speed = b.getSpeed();
-            double drag = air * (speed * speed);
-
-            double nx = drag*b.getSpeedX()/speed;
-            double ny = drag*b.getSpeedY()/speed;
-            double nz = drag*b.getSpeedZ()/speed;
-
-
-
-            b.aX-=nx;
-            b.aY-=ny;
-            b.aZ-=nz;
 
 
 
 
         }
+        double air= Config.AIR_FRICTION;
+
+        double speed = b.getSpeed();
+        double drag = air * (speed * speed);
+
+        double nx = drag*b.getSpeedX()/speed;
+        double ny = drag*b.getSpeedY()/speed;
+        double nz = drag*b.getSpeedZ()/speed;
+
+
+
+        b.aX-=nx;
+        b.aY-=ny;
+        b.aZ-=nz;
     }
 
     private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
@@ -358,6 +361,7 @@ public class PhysicsEngine {
         b.z+=b.aZ*e;
 
     }
+
 
     private void ballCollision(Ball b, Ball bd) {
 

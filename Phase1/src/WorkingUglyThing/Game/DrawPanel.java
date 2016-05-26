@@ -353,10 +353,12 @@ public class DrawPanel extends JPanel {
                 y -= d[1];
                 z -= d[2];
 
-                if (x<0||x>dim[0]||y<0||y>dim[1]||z<0||z>dim[2]){
+                if (x<0||x>dim[0]||y<0||y>dim[1]||z<0){
                     continue outerloop;
                 }
-
+                if (z>dim[2]){
+                    continue;
+                }
 
 
                 if (course.getTile((int)x,(int)y,(int)z) !=Type.Empty){
