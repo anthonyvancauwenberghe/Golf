@@ -16,13 +16,13 @@ public class Config {
     private static  double holeRadius = 24;
     public static  double SAND_DAMPNESS = 0.3;
     public static  double AI_OFFSET = 0.65;
-    public static  double GRASS_FRICTION = 0.8;
+    public static  double GRASS_FRICTION = 0.4;
     public static  double AIR_FRICTION = 3;
     public static  double GRAVITY_FORCE = 9.81;
     public static  double WALL_ENERGY_LOSS = 0.04;
     public static  double WATER_ENERGY_LOSS  = 0.3;
     public static  double SAND_FRICTION = 0.95;
-    public static  double OBJECT_FRICTION = 0.8;
+    public static  double OBJECT_FRICTION = 0.1;
     public static  int OFFSET_X_GAME=50;
     public static  int OFFSET_Y_GAME=70;
     public static  int OFFSET_X_EDITOR=16;

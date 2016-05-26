@@ -51,7 +51,7 @@ public class PhysicsEngine {
             gravity(b);
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
-            //collide(b,elapsedTime,playfield,normals,course.getDimension());
+            collide(b,elapsedTime,playfield,normals,course.getDimension());
             checkborder(b);
             accelerate(b,elapsedTime);
             resetA(b);
@@ -214,7 +214,7 @@ public class PhysicsEngine {
             double dyNew = dy -  normalY * scalarProjection * 2;
             double dzNew = dz -  normalZ * scalarProjection * 2;
            // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
-
+            BounceFriction=0;
                b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
                b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
                b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
@@ -321,8 +321,8 @@ public class PhysicsEngine {
            aX/=count;
            aY/=count;
            aZ/=count;
-           addedFriction/=l;
-           addedFriction = (1-addedFriction*elapsedTime);
+           addedFriction/=count;
+
 
            //Vector3 planeOrigin;
            //Vector3 planeNormal;
@@ -340,9 +340,9 @@ public class PhysicsEngine {
            b.previousY = b.y +  dy*addedFriction;
            b.previousZ = b.z +  dz*addedFriction;
 
-           b.aX+=aX*g;
-           b.aY+=aY*g;
-           b.aZ+=aZ*g;
+           b.aX+=aX*Config.UPPush*g;
+           b.aY+=aY*Config.UPPush*g;
+           b.aZ+=aZ*Config.UPPush*g;
            //friction should come in here
 
        }
