@@ -17,10 +17,10 @@ import java.util.Random;
 public class Course {
  String name;
 
-    Tile[][][] playfield;
+    public Tile[][][] playfield;
     Tile[][][] copy;
     int[] dimension;
-    ArrayList<ArrayList<Tile>> objectsOnPlayfield;
+    public ArrayList<ArrayList<Tile>> objectsOnPlayfield;
     int par;
     public Tile startTile;
     public Hole hole;
@@ -88,6 +88,9 @@ public class Course {
      * @param z
      * @param t
      */
+    public Tile getTile(int x, int y, int z){
+        return playfield[x][y][z];
+    }
     public void setTile(int x, int y, int z, Type t){
         Tile originalTile = playfield[x][y][z];
         Tile newTile = originalTile;
@@ -110,10 +113,6 @@ public class Course {
         }
 
 
-    }
-
-    Tile getTile(int x, int y, int z){
-        return playfield[x][y][z];
     }
 
     /**

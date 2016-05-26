@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 public class Stroke2Bot extends AIPlayer {
     public Coordinate alternative=null;
+    Course course;
 
 
     public Stroke2Bot(String s) {
@@ -27,6 +28,7 @@ public class Stroke2Bot extends AIPlayer {
     @Override
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
         Ball b = this.getBall();
+        this.course = c;
         Hole h = course.getHole();
         Type[][][] playfield = course.getPlayfield();
 
@@ -54,15 +56,15 @@ public class Stroke2Bot extends AIPlayer {
         return this.alternative;
     }
     public Coordinate findAlternative(Coordinate coordBall, Coordinate coordHole) {
-
+        int altX, altY, altZ;
         do {
-            int altX = (int) (Math.random() * Config.getWidth());
-            int altY = (int) (Math.random() * Config.getHeight());
-            int altZ = 0;
+            altX = (int) (Math.random() * Config.getWidth());
+            altY = (int) (Math.random() * Config.getHeight());
+            altZ = 0;
             alternative = new Coordinate(altX, altY, altZ);
             System.out.println(alternative.toString());
         }
-        while ((!course.wayIsObstacleFree(coordBall, alternative) || !course.wayIsObstacleFree(alternative, coordHole)));
+        while ((!course.wayIsObstacleFree(coordBall, alternative) || !course.wayIsObstacleFree(alternative, coordHole))&&course.getTile(altX, altY, altZ)==Type.OBJECT );
 
 
 
