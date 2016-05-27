@@ -43,8 +43,8 @@ public class Game {
     public Game(){
 
         course1 = Course.loadCourse("GolfDeluxe1.gol");
-        //course2 = Course.loadCourse("GolfDeluxe2.gol");
-        //course3 = Course.loadCourse("GolfDeluxe3.gol");
+        course2 = Course.loadCourse("GolfDeluxe2.gol");
+        course3 = Course.loadCourse("GolfDeluxe3.gol");
         if (course1 == null) {
             course1 = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course1.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
@@ -71,7 +71,7 @@ public class Game {
 
             course1.saveCourse();
         }
-        /*
+
         if (course2 == null) {
             course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
             course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
@@ -114,7 +114,7 @@ public class Game {
 
             course3.saveCourse();
         }
-        */
+
         course = course1;
         physics = new PhysicsEngine();
         frame = new JFrame();
@@ -126,13 +126,13 @@ public class Game {
 
         Player p = new HumanPlayer("Player 1");
 
-        Player p2 = AI;
+        Player p2  = new HumanPlayer("Player 2");//= AI;
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
 
         pp.add(p);
-       // pp.add(p2);
+        pp.add(p2);
 
 
 

@@ -622,7 +622,10 @@ public class Course {
         return null;
     }
     public boolean wayIsObstacleFree(Coordinate c1, Coordinate c2){
-        ArrayList<Coordinate> all = Coordinate.getPixelBetweenToPoints(c1, c2);
+        Coordinate cn = new Coordinate(c1.getX(),c1.getY(),c2.getZ());
+
+
+        ArrayList<Coordinate> all = Coordinate.getPixelBetweenToPoints(cn, c2);
         for (int i = 1; i<all.size()-1; i++){
             Coordinate c = all.get(i);
             System.out.println(c.getX() + " q" + c.getY() + " " + c.getZ());

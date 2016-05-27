@@ -62,7 +62,7 @@ public class PhysicsEngine {
                 //check for collision between two balls
                 Ball bd = balls.get(j);
                 if (!bd.inPlay||bd.pregame) continue;
-                ballCollision(b,bd);
+               // ballCollision(b,bd);
             }
 
             inertia(b,elapsedTime);
@@ -70,8 +70,20 @@ public class PhysicsEngine {
             atLeastOneBallMoving = !b.checkBallStopped();
 
             checkIfInHole(b);
+           // setUp(b);
 
         }
+    }
+
+    private void setUp(Ball b) {
+        int upthing = 0;
+        if (b.z-b.radius>=course.getDimension()[2])return;
+        while (course.getTile((int)b.x,(int)b.y,(int)(b.z-b.radius))!=Type.Empty){
+            b.z=b.z+1.1;
+            b.previousZ+=1.1;;
+        }
+
+
     }
 
     private void checkIfInHole(Ball b) {
@@ -239,17 +251,19 @@ public class PhysicsEngine {
         double air= Config.AIR_FRICTION;
 
         double speed = b.getSpeed();
-        double drag = air * (speed * speed);
 
-        double nx = drag*b.getSpeedX()/speed;
-        double ny = drag*b.getSpeedY()/speed;
-        double nz = drag*b.getSpeedZ()/speed;
+        if (speed!=0) {
+            double drag = air * (speed * speed);
+
+            double nx = drag * b.getSpeedX() / speed;
+            double ny = drag * b.getSpeedY() / speed;
+            double nz = drag * b.getSpeedZ() / speed;
 
 
-
-        b.aX-=nx;
-        b.aY-=ny;
-        b.aZ-=nz;
+            b.aX -= nx;
+            b.aY -= ny;
+            b.aZ -= nz;
+        }
     }
 
     private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {

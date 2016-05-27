@@ -118,10 +118,8 @@ public class Coordinate {
         return "X: " + this.xCoord + " Y: " + this.yCoord + " Z: "  + this.zCoord;
     }
 
-    public static ArrayList<Coordinate> getPixelBetweenToPoints(Coordinate c1, Coordinate c2) {
-        int ballRadius = (int)Config.getBallRadius();
-        Coordinate coordinate1 = new Coordinate(c1.getX(), c1.getX(), c1.getX()- ballRadius/2);
-        Coordinate coordinate2 = new Coordinate(c2.getX(), c2.getX(), c2.getX()- ballRadius/2);
+    public static ArrayList<Coordinate> getPixelBetweenToPoints(Coordinate coordinate1, Coordinate coordinate2) {
+
 
         int xNew = 0;
         int yNew = 0;
