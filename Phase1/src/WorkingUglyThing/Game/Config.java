@@ -15,7 +15,7 @@ public class Config {
     protected static double ballRadius = 14;
     private static  double holeRadius = 24;
     public static  double SAND_DAMPNESS = 0.3;
-    public static  double AI_OFFSET = 0.3;
+    public static  double AI_OFFSET = 0.563;
     public static  double GRASS_FRICTION = 0.4;
     public static  double AIR_FRICTION = 3;
     public static  double GRAVITY_FORCE = 9.81;

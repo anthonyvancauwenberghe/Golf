@@ -27,6 +27,7 @@ public class Stroke2Bot extends AIPlayer {
 
     @Override
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
+        WorkingUglyThing.Game.Game.dp.repaint();
         Ball b = this.getBall();
         this.course = c;
         Hole h = course.getHole();
@@ -37,16 +38,27 @@ public class Stroke2Bot extends AIPlayer {
 
         if (course.wayIsObstacleFree(coordBall, coordHole)) {
             int[] delta = getDelta(coordBall, coordHole);
+            try {
+                this.alternative = coordHole;
+                WorkingUglyThing.Game.Game.dp.repaint();
+                Thread.sleep(1000);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
+            this.alternative=null;
         } else {
             Coordinate alternative = findAlternative(coordBall, coordHole);
             int[] delta = getDelta(coordBall, alternative);
             try {
+                WorkingUglyThing.Game.Game.dp.repaint();
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
+            this.alternative=null;
             System.out.println("bot shooting");
         }
 
@@ -60,12 +72,13 @@ public class Stroke2Bot extends AIPlayer {
         do {
             altX = (int) (Math.random() * Config.getWidth());
             altY = (int) (Math.random() * Config.getHeight());
-            altZ = 0;
+            altZ = 16;
             alternative = new Coordinate(altX, altY, altZ);
+
             System.out.println(alternative.toString());
         }
-        while ((!course.wayIsObstacleFree(coordBall, alternative) || !course.wayIsObstacleFree(alternative, coordHole))&&course.getTile(altX, altY, altZ)==Type.OBJECT );
-
+        while (!(course.wayIsObstacleFree(coordBall, alternative,false,false) && course.wayIsObstacleFree(alternative, coordHole,false,true)));
+        //&&course.getTile(altX, altY, altZ)==Type.OBJECT
 
 
         return alternative;

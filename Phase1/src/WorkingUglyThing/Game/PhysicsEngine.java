@@ -62,7 +62,7 @@ public class PhysicsEngine {
                 //check for collision between two balls
                 Ball bd = balls.get(j);
                 if (!bd.inPlay||bd.pregame) continue;
-               // ballCollision(b,bd);
+               ballCollision(b,bd);
             }
 
             inertia(b,elapsedTime);

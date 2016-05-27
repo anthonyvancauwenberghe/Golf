@@ -126,7 +126,7 @@ public class Game {
 
         Player p = new HumanPlayer("Player 1");
 
-        Player p2  = new HumanPlayer("Player 2");//= AI;
+        Player p2  =  AI;
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
@@ -139,7 +139,7 @@ public class Game {
 
 
 
-        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME, Config.getHeight() + Config.OFFSET_Y_GAME);
+        frame.setSize(Config.getWidth() , Config.getHeight() + Config.OFFSET_Y_GAME);
         frame.add(dp, BorderLayout.CENTER);
         addMenues(frame);
         frame.setVisible(true);
@@ -328,7 +328,7 @@ public class Game {
 
     private static void showVariables() {
         variablesVisible = !variablesVisible;
-        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+        frame.setSize(Config.getWidth() +(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (variablesVisible) {
              sidebarwidth = 200;
 
@@ -491,7 +491,7 @@ public class Game {
 
     private static void showEditor() {
         editorVisible = !editorVisible;
-        frame.setSize(Config.getWidth() + Config.OFFSET_X_GAME+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+        frame.setSize(Config.getWidth()+(variablesVisible? 1 : 0)*sidebarwidth+(editorVisible? 1 : 0)*sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (editorVisible) {
             int sidebarwidth = 200;
 
@@ -690,7 +690,8 @@ public class Game {
 
         loadCourse(course);
     }
-    private static void loadCourse(Course course) {
+    private static void loadCourse(Course coursel) {
+        course = coursel;
         loadCourse = true;
         ArrayList<Ball> balls = new ArrayList<>(2);
 
