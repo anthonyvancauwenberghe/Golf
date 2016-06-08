@@ -16,6 +16,7 @@ public class Tile {
     public int y;
     public int z;
     public int distanceCounter;
+    private int test;
 
 
 
