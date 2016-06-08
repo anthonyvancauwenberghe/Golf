@@ -15,6 +15,7 @@ public class Tile {
     public int x;
     public int y;
     public int z;
+    public int distanceCounter;
 
 
 
@@ -79,6 +80,14 @@ public class Tile {
 
     public void setType(Type type) {
         this.t = type;
+    }
+
+    public void setDistanceCounter(int c){
+        this.distanceCounter = c;
+    }
+
+    public int getDistanceCounter(){
+        return distanceCounter;
     }
 
     public Coordinate getCoordinate() {
