@@ -1,12 +1,9 @@
 package Game.Actors.Bots;
 
 
-import Game.Model.Ball;
-import Game.Model.Coordinate;
-import Game.Model.Course;
-import Game.Model.Type;
+import Game.Model.*;
 import Game.Config;
-import Game.Model.Hole;
+import com.sun.org.glassfish.gmbal.GmbalException;
 
 import java.util.ArrayList;
 
@@ -27,6 +24,12 @@ public class Stroke2Bot extends AIPlayer {
 
     @Override
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
+        PhysicsEngine p = Game.Game.getAlternativBoardForTest();
+        Ball b2 = p.getBallOfPlayer(this);
+        b2.shootBall(50,50,0);
+        p.calculateUntilNoBallIsMoving();
+
+
         Game.Game.dp.repaint();
         Ball b = this.getBall();
         this.course = c;
@@ -57,6 +60,8 @@ public class Stroke2Bot extends AIPlayer {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+
             shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
             this.alternative=null;
             System.out.println("bot shooting");

@@ -1,5 +1,6 @@
 package Game;
 
+import Game.Actors.Bots.Stroke2Bot;
 import Game.Actors.Player;
 import Game.Model.*;
 import Game.Unused.Editor;
@@ -324,15 +325,18 @@ public class DrawPanel extends JPanel {
             g.drawImage(previewObject, mousePosition.x, mousePosition.y, null);
 
         }
-        if(Game.AI.getShootLocation()!=null){
-            Coordinate c = Game.AI.getShootLocation();
-            g2.setStroke(new BasicStroke(3));
-            g2.setColor(Color.red);
-            g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
-            g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+        if(Game.AI instanceof Stroke2Bot){
+            Stroke2Bot stroke2Bot = (Stroke2Bot) Game.AI;
 
+            if(stroke2Bot.getShootLocation()!=null){
+                Coordinate c = stroke2Bot.getShootLocation();
+                g2.setStroke(new BasicStroke(3));
+                g2.setColor(Color.red);
+                g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
+                g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+
+            }
         }
-
     }
 
 

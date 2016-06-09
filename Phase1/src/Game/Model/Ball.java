@@ -12,6 +12,8 @@ import static java.lang.Math.sin;
 
 public class Ball {
 
+
+
     private final Player player;
 
     public double radius = Config.getBallRadius();
@@ -35,14 +37,44 @@ public class Ball {
     public boolean inHole = false;
     public boolean inPlay = true;
 
-
-    private int speedLimiter = Config.speedLimiter;
-    private double speedSlower = Config.speedSlower;
     private int stopcounter;
 
 
 
     private boolean pregame = true;
+
+    private Ball(Player player){
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public Ball clone(){
+        Ball b = new Ball(this.player);
+        b.x = x;
+        b.y = y;
+        b.z = z;
+        b.aX = aX; b.aY = aY; b.aZ = aZ;
+        b.surfaceX = surfaceX;
+        b.surfaceY = surfaceY;
+        b.surfaceZ = surfaceZ;
+
+        b.surfaceXBig = surfaceXBig;
+        b.surfaceYBig = surfaceYBig;
+        b.surfaceZBig = surfaceZBig;
+
+        b.isMoving = isMoving;
+        b.inHole = inHole;
+        b.inPlay = inPlay;
+
+        b.stopcounter = stopcounter;
+
+        b.surfaceColection = new int[3][surfaceX.length];
+        b.surfaceColectionBig = new int[3][surfaceXBig.length];
+        return b;
+    }
 
 
     /**
@@ -204,26 +236,11 @@ public class Ball {
     }
 
     public void shootBall(double impulsX, double impulsY, double impulsZ) {
-        //System.out.println(inPlay());
-        //System.out.println(isMoving);
         if (!isMoving && inPlay()) {
             previousX-=impulsX* Config.STEPSIZE;
             previousY-=impulsY* Config.STEPSIZE;
             previousZ-=impulsZ* Config.STEPSIZE;
             isMoving = true;
-
-            /*
-            this.aX = (Math.abs(aX)>=speedLimiter) ? getSign(aX)*speedLimiter : aX ;
-            this.aY = (Math.abs(aY)>=speedLimiter) ? getSign(aY)*speedLimiter : aY;
-            this.aZ = (Math.abs(aZ)>=speedLimiter) ? getSign(aZ)*speedLimiter : aZ;
-            this.aX = this.aX/speedSlower;
-            this.aY = this.aY/speedSlower;
-            this.aZ = this.aZ/speedSlower;
-            System.out.println("ball is still moving or not in play speedY: " + this.aY);
-            */
-
-        } else {
-            //System.out.println("ball is still moving or not in play");
         }
     }
 

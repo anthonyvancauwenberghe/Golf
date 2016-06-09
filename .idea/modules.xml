@@ -5,7 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Phase1/Deprecated.iml" filepath="$PROJECT_DIR$/Phase1/Deprecated.iml" />
       <module fileurl="file://$PROJECT_DIR$/Phase1/Phase1.iml" filepath="$PROJECT_DIR$/Phase1/Phase1.iml" />
       <module fileurl="file://$PROJECT_DIR$/Phase1/Phase2.iml" filepath="$PROJECT_DIR$/Phase1/Phase2.iml" />
-      <module fileurl="file://$PROJECT_DIR$//TestLab.iml" filepath="$PROJECT_DIR$//TestLab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TestLab.iml" filepath="$PROJECT_DIR$/TestLab.iml" />
     </modules>
   </component>
 </project>

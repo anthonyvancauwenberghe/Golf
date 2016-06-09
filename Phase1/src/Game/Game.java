@@ -30,7 +30,7 @@ public class Game {
     private static boolean variablesVisible;
 
     private static PhysicsEngine physics;
-    public static Stroke2Bot AI= new Stroke2Bot("Player 2");
+    public static AIPlayer AI= new Stroke2Bot("Player 2");
     public static DrawPanel dp;
 
     private static ArrayList<Player> pp;
@@ -45,7 +45,9 @@ public class Game {
 
     private static boolean pause = false;
 
-
+    public static PhysicsEngine getAlternativBoardForTest(){
+        return physics.getAlternativBoardForTest();
+    }
 
     public Game(){
         JOptionPane.showMessageDialog(frame,
@@ -90,16 +92,16 @@ public class Game {
 
     private void prepareCourses() {
         course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
-        course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
-        course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
+        //course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
+        //course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
         if (course1 == null) {
             course1 = createStandartCourse(1);
         }
         if (course2 == null) {
-            course2 = createStandartCourse(2);
+            //course2 = createStandartCourse(2);
         }
         if (course3 == null) {
-            course3 = createStandartCourse(3);
+            //course3 = createStandartCourse(3);
         }
 
         course = course1;
@@ -238,7 +240,8 @@ public class Game {
 
                     if ((physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole) {
                             selectNextPlayer = true;
-                            if(!pause) physics.processPhysics(0.016); //
+
+                            if(!pause) physics.processPhysics(Config.STEPSIZE); //
 
                         } else {
                             if (selectNextPlayer){
