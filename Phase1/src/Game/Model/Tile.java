@@ -7,7 +7,7 @@ import java.awt.*;
 /**
  * Created by nibbla on 14.03.16.
  */
-public class Tile {
+public class Tile{
     Type t;
 
 
@@ -15,8 +15,7 @@ public class Tile {
     public int x;
     public int y;
     public int z;
-    public int distanceCounter;
-    private int test;
+
 
 
 
@@ -82,15 +81,6 @@ public class Tile {
     public void setType(Type type) {
         this.t = type;
     }
-
-    public void setDistanceCounter(int c){
-        this.distanceCounter = c;
-    }
-
-    public int getDistanceCounter(){
-        return distanceCounter;
-    }
-
     public Coordinate getCoordinate() {
         return new Coordinate(x,y,z);
     }

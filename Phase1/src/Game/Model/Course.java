@@ -1,4 +1,5 @@
-package Game.Model; /**
+package Game.Model;
+/**
  * Created by nibbla on 14.03.16.
  */
 
@@ -20,7 +21,7 @@ import java.util.StringTokenizer;
 public class Course {
     public String name;
     public Coordinate[][]surfaceNormals;
-    public int[][]heightMap;
+    public int[][] heightMap;
 
 
 

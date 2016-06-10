@@ -24,6 +24,7 @@ public enum Type {
     double friction;
     private double bounceDampness;
     private double dampness;
+    public int distanceCounter;
 
     Type(Color g, double v, double bd) {
         this.g = g;
@@ -69,5 +70,13 @@ public enum Type {
 
     public void setDampness(double dampness) {
         this.dampness = dampness;
+    }
+
+    public void setDistanceCounter(int c){
+        distanceCounter = c;
+    }
+
+    public int getDistanceCounter(){
+        return distanceCounter;
     }
 }
