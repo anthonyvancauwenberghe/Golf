@@ -11,28 +11,43 @@ import java.util.ArrayList;
  */
 public class PhysicsEngine {
     private Course course;
-    public boolean atLeastOneBallMoving;
+
     private ArrayList<Ball> balls = new ArrayList<>(2);
 
     public PhysicsEngine getAlternativBoardForTest(){
         return clone();
     }
 
+
+
     public void calculateUntilNoBallIsMoving(){
         do {
             processPhysics(Config.STEPSIZE);
-        }while(!atLeastOneBallMoving);
+
+        }while(atLeastOneBallMoving());
+    }
+
+    public boolean atLeastOneBallMoving() {
+
+        for (int i = 0; i < balls.size(); i++) {
+           if (balls.get(i).isMoving()) return true;
+        }
+        return false;
     }
 
     public PhysicsEngine clone(){
         PhysicsEngine p = new PhysicsEngine();
         p.course = course;
-        p.atLeastOneBallMoving = atLeastOneBallMoving;
+
         p.balls = new ArrayList<>();
         for (Ball b:balls){
             p.balls.add(b.clone());
         }
         return p;
+    }
+
+    public ArrayList<Ball> getBalls(){
+        return balls;
     }
 
     public Ball getBallOfPlayer(Player p){
@@ -42,11 +57,18 @@ public class PhysicsEngine {
         return null;
     }
 
+    public int getBallIndexOfPlayer(Player p){
+        for (int i = 0; i < balls.size(); i++) {
+            if (balls.get(i).getPlayer()==p) return i;
+        }
+        return -1;
+    }
+
     public void init(Course course, ArrayList<Ball> balls) {
         this.course = course;
         this.balls.clear();
         this.balls = balls;
-        atLeastOneBallMoving = false;
+
     }
 
     public void init(ArrayList<Player> players, Course course) {
@@ -56,12 +78,11 @@ public class PhysicsEngine {
         for (int i = 0; i < players.size(); i++) {
             balls.add(players.get(i).getBall());
         }
-        atLeastOneBallMoving = false;
+
     }
 
 
     public void processPhysics(double elapsedTime) {
-        atLeastOneBallMoving = false;
 
 
         Type[][][] playfield = course.getPlayfield();
@@ -94,7 +115,8 @@ public class PhysicsEngine {
         }
 
         for (int i = 0; i < balls.size(); i++) {
-            if (!balls.get(i).checkBallStopped())  atLeastOneBallMoving =true;
+            balls.get(i).checkBallStopped();
+
         }
 
 
@@ -119,42 +141,58 @@ public class PhysicsEngine {
 
         if ((h.isBallIntersectingHole(b))&&b.getSpeed()<0.2){
             b.setInHole(true);
+            b.isMoving=false;
+
+            System.out.println(b.getPlayer().getName() + " put the ball into the hole");
         }
+
 
     }
     private void checkborder(Ball b){
         int height = Game.course.getHeight();
         int width = Game.course.getWidth();
+        int depth = Game.course.getDepth();
 
         double dx = Math.abs(b.getX()-b.getPreviousX());
         double dy = Math.abs(b.getY()-b.getPreviousY());
         double dz = Math.abs(b.getZ()-b.getPreviousZ());
 
+        if(b.getZ()+b.getRadius()<= 0){
+            System.out.println("out of Z border: ");
 
+            b.z = 1+b.getRadius();
+            b.previousZ=b.z-dz;
+            b.printBallInfo();
+
+        }
 
         if(b.getX()+b.getRadius()>width-1){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of X border: ");
+
             b.x = width-1-b.getRadius();
             b.previousX=b.x+dx;
-
+            b.printBallInfo();
         }
 
         if(b.getX()-b.getRadius()<=0){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of X border: ");
             b.x = b.getRadius()+1;
             b.previousX=b.x-dx;
+            b.printBallInfo();
         }
 
         if(b.getY()+b.getRadius()>height-1){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of Y border: ");
             b.y = height-1-b.getRadius();
             b.previousY=b.y+dy;
+            b.printBallInfo();
         }
 
         if(b.getY()-b.getRadius()<=0){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of Y border: " );
             b.y = 1+b.getRadius();
             b.previousY=b.y-dy;
+
         }
 
 

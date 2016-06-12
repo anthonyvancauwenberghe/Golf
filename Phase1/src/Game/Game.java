@@ -30,7 +30,7 @@ public class Game {
     private static boolean variablesVisible;
 
     private static PhysicsEngine physics;
-    public static AIPlayer AI= new Stroke2Bot("Player 2");
+    public static AIPlayer AI= new AngryBot("Player 2",64);
     public static DrawPanel dp;
 
     private static ArrayList<Player> pp;
@@ -237,13 +237,14 @@ public class Game {
                     //System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
                     if (courseLoading) continue;
-
-                    if ((physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole) {
+// || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
+                    if ((physics.atLeastOneBallMoving())) {
                             selectNextPlayer = true;
 
                             if(!pause) physics.processPhysics(Config.STEPSIZE); //
 
                         } else {
+                            dp.resetAIPreview();
                             if (selectNextPlayer){
                                 if (!IsGameStillOn()) {
                                     selectNextPlayer = false;
@@ -256,14 +257,11 @@ public class Game {
                                     currentPlayer = (currentPlayer + 1) % (pp.size());
                                 } while (!pp.get(currentPlayer).getBall().inPlay);
                                 ArrayList<Ball> balls = new ArrayList<>(8);
-                                ArrayList<Ball> otherBalls = new ArrayList<>(8);
-                                for (int i = 0; i < pp.size(); i++) {
-                                    balls.add(pp.get(i).getBall());
-                                    if (i != currentPlayer) otherBalls.add(pp.get(i).getBall());
-                                }
+
+
                                 pp.get(currentPlayer).getBall().setPregame(false);
                                 dp.setCurrentPlayer(pp.get(currentPlayer));
-                                pp.get(currentPlayer).nextMove(course, otherBalls);
+                                pp.get(currentPlayer).nextMove(physics);
 
                                 dp.repaint();
 
@@ -639,7 +637,7 @@ public class Game {
 
                         Type t = Type.valueOf(typeBox.getSelectedItem().toString());
 
-                        previewMiniCourse = new Course("preview", width, height, course.getLength(), t, 0);
+                        previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
                         previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
                         previewMiniCourse.calculateHeightMap();
                         previewMiniCourse.calculateSurfaceNormals();

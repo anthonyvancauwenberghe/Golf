@@ -271,4 +271,7 @@ public class Coordinate {
         return passedPoints;
     }
 
+    public static double getDistance(Coordinate coordinate, Coordinate coordinate1) {
+        return getDistance(coordinate.xCoord,coordinate.yCoord,coordinate.zCoord,coordinate1.xCoord,coordinate1.yCoord,coordinate1.zCoord);
+    }
 }

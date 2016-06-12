@@ -357,7 +357,7 @@ public class Course {
      * getter to get the length of the course
      * @return dimension[2]
      */
-    public int getLength() {
+    public int getDepth() {
         return dimension[2];
     }
 

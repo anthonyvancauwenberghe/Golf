@@ -1,10 +1,7 @@
 package Game.Actors.Bots;
 
 import Game.*;
-import Game.Model.Ball;
-import Game.Model.Coordinate;
-import Game.Model.Course;
-import Game.Model.Type;
+import Game.Model.*;
 
 
 import java.util.ArrayList;
@@ -14,9 +11,9 @@ import java.util.ArrayList;
  */
 public class StraightLineBot extends AIPlayer {
     @Override
-    public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
+    public void nextMove(PhysicsEngine p) {
         Ball b = this.getBall();
-        Type[][][] playfield = c.getPlayfield();
+        Type[][][] playfield = course.getPlayfield();
 
         Coordinate currentCoord = b.getCoordinate();
         Coordinate HoleCoord = new Coordinate(400,400,0);

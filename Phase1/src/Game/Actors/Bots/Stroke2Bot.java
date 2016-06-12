@@ -13,18 +13,17 @@ import java.util.ArrayList;
 
 
 
-public class Stroke2Bot extends AIPlayer {
+public class Stroke2Bot extends AIPlayer implements Previewable{
     public Coordinate alternative=null;
-    Course course;
-
+    public Coordinate[] alternativeAr = new Coordinate[1];
 
     public Stroke2Bot(String s) {
         super(s);
     }
 
     @Override
-    public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
-        PhysicsEngine p = Game.Game.getAlternativBoardForTest();
+    public void nextMove(PhysicsEngine p) {
+
         Ball b2 = p.getBallOfPlayer(this);
         b2.shootBall(50,50,0);
         p.calculateUntilNoBallIsMoving();
@@ -32,7 +31,7 @@ public class Stroke2Bot extends AIPlayer {
 
         Game.Game.dp.repaint();
         Ball b = this.getBall();
-        this.course = c;
+
         Hole h = course.getHole();
         Type[][][] playfield = course.getPlayfield();
 
@@ -70,7 +69,8 @@ public class Stroke2Bot extends AIPlayer {
 
     }
     public Coordinate getShootLocation(){
-        return this.alternative;
+
+        return alternative;
     }
     public Coordinate findAlternative(Coordinate coordBall, Coordinate coordHole) {
         int altX, altY, altZ;

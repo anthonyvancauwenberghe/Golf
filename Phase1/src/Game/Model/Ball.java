@@ -1,8 +1,8 @@
 package Game.Model;
 
 
+import Game.Actors.Move;
 import Game.Actors.Player;
-import Game.Game;
 import Game.Config;
 
 import java.util.ArrayList;
@@ -56,6 +56,9 @@ public class Ball {
         b.x = x;
         b.y = y;
         b.z = z;
+        b.previousX = previousX;
+        b.previousY = previousY;
+        b.previousZ = previousZ;
         b.aX = aX; b.aY = aY; b.aZ = aZ;
         b.surfaceX = surfaceX;
         b.surfaceY = surfaceY;
@@ -68,11 +71,11 @@ public class Ball {
         b.isMoving = isMoving;
         b.inHole = inHole;
         b.inPlay = inPlay;
-
+        b.pregame = pregame;
         b.stopcounter = stopcounter;
 
-        b.surfaceColection = new int[3][surfaceX.length];
-        b.surfaceColectionBig = new int[3][surfaceXBig.length];
+        b.surfaceColection = new int[surfaceX.length][3];
+        b.surfaceColectionBig = new int[surfaceXBig.length][3];
         return b;
     }
 
@@ -147,8 +150,8 @@ public class Ball {
             surfaceZBig[i] = zses2.get(i);
         }
 
-        surfaceColection = new int[3][xses.size()];
-        surfaceColectionBig = new int[3][xses.size()];
+        surfaceColection = new int[xses.size()][3];
+        surfaceColectionBig = new int[xses.size()][3];
 
     }
 
@@ -244,6 +247,10 @@ public class Ball {
         }
     }
 
+    public void shootBall(double angleRadians, double power) {
+        shootBall(Math.cos(angleRadians)*power,Math.sin(angleRadians)*power,0);
+    }
+
 
 
     /**
@@ -328,6 +335,8 @@ public class Ball {
         }else{
             stopcounter=0;
         }
+        if(inHole) return true;
+        isMoving=true;
         return false;
 
     }
@@ -337,6 +346,8 @@ public class Ball {
      * method that prints the information about the ball
      */
     public void printBallInfo(){
+
+        System.out.println("Name:" + player.getName());
         System.out.println("X: " +x);
         System.out.println("Y: " +y);
         System.out.println("Z: " +z);
@@ -344,9 +355,9 @@ public class Ball {
         System.out.println("previousY: " +previousY);
         System.out.println("previousZ: " +previousZ);
 
-        System.out.println("SpeedX: " + getSpeedX());
-        System.out.println("SpeedY: " + getSpeedY());
-        System.out.println("SpeedZ: " + getSpeedZ());
+       // System.out.println("SpeedX: " + getSpeedX());
+       // System.out.println("SpeedY: " + getSpeedY());
+       // System.out.println("SpeedZ: " + getSpeedZ());
         System.out.println("ball radius: " + getRadius());
         if(!isMoving)
             System.out.println("ballStopped");
@@ -428,5 +439,9 @@ public class Ball {
         this.pregame = pregame;
     }
 
+
+    public void shootBall(Move move) {
+        shootBall(move.getX(),move.getY(),move.getZ());
+    }
 
 }
