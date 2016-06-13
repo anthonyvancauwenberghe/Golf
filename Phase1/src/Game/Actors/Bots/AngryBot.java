@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by Nibbla on 12.06.2016.
  */
-public class AngryBot extends AIPlayer implements Previewable {
+public class AngryBot extends AIPlayer {
     public int testMoves;
 
     public AngryBot(String name, int testMoves) {
