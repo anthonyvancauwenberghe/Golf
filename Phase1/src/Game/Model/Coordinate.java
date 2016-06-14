@@ -285,4 +285,19 @@ public class Coordinate {
     public double getLength() {
         return getDistance(0,0,0,xCoord,yCoord,zCoord);
     }
+
+
+   /* public static Coordinate(Coordinate a){
+
+        lon = Random(0;2*PI)
+        lat = Random(-PI;PI)
+        lengthC = a.length * percentage;
+        Vector3d c;
+        Vector3d b;
+        c.x = lengthC * cos(lat) * cos(lon)
+        c.y = lengthC * cos(lat) * sin(lon)
+        c.z = lengthC *sin(lat)
+        b = a + c;
+        return b;
+    }*/
 }

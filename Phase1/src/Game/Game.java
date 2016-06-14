@@ -255,7 +255,7 @@ public class Game {
 
                                 do {
                                     currentPlayer = (currentPlayer + 1) % (pp.size());
-                                } while (!pp.get(currentPlayer).getBall().inPlay);
+                                }while (!pp.get(currentPlayer).getBall().inPlay);
                                 ArrayList<Ball> balls = new ArrayList<>(8);
 
 
