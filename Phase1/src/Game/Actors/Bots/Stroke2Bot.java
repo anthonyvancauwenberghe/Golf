@@ -1,6 +1,7 @@
 package Game.Actors.Bots;
 
 
+import Game.Actors.Bots.BotMaps.PathfindingMap;
 import Game.Model.Ball;
 import Game.Model.Coordinate;
 import Game.Model.Course;
@@ -35,6 +36,7 @@ public class Stroke2Bot extends AIPlayer {
 
         Coordinate coordBall = b.getCoordinate();
         Coordinate coordHole = h.getCoordinate();
+
 
         if (course.wayIsObstacleFree(coordBall, coordHole)) {
             int[] delta = getDelta(coordBall, coordHole);
@@ -75,7 +77,7 @@ public class Stroke2Bot extends AIPlayer {
             altZ = 16;
             alternative = new Coordinate(altX, altY, altZ);
 
-            System.out.println(alternative.toString());
+            //System.out.println(alternative.toString());
         }
         while (!(course.wayIsObstacleFree(coordBall, alternative,false,false) && course.wayIsObstacleFree(alternative, coordHole,false,true)));
         //&&course.getTile(altX, altY, altZ)==Type.OBJECT

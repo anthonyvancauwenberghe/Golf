@@ -19,7 +19,8 @@ public class PathfindingMap {
         hole = h;
     }
     public void makeCounter(){
-        Type type = course.playfield[1][2][course.heightMap[1][2]];
-        type.toString();
+        //Type type = course.playfield[1][2][3];
+        //type.toString();
+
     }
 }

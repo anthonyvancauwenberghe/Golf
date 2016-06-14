@@ -68,7 +68,7 @@ public class Game {
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("Player 1");
-        Player p2  =  AI;
+        Player p2  =  new StraightLineBot("Player 2");
 
         pp.add(p);
         pp.add(p2);

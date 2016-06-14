@@ -1,6 +1,7 @@
 package Game.Actors.Bots;
 
 import Game.*;
+import Game.Actors.Bots.BotMaps.PathfindingMap;
 import Game.Model.Ball;
 import Game.Model.Coordinate;
 import Game.Model.Course;
@@ -20,6 +21,8 @@ public class StraightLineBot extends AIPlayer {
 
         Coordinate currentCoord = b.getCoordinate();
         Coordinate HoleCoord = new Coordinate(400,400,0);
+        PathfindingMap map = new PathfindingMap(c, currentCoord, HoleCoord);
+        map.makeCounter();
 
     /*public void euclideanDistance() {*/
         double p1 = (HoleCoord.getX() - currentCoord.getX());
