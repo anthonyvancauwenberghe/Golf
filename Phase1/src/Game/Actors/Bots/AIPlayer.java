@@ -56,9 +56,6 @@ public abstract class AIPlayer extends Player {
         Coordinate[] c = new Coordinate[ps.length];
         Game.dp.setPreviewMoves(m);
         for (int j = 0; j < m.length; j++) {
-            if (j==7) {
-                System.out.println("wlej");
-            }
             ps[j] = p.getAlternativBoardForTest();
             Ball b = ps[j].getBallOfPlayer(this);
             b.shootBall(m[j]);

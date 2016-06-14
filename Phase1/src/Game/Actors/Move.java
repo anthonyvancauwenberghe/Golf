@@ -17,6 +17,7 @@ public class Move {
         Move m = this.clone();
         m.c = Coordinate.modify2d(c,varianz_length);
         m.c2[0] = m.c;
+        m.attainedTarget=null;
         return m;
     }
 

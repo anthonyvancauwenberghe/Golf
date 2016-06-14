@@ -399,29 +399,30 @@ public class DrawPanel extends JPanel {
             }
         }
 
-        g2.setStroke(new BasicStroke(3));
-        g2.setColor(Color.red);
+
+        g2.setColor(Color.BLUE);
         if(previewMoves != null){
             for (int i = 0; i < previewMoves.length; i++) {
                 Coordinate c = previewMoves[i].attainedTarget;
                 if (c == null) continue;
+                g2.setStroke(new BasicStroke(3));
                 g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
                 g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
 
                 g2.setStroke(new BasicStroke(1));
-                g2.setColor(Color.BLUE);
+
                 Coordinate c2 = previewMoves[i].c;
                 c = previewMoves[i].startCoordinate;
-                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) c2.getX(),(int) c2.getY());
+                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) (c.getX()+c2.getX()),(int) (c.getY()+c2.getY()));
 
             }
 
 
         }
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(Color.magenta);
-        if(previewMove != null){
 
+        if(previewMove != null){
+                g2.setColor(Color.magenta);
                 Coordinate c = previewMove.attainedTarget;
 
                 g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
@@ -430,7 +431,7 @@ public class DrawPanel extends JPanel {
                 g2.setColor(Color.red);
                 Coordinate c2 = previewMove.c;
                 c = previewMove.startCoordinate;
-                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) c2.getX(),(int) c2.getY());
+                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) (c.getX() + c2.getX()),(int) (c.getY()+ c2.getY()));
 
 
 
