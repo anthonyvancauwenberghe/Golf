@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 
 
-public class Stroke2Bot extends AIPlayer implements Previewable{
+public class Stroke2Bot extends AIPlayer{
     public Coordinate alternative=null;
     public Coordinate[] alternativeAr = new Coordinate[1];
 

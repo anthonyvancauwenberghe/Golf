@@ -1,7 +1,7 @@
 package Game;
 
 import Game.Actors.Bots.Stroke2Bot;
-import Game.Actors.Bots.Previewable;
+
 import Game.Actors.Player;
 import Game.Model.*;
 import Game.Unused.Editor;

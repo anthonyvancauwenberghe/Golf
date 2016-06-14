@@ -240,7 +240,7 @@ public class Game {
 // || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
                     if ((physics.atLeastOneBallMoving())) {
                             selectNextPlayer = true;
-
+;
                             if(!pause) physics.processPhysics(Config.STEPSIZE); //
 
                         } else {
