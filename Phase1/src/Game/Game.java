@@ -133,6 +133,7 @@ public class Game {
                 course1.saveCourse();
                 c = course1;
                 break;
+            /*
             case 2:
                 Course course2;
                 course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
@@ -177,6 +178,7 @@ public class Game {
                 course3.saveCourse();
                 c = course3;
                 break;
+                */
             default:
                 Course courseD;
                 courseD = new Course("GolfDeluxeStandart", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
