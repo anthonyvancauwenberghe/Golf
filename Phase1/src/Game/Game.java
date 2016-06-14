@@ -757,8 +757,7 @@ public class Game {
         dp.setPlayers(pp);
 
         if (physics == null)physics = new PhysicsEngine();
-        physics.init(pp,course);
-        physics.init(course, balls);
+        physics.init(pp,course, new Wind(Config.MINWIND,Config.MAXWIND,0,2*Math.PI));
 
         dp.repaint();
 
@@ -824,6 +823,10 @@ public class Game {
         previewMiniCourse=null;
         dp.setPreviewObject(null);
         dp.repaint();
+    }
+
+    public static Coordinate getWind() {
+        return physics.getWind();
     }
 
 

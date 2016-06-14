@@ -29,7 +29,6 @@ public class AngryBot extends AIPlayer implements Previewable {
 
         for (int i = 0; i < testMoves; i++) {
             moves[i] = new Move(i*1.0/(testMoves)*2*Math.PI, power);
-
         }
         double[] ratio = {0.1};
         Move m = evaluate(p,moves, Evaluationfunction.hybrid,ratio);

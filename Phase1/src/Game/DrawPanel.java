@@ -449,6 +449,36 @@ public class DrawPanel extends JPanel {
             g.drawImage(previewObject, mousePosition.x, mousePosition.y, null);
 
         }
+        Coordinate wind = Game.getWind();
+        if (wind!= null) drawWindpanel(g2,wind);
+
+    }
+
+    private void drawWindpanel(Graphics2D g2, Coordinate wind) {
+        int x = this.getWidth()*15/16;
+        int y = this.getHeight()*1/16;
+
+        int radius = 30;
+
+        g2.setPaint(Color.BLACK);
+        g2.fillOval(x-radius/2,y-radius/2,radius,radius);
+        radius -= 1;
+        g2.setPaint(Color.WHITE);
+        g2.fillOval(x-radius/2,y-radius/2,radius,radius);
+        radius -= 3;
+
+        int lengthX = (int)(  radius *  wind.getX()/ Config.MAXWIND);
+        int lengthY = (int) (radius * wind.getY()/ Config.MAXWIND);
+        g2.setPaint(Color.MAGENTA);
+        g2.setStroke(new BasicStroke(3));
+
+        int x2 = (int) (this.getWidth()*15/16 + lengthX);
+        int y2 = (int) (this.getHeight()*1/16+ lengthY);;
+
+        g2.drawLine(x,y,x2,y2);
+
+
+
 
     }
 

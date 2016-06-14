@@ -13,6 +13,8 @@ public class Config {
     private static final int depth = 100;
 
     public static final double maxSpeedToFallIntoHole = 3;
+    public static final double MINWIND = 0.0;
+    public static final double MAXWIND = 1.0;
 
     public static double ballRadius = 14;
     private static  double holeRadius = 24;

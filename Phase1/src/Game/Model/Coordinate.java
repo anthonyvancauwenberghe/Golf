@@ -10,8 +10,8 @@ import java.util.ArrayList;
  */
 public class Coordinate {
 
-    private double xCoord, yCoord, zCoord;
-    private Type type;//This will be the value that references the object at the coordinate space.
+    protected double xCoord, yCoord, zCoord;
+
 
     /**
      * Constructor of the Coordinate class
@@ -30,6 +30,19 @@ public class Coordinate {
         this.xCoord = x;
         this.yCoord = y;
         this.zCoord = z;
+    }
+
+    public Coordinate(double minwind, double maxwind) {
+
+    }
+
+    public Coordinate getDerivate(double maxChangeInPercent){
+        return null;
+    }
+
+    public Coordinate clone(){
+        Coordinate c = new Coordinate(xCoord,yCoord,zCoord);
+        return c;
     }
 
     /**
@@ -68,13 +81,7 @@ public class Coordinate {
         this.zCoord = z;
     }
 
-    /**
-     * setter to set the type of class Type
-     * @param type
-     */
-    public void setType(Type type){
-        this.type = type;
-    }
+
 
     /**
      * getter to get the x-coordinate
@@ -273,5 +280,9 @@ public class Coordinate {
 
     public static double getDistance(Coordinate coordinate, Coordinate coordinate1) {
         return getDistance(coordinate.xCoord,coordinate.yCoord,coordinate.zCoord,coordinate1.xCoord,coordinate1.yCoord,coordinate1.zCoord);
+    }
+
+    public double getLength() {
+        return getDistance(0,0,0,xCoord,yCoord,zCoord);
     }
 }

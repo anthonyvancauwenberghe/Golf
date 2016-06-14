@@ -4,6 +4,7 @@ import Game.Actors.Player;
 import Game.Game;
 import Game.Config;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -13,6 +14,7 @@ public class PhysicsEngine {
     private Course course;
 
     private ArrayList<Ball> balls = new ArrayList<>(2);
+    private Coordinate wind;
 
     public PhysicsEngine getAlternativBoardForTest(){
         return clone();
@@ -38,6 +40,7 @@ public class PhysicsEngine {
     public PhysicsEngine clone(){
         PhysicsEngine p = new PhysicsEngine();
         p.course = course;
+        p.wind = wind.clone();
 
         p.balls = new ArrayList<>();
         for (Ball b:balls){
@@ -64,17 +67,27 @@ public class PhysicsEngine {
         return -1;
     }
 
-    public void init(Course course, ArrayList<Ball> balls) {
+    public void init(Course course, ArrayList<Ball> balls, Coordinate wind) {
         this.course = course;
         this.balls.clear();
         this.balls = balls;
-
+        this.wind = wind;
     }
 
     public void init(ArrayList<Player> players, Course course) {
+        if (wind == null) wind = new Wind(0,0,0,0);
         this.course = course;
         this.balls.clear();
 
+        for (int i = 0; i < players.size(); i++) {
+            balls.add(players.get(i).getBall());
+        }
+    }
+
+    public void init(ArrayList<Player> players, Course course, Coordinate wind) {
+        this.course = course;
+        this.balls.clear();
+        this.wind = wind;
         for (int i = 0; i < players.size(); i++) {
             balls.add(players.get(i).getBall());
         }
@@ -95,6 +108,7 @@ public class PhysicsEngine {
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
             collide(b,elapsedTime,playfield,normals,course.getDimension());
+            drag(b);
             checkborder(b);
             accelerate(b,elapsedTime);
             resetA(b);
@@ -120,6 +134,25 @@ public class PhysicsEngine {
         }
 
 
+    }
+
+    private void drag(Ball b) {
+        double air= Config.AIR_FRICTION;
+
+        double speed = b.getSpeed();
+
+        if (speed!=0) {
+            double drag = air * (speed * speed);
+
+            double nx = drag * b.getSpeedX() / speed;
+            double ny = drag * b.getSpeedY() / speed;
+            double nz = drag * b.getSpeedZ() / speed;
+
+
+            b.aX -= nx;
+            b.aY -= ny;
+            b.aZ -= nz;
+        }
     }
 
     private void setUp(Ball b) {
@@ -311,22 +344,7 @@ public class PhysicsEngine {
 
 
         }
-        double air= Config.AIR_FRICTION;
 
-        double speed = b.getSpeed();
-
-        if (speed!=0) {
-            double drag = air * (speed * speed);
-
-            double nx = drag * b.getSpeedX() / speed;
-            double ny = drag * b.getSpeedY() / speed;
-            double nz = drag * b.getSpeedZ() / speed;
-
-
-            b.aX -= nx;
-            b.aY -= ny;
-            b.aZ -= nz;
-        }
     }
 
     private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
@@ -423,8 +441,13 @@ public class PhysicsEngine {
            b.aX+=aX* Config.UPPush*g;
            b.aY+=aY* Config.UPPush*g;
            b.aZ+=aZ* Config.UPPush*g;
-           //friction should come in here
 
+
+       }else{
+           //wind force
+           b.aX+= wind.getX();
+           b.aY+= wind.getY();
+           b.aZ+= wind.getZ();
        }
 
 
@@ -527,4 +550,8 @@ public class PhysicsEngine {
         return angle;
     }
 
+
+    public Coordinate getWind() {
+        return wind;
+    }
 }
