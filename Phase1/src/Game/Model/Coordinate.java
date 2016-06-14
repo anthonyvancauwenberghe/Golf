@@ -1,6 +1,6 @@
 package Game.Model;
 
-
+import org.apache.commons.math3.distribution.NormalDistribution;
 import java.util.ArrayList;
 
 /**
@@ -284,5 +284,13 @@ public class Coordinate {
 
     public double getLength() {
         return getDistance(0,0,0,xCoord,yCoord,zCoord);
+    }
+
+    public static Coordinate modify2d(Coordinate c, double varianz) {
+        NormalDistribution n = new NormalDistribution(c.xCoord,varianz);
+        NormalDistribution n2 = new NormalDistribution(c.yCoord,varianz);
+        Coordinate c2 = new Coordinate(n.sample(),n2.sample(),c.getZ());
+        return c2;
+
     }
 }

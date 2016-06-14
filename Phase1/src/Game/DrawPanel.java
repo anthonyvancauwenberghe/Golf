@@ -1,7 +1,9 @@
 package Game;
 
+import Game.Actors.Bots.AIPlayer;
 import Game.Actors.Bots.Stroke2Bot;
 
+import Game.Actors.Move;
 import Game.Actors.Player;
 import Game.Model.*;
 import Game.Unused.Editor;
@@ -17,6 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import static Game.Game.AI;
+import static Game.Game.course;
 
 /**
  * Created by nibbla on 16.03.16.
@@ -47,8 +52,10 @@ public class DrawPanel extends JPanel {
     public boolean prepareShoot;
     private BufferedImage previewObject;
     private Graphics2D g2;
-    private Coordinate[] previewCoordinates;
-    private Coordinate[] previewCoordinates2;
+
+    private Move previewMove;
+    private Move[] previewMoves;
+
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -378,8 +385,8 @@ public class DrawPanel extends JPanel {
         if (courseImage != null) g.drawImage(course.getManagedBufferedImage(), 0, 0, null);
         drawHole(g);
 
-        if(Game.AI instanceof Stroke2Bot){
-            Stroke2Bot stroke2Bot = (Stroke2Bot) Game.AI;
+        if(AI instanceof Stroke2Bot){
+            Stroke2Bot stroke2Bot = (Stroke2Bot) AI;
             Coordinate c = stroke2Bot.getShootLocation();
             if(c!=null){
 
@@ -394,27 +401,37 @@ public class DrawPanel extends JPanel {
 
         g2.setStroke(new BasicStroke(3));
         g2.setColor(Color.red);
-        if(previewCoordinates != null){
-            for (int i = 0; i < previewCoordinates.length; i++) {
-                Coordinate c = previewCoordinates[i];
-
+        if(previewMoves != null){
+            for (int i = 0; i < previewMoves.length; i++) {
+                Coordinate c = previewMoves[i].attainedTarget;
+                if (c == null) continue;
                 g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
                 g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+
+                g2.setStroke(new BasicStroke(1));
+                g2.setColor(Color.BLUE);
+                Coordinate c2 = previewMoves[i].c;
+                c = previewMoves[i].startCoordinate;
+                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) c2.getX(),(int) c2.getY());
 
             }
 
 
         }
         g2.setStroke(new BasicStroke(3));
-        g2.setColor(Color.BLUE);
-        if(previewCoordinates2 != null){
-            for (int i = 0; i < previewCoordinates2.length; i++) {
-                Coordinate c = previewCoordinates2[i];
+        g2.setColor(Color.magenta);
+        if(previewMove != null){
+
+                Coordinate c = previewMove.attainedTarget;
 
                 g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
                 g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
 
-            }
+                g2.setColor(Color.red);
+                Coordinate c2 = previewMove.c;
+                c = previewMove.startCoordinate;
+                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) c2.getX(),(int) c2.getY());
+
 
 
         }
@@ -461,10 +478,10 @@ public class DrawPanel extends JPanel {
         int radius = 30;
 
         g2.setPaint(Color.BLACK);
-        g2.fillOval(x-radius/2,y-radius/2,radius,radius);
+        g2.fillOval(x-radius,y-radius,2*radius,2*radius);
         radius -= 1;
         g2.setPaint(Color.WHITE);
-        g2.fillOval(x-radius/2,y-radius/2,radius,radius);
+        g2.fillOval(x-radius,y-radius,2*radius,2*radius);
         radius -= 3;
 
         int lengthX = (int)(  radius *  wind.getX()/ Config.MAXWIND);
@@ -616,16 +633,21 @@ public class DrawPanel extends JPanel {
         this.previewObject = previewObject;
     }
 
-    public void setPreviewCoordinates(Coordinate[] previewCoordinates) {
-        this.previewCoordinates = previewCoordinates;
-    }
 
-    public void setPreviewCoordinates2(Coordinate[] previewCoordinates2) {
-        this.previewCoordinates2 = previewCoordinates2;
+
+    public void setPreviewMove(Move previewMove) {
+        this.previewMove = previewMove;
     }
 
     public void resetAIPreview() {
-        previewCoordinates=null;
-        previewCoordinates2 = null;
+
+        previewMoves=null;
+        previewMove = null;
     }
+
+    public void setPreviewMoves(Move[] previewMoves) {
+        this.previewMoves = previewMoves;
+    }
+
+
 }

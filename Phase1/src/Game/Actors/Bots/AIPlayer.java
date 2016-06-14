@@ -54,6 +54,7 @@ public abstract class AIPlayer extends Player {
         //execute all the moves
         PhysicsEngine[] ps = new PhysicsEngine[m.length];
         Coordinate[] c = new Coordinate[ps.length];
+        Game.dp.setPreviewMoves(m);
         for (int j = 0; j < m.length; j++) {
             if (j==7) {
                 System.out.println("wlej");
@@ -62,14 +63,14 @@ public abstract class AIPlayer extends Player {
             Ball b = ps[j].getBallOfPlayer(this);
             b.shootBall(m[j]);
             ps[j].calculateUntilNoBallIsMoving();
-            c[j] = ps[j].getBallOfPlayer(this).getCoordinate();
-
+            m[j].attainedTarget = ps[j].getBallOfPlayer(this).getCoordinate();
+            Game.dp.repaint();
             System.out.println("AI move " + j);
             b.printBallInfo();
         }
 
 
-        Game.dp.setPreviewCoordinates(c);
+
 
 
 
@@ -114,7 +115,10 @@ public abstract class AIPlayer extends Player {
         }
         Coordinate[] c2 = new Coordinate[1];
         c2[0] = ps[indexOfBest].getBallOfPlayer(this).getCoordinate();
-        Game.dp.setPreviewCoordinates2(c2);
+
+
+        m[indexOfBest].attainedTarget = c2[0];
+        Game.dp.setPreviewMove(m[indexOfBest]);
         return m[indexOfBest];
     }
 
