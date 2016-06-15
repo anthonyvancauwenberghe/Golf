@@ -15,5 +15,8 @@ public class MapDetails {
         height = h;
         counter = c;
     }
+    void setCounter(int i){
+        this.counter = i;
+    }
 
 }

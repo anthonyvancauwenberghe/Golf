@@ -33,10 +33,11 @@ public class PathfindingMap {
             for (int j = 0; j < map[0].length; j++) {
                 int h = course.heightMap[i][j];
                 Type t = course.playfield[i][j][course.heightMap[i][j]];
-                int c = 0;
+                int c = -1;
                 map[i][j] = new MapDetails(t, h, c);
             }
         }
+        map[(int)hole.getX()][(int)hole.getY()].setCounter(0);
 
     }
 
