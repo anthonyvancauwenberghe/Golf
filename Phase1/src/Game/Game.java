@@ -537,6 +537,7 @@ public class Game {
             JPanel label = new miniDraw(new Dimension(Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME - 400));
             RightSidebar.add(label);
 
+
             JLabel widthL = new JLabel("Width");
             JTextField widhtT = new JTextField("200");
             JLabel heightL = new JLabel("Height");
@@ -748,7 +749,8 @@ public class Game {
                String path = "";
 
                JFileChooser chooser = new JFileChooser();
-               File projectDir = new File(System.getProperty("user.dir"));
+               String p = System.getProperty("user.dir") + File.separator + Config.CourseLocation;
+               File projectDir = new File(p);
                chooser.setCurrentDirectory(projectDir);
                int returnVal = chooser.showOpenDialog(frame);
                if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -762,7 +764,7 @@ public class Game {
 
     }
     private static void loadCourse(String path) {
-        Course course = Course.loadCourse(path);
+        Course course = Course.loadCourse2_5d(path);
 
         loadCourse(course);
     }

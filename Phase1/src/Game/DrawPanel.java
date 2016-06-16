@@ -233,8 +233,21 @@ public class DrawPanel extends JPanel {
         if (grassTexture==null)DrawPanel.loadTextures();
         Type[][][] pf = course.getPlayfield();
         int[][] hm = course.getHeightMap();
+        if (hm==null){
+            course.calculateHeightMap();
+            hm = course.getHeightMap();
+        }
         float[][] sm = course.getShadingMap();
+        if (sm ==null) {
+            course.calculateShadingMap();
+            sm = course.getShadingMap();
+        }
         Coordinate[][] normals = course.getSurfaceNormals();
+        if (normals == null){
+            course.calculateSurfaceNormals();
+            normals =course.getSurfaceNormals();
+
+        }
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
                 new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);
@@ -301,6 +314,22 @@ public class DrawPanel extends JPanel {
         int[][] hm = course.getHeightMap();
         float[][] sm = course.getShadingMap();
         Coordinate[][] normals = course.getSurfaceNormals();
+        if (hm==null){
+            course.calculateHeightMap();
+            hm = course.getHeightMap();
+        }
+
+        if (sm ==null) {
+            course.calculateShadingMap();
+            sm = course.getShadingMap();
+        }
+
+        if (normals == null){
+            course.calculateSurfaceNormals();
+            normals =course.getSurfaceNormals();
+
+        }
+
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
                 new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);

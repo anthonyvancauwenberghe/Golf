@@ -224,22 +224,31 @@ public class Course {
             c.setTile(x, y, 0, Type.Hole);
             c.hole = new Hole(Config.getHoleRadius(),x, y, 0);
         }
-            System.out.println("try to read " + c.getName()+".png");
-            BufferedImage bi = ImageIO.read(new File(Config.CourseLocation + c.getName()+".png"));
-            c.setBufferedImage(bi);
+
 
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return null;
+
         } catch (IOException e) {
             System.out.println("tried to read " + c.getName()+".png");
             e.printStackTrace();
-            return null;
+
         }
 
 
         c.calculateSurfaceNormals();
+        System.out.println("try to read " + c.getName()+".png");
+        BufferedImage bi;
+        try {
+
+            bi = ImageIO.read(new File(Config.CourseLocation + c.getName() + ".png"));
+        }catch (IOException e){
+            c.calculateHeightMap();
+            bi = DrawPanel.createImage(c);
+            Utils.saveManagedBufferedImage(Config.CourseLocation + c.name + ".png",bi);
+        }
+        c.setBufferedImage(bi);
         return c;
 
     }
@@ -304,6 +313,7 @@ public class Course {
                 c.setTile(x, y, 0, Type.Hole);
                 c.hole = new Hole(Config.getHoleRadius(),x, y, 0);
             }
+            c.calculateSurfaceNormals();
             System.out.println("try to read " + c.getName()+".png");
             BufferedImage bi = ImageIO.read(new File(Config.CourseLocation + c.getName()+".png"));
             c.setBufferedImage(bi);
@@ -319,7 +329,7 @@ public class Course {
         }
 
 
-        c.calculateSurfaceNormals();
+
         return c;
 
     }
