@@ -2,7 +2,6 @@ package Game.Actors.Bots.BotMaps;
 
 import Game.Model.Coordinate;
 import Game.Model.Course;
-import Game.Model.Tile;
 import Game.Model.Type;
 
 import java.util.*;
@@ -14,15 +13,22 @@ public class PathfindingMap {
     Course course;
     Coordinate ball;
     Coordinate hole;
-    MapDetails[][] map;
+    MapCellDetails[][] map;
+    ArrayList<MapCellDetails> treatedCells;
+    ArrayList<MapCellDetails> visitedCells;
 
     public PathfindingMap(Course c, Coordinate b, Coordinate h) {
         course = c;
         ball = b;
         hole = h;
-        map = new MapDetails[course.playfield.length][course.playfield[0].length];
+        map = new MapCellDetails[course.playfield.length][course.playfield[0].length];
+        treatedCells = new ArrayList<>();
+        visitedCells = new ArrayList<>();
         c.calculateHeightMap();
         makeInitialMap();
+        makeCounter((int)hole.getX(), (int)hole.getY());
+        completeCounters();
+        int r = 2;
     }
 
     public void makeInitialMap() {
@@ -34,7 +40,8 @@ public class PathfindingMap {
                 int h = course.heightMap[i][j];
                 Type t = course.playfield[i][j][course.heightMap[i][j]];
                 int c = -1;
-                map[i][j] = new MapDetails(t, h, c);
+                map[i][j] = new MapCellDetails(t, h, c, i, j);
+                map[i][j].visited=false;
             }
         }
         map[(int)hole.getX()][(int)hole.getY()].setCounter(0);
@@ -42,32 +49,53 @@ public class PathfindingMap {
     }
 
     public void makeCounter(int x, int y) {
-        int[][] adjCells = getadjCells(x, y);
-        for (int i = 0; i < adjCells.length; i++){
-            int deltaH = Math.abs(map[adjCells[i][0]][adjCells[i][1]].height - map[x][y].height);
+        ArrayList<MapCellDetails> adjCells = getadjCells(x, y);
+        for (int i = 0; i < adjCells.size(); i++){
+            int deltaH = Math.abs(adjCells.get(i).height - map[x][y].height);
             int distance = (int)(Math.sqrt(1+deltaH*deltaH)*10);
-            map[adjCells[i][0]][adjCells[i][1]].counter = distance;
+            int total = distance + map[x][y].counter;
+            if (adjCells.get(i).counter > total || adjCells.get(i).counter == -1){
+                adjCells.get(i).counter = total;
+            }
+            treatedCells.add(adjCells.get(i));
         }
-
-
+        map[x][y].visited = true;
     }
 
-    public int[][] getadjCells(int x, int y) {
-        int[][] adjCells = new int[8][2];
-        int listCounter = 0;
+    public ArrayList<MapCellDetails> getadjCells(int x, int y) {
+        ArrayList<MapCellDetails> list = new ArrayList<>();
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
-                if ((i >= 0) && (j >= 0)) {
+                if ((i >= 0) && (j >= 0) && (i < map.length) && j < map[0].length) {
                     if ((i == x) && (j == y)) {
-
                     } else {
-                        adjCells[listCounter][0] = i;
-                        adjCells[listCounter][1] = j;
-                        listCounter++;
+                        list.add(map[i][j]);
                     }
                 }
             }
         }
-        return adjCells;
+        return list;
+    }
+    MapCellDetails getNextToVisit(){
+        int returnCell = -1;
+        for (int i = 0; i < treatedCells.size(); i++){
+            if (treatedCells.get(i).visited == true) {
+                visitedCells.add(treatedCells.get(i));
+                treatedCells.remove(i);
+            }else if(treatedCells.get(i).visited == false){
+                returnCell = i;
+            }
+
+        }
+        return treatedCells.get(returnCell);
+    }
+    void completeCounters(){
+        double ratio;
+        double total = map.length * map[0].length;
+        while (treatedCells.size() < 100000){
+            makeCounter(getNextToVisit().x, getNextToVisit().y);
+            ratio = visitedCells.size()/100000;
+            System.out.println(ratio);
+        }
     }
 }
