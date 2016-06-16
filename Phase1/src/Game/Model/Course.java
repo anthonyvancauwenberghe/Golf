@@ -600,14 +600,14 @@ public class Course {
         surfaceNormals = new Coordinate[dimension[0]][dimension[1]];
 
         for (int x = 0; x <dimension[0];x++){
-            for (int y = 0; y <dimension[1];y++){
+            yLoop:for (int y = 0; y <dimension[1];y++){
                 for (int z = dimension[2]-1; z >=0;z--){
                     if (playfield[x][y][z] != Type.Empty){
                         surfaceNormals[x][y] = getNormal(x,y,z);
-                        break;
+                        continue yLoop;
                     }
                 }
-
+                surfaceNormals[x][y] = getNormal(x,y,0);
             }
 ;
         }
