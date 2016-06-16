@@ -305,6 +305,13 @@ public class Coordinate {
 
     }
 
+    public void normalise() {
+        double length = Math.sqrt(xCoord * xCoord+ yCoord * yCoord + zCoord * zCoord ); // distance from avg to the center
+        xCoord /= length;
+        yCoord /= length;
+        zCoord  /= length;
+    }
+
 
    /* public static Coordinate(Coordinate a){
 

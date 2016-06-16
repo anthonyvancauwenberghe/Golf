@@ -118,7 +118,7 @@ public class PhysicsEngine {
             for (int j = i+1; j < balls.size(); j++) {
                 //check for collision between two balls
                 Ball bd = balls.get(j);
-                if (!bd.inPlay||bd.isPregame()) continue;
+                if (bd.inHole||!bd.inPlay||bd.isPregame()) continue;
                ballCollision(b,bd);
             }
 
@@ -291,7 +291,9 @@ public class PhysicsEngine {
                     if (noisePercentage == 0)  c = normals[x][y];
                     else{
                         c = normals[x][y].clone();;
-                        Coordinate.modify3d(normals[x][y],noisePercentage);
+                        Coordinate.modify3d(c,noisePercentage);
+                        c.normalise();
+
                     }
 
 
