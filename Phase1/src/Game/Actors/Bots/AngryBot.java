@@ -25,26 +25,24 @@ public class AngryBot extends AIPlayer {
         Move[] moves = new Move[testMoves];
         Ball b = p.getBallOfPlayer(this);
         double power = Coordinate.getDistance(b.getCoordinate(),course.getHole().getCoordinate())*Config.AI_OFFSET;
-
-
         for (int i = 0; i < testMoves; i++) {
             moves[i] = new Move(i*1.0/(testMoves)*2*Math.PI, power,b.getCoordinate());
-
         }
         double[] ratio = {0.1};
-        Move m = evaluate(p,moves, Evaluationfunction.hybrid,ratio);
+        Move m = evaluate(p,moves, Evaluationfunction.botClosest,ratio);
+
 
         repaintAndWait(1000);
         Game.dp.setPreviewMoves(null);
         Game.dp.repaint();
 
+
         double length = Coordinate.getDistance(m.attainedTarget,course.getHole().getCoordinate())*Config.AI_OFFSET;
         moves[0] = m;
-
         for (int i = 1; i < testMoves; i++) {
             moves[i] = m.modifyAndClone(length);
         }
-        m = evaluate(p,moves, Evaluationfunction.hybrid,ratio);
+        m = evaluate(p,moves, Evaluationfunction.botClosest,ratio);
 
         repaintAndWait(1000);
         repaintAndWait(500);

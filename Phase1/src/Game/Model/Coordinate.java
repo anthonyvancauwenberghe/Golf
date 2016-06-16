@@ -286,12 +286,30 @@ public class Coordinate {
         return getDistance(0,0,0,xCoord,yCoord,zCoord);
     }
 
-    public static Coordinate modify2d(Coordinate c, double varianz) {
+    public static void modify2d(Coordinate c, double varianz) {
         NormalDistribution n = new NormalDistribution(c.xCoord,varianz);
         NormalDistribution n2 = new NormalDistribution(c.yCoord,varianz);
-        Coordinate c2 = new Coordinate(n.sample(),n2.sample(),c.getZ());
-        return c2;
+        c.xCoord = n.sample();
+        c.yCoord = n2.sample();
 
+    }
+
+    public static void modify3d(Coordinate c, double varianz) {
+        if (varianz == 0) return;
+        NormalDistribution n = new NormalDistribution(c.xCoord,varianz);
+        NormalDistribution n2 = new NormalDistribution(c.yCoord,varianz);
+        NormalDistribution n3 = new NormalDistribution(c.zCoord,varianz);
+        c.xCoord = n.sample();
+        c.yCoord = n2.sample();
+        c.zCoord = n3.sample();
+
+    }
+
+    public void normalise() {
+        double length = Math.sqrt(xCoord * xCoord+ yCoord * yCoord + zCoord * zCoord ); // distance from avg to the center
+        xCoord /= length;
+        yCoord /= length;
+        zCoord  /= length;
     }
 
 

@@ -1,6 +1,7 @@
 package Game.Actors;
 
 import Game.Model.Coordinate;
+import Game.Model.PhysicsEngine;
 
 /**
  * Created by Nibbla on 12.06.2016.
@@ -10,14 +11,15 @@ public class Move {
     public Coordinate c = new Coordinate();
     public Coordinate[] c2 = new Coordinate[1];
     public Coordinate attainedTarget;
-
+    private PhysicsEngine model;
 
 
     public Move modifyAndClone(double varianz_length){
         Move m = this.clone();
-        m.c = Coordinate.modify2d(c,varianz_length);
+        Coordinate.modify2d(m.c,varianz_length);
         m.c2[0] = m.c;
         m.attainedTarget=null;
+        m.model = null;
         return m;
     }
 
@@ -57,5 +59,13 @@ public class Move {
 
     public Coordinate[] getCoordinate() {
         return c2;
+    }
+
+    public void setModel(PhysicsEngine model) {
+        this.model = model;
+    }
+
+    public PhysicsEngine getModel() {
+        return model;
     }
 }
