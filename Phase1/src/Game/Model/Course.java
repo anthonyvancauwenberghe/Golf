@@ -535,18 +535,15 @@ public class Course {
         }
 
     }
-    public void addHill(int a, int b, int r, double n, int z, int depth, Type t) {
+    public void addHill(int initialX, int initialY, int initialZ,int depth ,double r, double DeltaRPerLayer, Type t) {
 
-        int initialX=a;
-        int initalY=b;
-        int initalZ=z;
+        double x=initialX;
+        double y=initialY;
 
-        for (z = initalZ; z < initalZ+depth; z++) {
-            addSquircle(a,b,r,n,z,t);
+        for (int z = initialZ; z < initialZ+depth; z++) {
+            addSquircle((int)x,(int)y,(int)r,2,z,t);
 
-            r--;
-
-            if (r<=0)break;
+            r +=DeltaRPerLayer;
         }
 
     }

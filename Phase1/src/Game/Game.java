@@ -26,6 +26,7 @@ public class Game {
     private static JPanel RightSidebar;
     private static JPanel LeftSidebar;
     private static JToggleButton select;
+    private static JToggleButton obectFormSelect;
     private static boolean editorVisible;
     private static boolean variablesVisible;
 
@@ -312,9 +313,7 @@ public class Game {
         JMenuItem selectCourse = new JMenuItem("Select Course");
         setting.add(addPlayer);
         setting.add(removePlayer);
-        setting.add(resetCourse);
-        setting.add(selectCourse);
-        setting.add(resetStrokes);
+
         addListenerToAddPlayer(addPlayer);
         addListenerToRemovePlayer(removePlayer);
         addListenerToResetCourse(resetCourse);
@@ -332,6 +331,7 @@ public class Game {
         showEditorButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showEditor();}});
 
         JMenu jm3 = new JMenu("Courses");
+
         JMenuItem courseSelect1 = new JMenuItem("Course1");
         courseSelect1.addActionListener(e -> loadCourse(course1));
         JMenuItem courseSelect2 = new JMenuItem("Course2");
@@ -339,6 +339,9 @@ public class Game {
         JMenuItem courseSelect3 = new JMenuItem("Course3");
         courseSelect3.addActionListener(e -> loadCourse(course3));
 
+        jm3.add(resetCourse);
+        jm3.add(selectCourse);
+        jm3.add(resetStrokes);
         jm3.add(courseSelect1);
         jm3.add(courseSelect2);
         jm3.add(courseSelect3);
@@ -542,6 +545,10 @@ public class Game {
             JTextField depthT = new JTextField("50");
             JLabel zL = new JLabel("z");
             JTextField zT = new JTextField("10");
+            JLabel radiusL = new JLabel("Radius");
+            JTextField deltaRadiusT = new JTextField("-1");
+            JLabel deltaRadiusL = new JLabel("delta Radius per Layer");
+            JTextField radiusT = new JTextField("30");
             JLabel deltaXLL = new JLabel("deltaX left per Layer");
             JTextField deltaXL_T = new JTextField("1");
             JLabel deltaXRL = new JLabel("deltaX right per Layer");
@@ -551,9 +558,12 @@ public class Game {
             JLabel deltaYBL = new JLabel("deltaY bottom per Layer");
             JTextField deltaYB_T = new JTextField("-1");
 
+            JComboBox<String> objectFormBox = new JComboBox<>(Arrays.toString(ObjectForm.values()).replaceAll("^.|.$", "").split(", "));
+            //obectFormSelect = new JToggleButton("select");
             JComboBox<String> typeBox = new JComboBox<>(Arrays.toString(Type.values()).replaceAll("^.|.$", "").split(", "));
             select = new JToggleButton("select");
-            addSelectActionListener(select, widhtT, heightT, depthT, zT, deltaXL_T, deltaXR_T, deltaYT_T, deltaYB_T, typeBox);
+            addSelectActionListener(select, widhtT, heightT, depthT, zT,radiusT, deltaRadiusT, deltaXL_T, deltaXR_T, deltaYT_T, deltaYB_T, typeBox,objectFormBox);
+            //JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField radiusT, JTextField deltaRT,JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox, JComboBox<String> obectFormBox)
             JButton finalizeCourse = new JButton("FinalizeCourse");
             finalizeCourse.addActionListener(new ActionListener() {
                 @Override
@@ -591,7 +601,10 @@ public class Game {
             RightSidebar.add(depthT);
             RightSidebar.add(zL);
             RightSidebar.add(zT);
-
+            RightSidebar.add(radiusL);
+            RightSidebar.add(radiusT);
+            RightSidebar.add(deltaRadiusL);
+            RightSidebar.add(deltaRadiusT);
             RightSidebar.add(deltaXLL);
             RightSidebar.add(deltaXL_T);
             RightSidebar.add(deltaXRL);
@@ -601,8 +614,11 @@ public class Game {
             RightSidebar.add(deltaYBL);
             RightSidebar.add(deltaYB_T);
 
+            RightSidebar.add(objectFormBox);
+            //RightSidebar.add(obectFormSelect);
             RightSidebar.add(typeBox);
             RightSidebar.add(select);
+
             RightSidebar.add(finalizeCourse);
             RightSidebar.add(saveCourse);
 
@@ -619,7 +635,7 @@ public class Game {
         frame.add(RightSidebar, BorderLayout.EAST);
     }
 
-    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox) {
+    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField radiusT, JTextField deltaRT,JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox, JComboBox<String> obectFormBox) {
         select.addActionListener(new ActionListener() {
 
             @Override
@@ -634,11 +650,31 @@ public class Game {
                         double deltaXR = Double.parseDouble(deltaXRL.getText());
                         double deltaYT = Double.parseDouble(deltaYT_t.getText());
                         double deltaYB = Double.parseDouble(deltaYB_t.getText());
+                        double deltaR = Double.parseDouble(deltaRT.getText());
+                        int radius = Integer.parseInt(radiusT.getText());
 
                         Type t = Type.valueOf(typeBox.getSelectedItem().toString());
+                        ObjectForm of = ObjectForm.valueOf(obectFormBox.getSelectedItem().toString());
 
-                        previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
-                        previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
+                        switch (of){
+                            case Cuboid:
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
+                                previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, 0, 0, 0, 0, t);
+                                break;
+                            case Fructum:
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
+                                previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
+                                break;
+                            case Cylinder:
+                                previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addHill(0, 0, z, depth, radius,0, t);
+                                break;
+                            case Hill:
+                                previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addHill(0, 0, z, depth, radius,deltaR, t);
+                                break;
+                        }
+
                         previewMiniCourse.calculateHeightMap();
                         previewMiniCourse.calculateSurfaceNormals();
                         previewMiniCourse.calculateShadingMap();
@@ -807,14 +843,21 @@ public class Game {
                         null,
                         "Hans");
 
-
-
                 Player p = new HumanPlayer(s);
+                Game.addPlayer(p);
+
+
                 Tile t = course.getStartTile();
                 p.setBallPositionToCoordinateAndSetSpeedToZero(t.x,t.y,t.z);
                 pp.add(p);
             }
         });
+    }
+
+    private static void addPlayer(Player p) {
+        pp.add(p);
+        dp.setPlayers(pp);
+        physics.init(pp,course);
     }
 
     public static void placeObject(int x, int y) {
