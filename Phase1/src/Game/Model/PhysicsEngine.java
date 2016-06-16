@@ -22,9 +22,9 @@ public class PhysicsEngine {
 
 
 
-    public void calculateUntilNoBallIsMoving(){
+    public void calculateUntilNoBallIsMoving(double noisePercentage){
         do {
-            processPhysics(Config.STEPSIZE);
+            processPhysics(Config.STEPSIZE, noisePercentage);
 
         }while(atLeastOneBallMoving());
     }
@@ -95,7 +95,7 @@ public class PhysicsEngine {
     }
 
 
-    public void processPhysics(double elapsedTime) {
+    public void processPhysics(double elapsedTime, double noisePercentage) {
 
 
         Type[][][] playfield = course.getPlayfield();
@@ -107,7 +107,7 @@ public class PhysicsEngine {
             gravity(b);
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
-            collide(b,elapsedTime,playfield,normals,course.getDimension());
+            collide(b,elapsedTime,playfield,normals,course.getDimension(),noisePercentage);
             drag(b);
             checkborder(b);
             accelerate(b,elapsedTime);
@@ -232,7 +232,7 @@ public class PhysicsEngine {
 
     }
 
-    private void collide(Ball b, double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
+    private void collide(Ball b, double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension, double noisePercentage) {
         double normalX = 0;
         double normalY = 0;
         double normalZ = 0;
@@ -287,10 +287,14 @@ public class PhysicsEngine {
                 Type t = playfield[x][y][z];
                 if (t!= Type.Empty) {
                     BounceFriction += t.getBounceDampness();
+                    Coordinate c;
+                    if (noisePercentage == 0)  c = normals[x][y];
+                    else{
+                        c = normals[x][y].clone();;
+                        Coordinate.modify3d(normals[x][y],noisePercentage);
+                    }
 
-                     Coordinate c = normals[x][y];
 
-                    //Coordinate c = course.getNormal(x, y, z);
                     if (!Double.isNaN(c.getX())){
                         normalX += c.getX();
                     normalY += c.getY();

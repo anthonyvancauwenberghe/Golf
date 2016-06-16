@@ -2,6 +2,7 @@ package Game.Actors.Bots;
 
 
 import Game.*;
+import Game.Actors.HumanPlayer;
 import Game.Actors.Move;
 import Game.Actors.Player;
 import Game.Model.*;
@@ -53,23 +54,12 @@ public abstract class AIPlayer extends Player {
         System.out.println("AI move evalutate");
         //execute all the moves
         PhysicsEngine[] ps = new PhysicsEngine[m.length];
-        Coordinate[] c = new Coordinate[ps.length];
+
         Game.dp.setPreviewMoves(m);
         for (int j = 0; j < m.length; j++) {
-            ps[j] = p.getAlternativBoardForTest();
-            Ball b = ps[j].getBallOfPlayer(this);
-            b.shootBall(m[j]);
-            ps[j].calculateUntilNoBallIsMoving();
-            m[j].attainedTarget = ps[j].getBallOfPlayer(this).getCoordinate();
-            Game.dp.repaint();
+            tryOutMoves(m[j],p);
             System.out.println("AI move " + j);
-            b.printBallInfo();
         }
-
-
-
-
-
 
 
         //do the moves
@@ -79,46 +69,50 @@ public abstract class AIPlayer extends Player {
 
         int indexOfBest = 0;
         double valOfBest = 0;
-        switch (f){
-            case enemyFurthest:
-                for (int j = 0; j < ps.length; j++) {
-                    double val = evalueteEnemyFurthest(ps[j],maximumDistance,course.getHole());
-                    if (val >= valOfBest){
-                        valOfBest = val;
-                        indexOfBest = j;
-                    }
-                }
+        for (int j = 0; j < m.length; j++) {
+            double val = 0;
+            switch (f){
+                case botClosest:
+                    val = evalueteBotClosest(m[j].getModel(),maximumDistance,course.getHole());
+                    break;
+                case enemyFurthest:
+
+                val = evalueteEnemyFurthest(m[j].getModel(),maximumDistance,course.getHole());
+
                 break;
-            case playerClosest:
-                for (int j = 0; j < ps.length; j++) {
-                    double val = evaluetePlayerClosest(ps[j],maximumDistance,course.getHole());
-                    if (val >= valOfBest){
-                        valOfBest = val;
-                        indexOfBest = j;
-                    }
-                }
+                case playerClosest:
+                    val = evaluetePlayerClosest(m[j].getModel(),maximumDistance,course.getHole());
+
                 break;
-            case hybrid:
-                for (int j = 0; j < ps.length; j++) {
-                    double val1 = evalueteEnemyFurthest(ps[j],maximumDistance, course.getHole());
-                    double val2 = evaluetePlayerClosest(ps[j],maximumDistance, course.getHole());
-                    double val = val2 * ratio + val1 * ( 1-ratio);
-                    if (val >= valOfBest){
-                        valOfBest = val;
-                        indexOfBest = j;
-                    }
-                }
+                case hybrid:
+                    double val1 = evalueteEnemyFurthest(m[j].getModel(),maximumDistance, course.getHole());
+                    double val2 = evaluetePlayerClosest(m[j].getModel(),maximumDistance, course.getHole());
+                    val = val2 * ratio + val1 * ( 1-ratio);
                 break;
+            }
+            if (val >= valOfBest){
+                valOfBest = val;
+                indexOfBest = j;
+            }
         }
-        Coordinate[] c2 = new Coordinate[1];
-        c2[0] = ps[indexOfBest].getBallOfPlayer(this).getCoordinate();
 
 
-        m[indexOfBest].attainedTarget = c2[0];
         Game.dp.setPreviewMove(m[indexOfBest]);
         return m[indexOfBest];
     }
 
+
+
+    private void tryOutMoves(Move move, PhysicsEngine p) {
+        PhysicsEngine ps = p.getAlternativBoardForTest();
+        Ball b = ps.getBallOfPlayer(this);
+        b.shootBall(move);
+        ps.calculateUntilNoBallIsMoving(0);
+        move.attainedTarget = ps.getBallOfPlayer(this).getCoordinate();
+        move.setModel(ps);
+        Game.dp.repaint();
+        b.printBallInfo();
+    }
 
 
     private double getMaximumDistance(Hole hole, int length, int height) {
@@ -142,13 +136,33 @@ public abstract class AIPlayer extends Player {
         double summedDistance = 0;
         for (int i = 0; i < balls.size(); i++) {
             if (i==indexP) continue;
-             summedDistance = Coordinate.getDistance(balls.get(i).getCoordinate(),hole.getCoordinate())/maximumDistance;
+             summedDistance += Coordinate.getDistance(balls.get(i).getCoordinate(),hole.getCoordinate())/maximumDistance;
 
         }
         summedDistance/= balls.size()-1;
         return summedDistance;
 
     }
+
+    private double evalueteBotClosest(PhysicsEngine p, double maximumDistance, Hole hole) {
+        int indexP = p.getBallIndexOfPlayer(this);
+        ArrayList<Ball> balls = p.getBalls();
+        double summedDistance = 0;
+        int skipped = 0;
+        for (int i = 0; i < balls.size(); i++) {
+            if (balls.get(i).getPlayer()instanceof HumanPlayer) {
+                skipped++;
+                continue;
+            }
+            summedDistance += maximumDistance-Coordinate.getDistance(balls.get(indexP).getCoordinate(),hole.getCoordinate());
+
+        }
+        summedDistance/= maximumDistance*(balls.size()-skipped);
+        return summedDistance;
+
+
+    }
+
 
     private double evaluetePlayerClosest(PhysicsEngine p, double maximumDistance, Hole hole) {
         int indexP = p.getBallIndexOfPlayer(this);

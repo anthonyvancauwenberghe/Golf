@@ -31,6 +31,7 @@ public class Game {
 
     private static PhysicsEngine physics;
     public static AIPlayer AI= new AngryBot("Player 2",64);
+    public static AIPlayer AI2= new AngryBot("Player 3",64);
     public static DrawPanel dp;
 
     private static ArrayList<Player> pp;
@@ -74,6 +75,7 @@ public class Game {
 
         pp.add(p);
         pp.add(p2);
+        pp.add(AI2);
     }
 
     private void prepareView() {
@@ -210,7 +212,7 @@ public class Game {
                     }
                 }
                 if(e.getKeyChar()=='w'){
-                    physics.processPhysics(Config.STEPSIZE);
+                    physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE);
                     dp.repaint();
                 }
                 if(e.getKeyChar()=='p'){
@@ -241,7 +243,7 @@ public class Game {
                     if ((physics.atLeastOneBallMoving())) {
                             selectNextPlayer = true;
 ;
-                            if(!pause) physics.processPhysics(Config.STEPSIZE); //
+                            if(!pause) physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE); //
 
                         } else {
                             dp.resetAIPreview();
