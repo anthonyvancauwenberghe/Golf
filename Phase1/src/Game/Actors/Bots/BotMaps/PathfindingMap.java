@@ -40,6 +40,7 @@ public class PathfindingMap {
                 int h = course.heightMap[i][j];
                 Type t = course.playfield[i][j][course.heightMap[i][j]];
                 int c = -1;
+                if(t == Type.OBJECT) c = -2;
                 map[i][j] = new MapCellDetails(t, h, c, i, j);
                 map[i][j].visited=false;
             }
@@ -54,7 +55,7 @@ public class PathfindingMap {
             int deltaH = Math.abs(adjCells.get(i).height - map[x][y].height);
             int distance = (int)(Math.sqrt(1+deltaH*deltaH)*10);
             int total = distance + map[x][y].counter;
-            if (adjCells.get(i).counter > total || adjCells.get(i).counter == -1){
+            if ((total < adjCells.get(i).counter && adjCells.get(i).counter != -2) || adjCells.get(i).counter == -1){
                 adjCells.get(i).counter = total;
             }
             treatedCells.add(adjCells.get(i));
@@ -92,9 +93,9 @@ public class PathfindingMap {
     void completeCounters(){
         double ratio;
         double total = map.length * map[0].length;
-        while (treatedCells.size() < 100000){
+        while (visitedCells.size() < total){
             makeCounter(getNextToVisit().x, getNextToVisit().y);
-            ratio = visitedCells.size()/100000;
+            ratio = (visitedCells.size()/total)*100;
             System.out.println(ratio);
         }
     }
