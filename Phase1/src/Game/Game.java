@@ -240,10 +240,10 @@ public class Game {
                     //System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
                     if (courseLoading) continue;
-// || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
+                    // || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
                     if ((physics.atLeastOneBallMoving())) {
                             selectNextPlayer = true;
-;
+
                             if(!pause) physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE); //
 
                         } else {
@@ -661,25 +661,26 @@ public class Game {
 
                         switch (of){
                             case Cuboid:
-                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), Type.Empty, 0);
                                 previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, 0, 0, 0, 0, t);
                                 break;
                             case Fructum:
-                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), Type.Empty, 0);
                                 previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
+                               // previewMiniCourse.addFrustrum(0,0,10,160,440,20,2,0,0,0,Type.OBJECT);
                                 break;
                             case Cylinder:
                                 previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
-                                previewMiniCourse.addHill(0, 0, z, depth, radius,0, t);
+                                previewMiniCourse.addHill(radius, radius, z, depth, radius,0, t);
                                 break;
                             case Hill:
                                 previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
-                                previewMiniCourse.addHill(0, 0, z, depth, radius,deltaR, t);
+                                previewMiniCourse.addHill(radius, radius, z, depth, radius,deltaR, t);
                                 break;
                         }
 
-                        previewMiniCourse.calculateHeightMap();
-                        previewMiniCourse.calculateSurfaceNormals();
+                        previewMiniCourse.calculateHeightMapSafe();
+                        previewMiniCourse.calculateSurfaceNormalsSafe();
                         previewMiniCourse.calculateShadingMap();
                         previewMiniCourse.setBufferedImage(dp.createImage(previewMiniCourse));
                         dp.setPreviewObject(previewMiniCourse.getManagedBufferedImage());

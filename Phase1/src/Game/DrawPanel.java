@@ -234,7 +234,7 @@ public class DrawPanel extends JPanel {
         Type[][][] pf = course.getPlayfield();
         int[][] hm = course.getHeightMap();
         if (hm==null){
-            course.calculateHeightMap();
+            course.calculateHeightMapSafe();
             hm = course.getHeightMap();
         }
         float[][] sm = course.getShadingMap();
@@ -244,7 +244,7 @@ public class DrawPanel extends JPanel {
         }
         Coordinate[][] normals = course.getSurfaceNormals();
         if (normals == null){
-            course.calculateSurfaceNormals();
+            course.calculateSurfaceNormalsSafe();
             normals =course.getSurfaceNormals();
 
         }
@@ -315,7 +315,7 @@ public class DrawPanel extends JPanel {
         float[][] sm = course.getShadingMap();
         Coordinate[][] normals = course.getSurfaceNormals();
         if (hm==null){
-            course.calculateHeightMap();
+            course.calculateHeightMapSafe();
             hm = course.getHeightMap();
         }
 
@@ -325,7 +325,7 @@ public class DrawPanel extends JPanel {
         }
 
         if (normals == null){
-            course.calculateSurfaceNormals();
+            course.calculateSurfaceNormalsSafe();
             normals =course.getSurfaceNormals();
 
         }
