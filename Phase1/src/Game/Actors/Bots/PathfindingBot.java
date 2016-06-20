@@ -42,7 +42,7 @@ public class PathfindingBot extends AIPlayer {
         PathfindingMap map = new PathfindingMap(c, ballCoord, holeCoord);
         pMap = map.getMap();
         indexList = pMap.size();
-        System.out.println("test");
+        System.out.println("s");
     }
 
     @Override
