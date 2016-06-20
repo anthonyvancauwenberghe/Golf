@@ -22,8 +22,6 @@ public class StraightLineBot extends AIPlayer {
         Coordinate currentCoord = b.getCoordinate();
         Coordinate HoleCoord = new Coordinate(400,400,0);
 
-        PathfindingMap map = new PathfindingMap(c, currentCoord, HoleCoord);
-        map.makeCounter((int)HoleCoord.getX(), (int)HoleCoord.getY());
 
     /*public void euclideanDistance() {*/
         double p1 = (HoleCoord.getX() - currentCoord.getX());

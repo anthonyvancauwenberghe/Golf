@@ -21,20 +21,17 @@ public class PathfindingMap {
         course = c;
         ball = b;
         hole = h;
-        map = new MapCellDetails[course.playfield.length][course.playfield[0].length];
+        map = new MapCellDetails[course.playfield.length/2][course.playfield[0].length/2];
         treatedCells = new ArrayList<>();
         visitedCells = new ArrayList<>();
         c.calculateHeightMap();
         makeInitialMap();
         makeCounter((int)hole.getX(), (int)hole.getY());
         completeCounters();
-        int r = 2;
+        Collections.sort(visitedCells);
     }
 
     public void makeInitialMap() {
-        Type type = course.playfield[1][2][course.heightMap[1][2]];
-        System.out.println(type.toString());
-
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 int h = course.heightMap[i][j];
@@ -98,5 +95,8 @@ public class PathfindingMap {
             ratio = (visitedCells.size()/total)*100;
             System.out.println(ratio);
         }
+    }
+    public ArrayList<MapCellDetails> getMap(){
+        return visitedCells;
     }
 }

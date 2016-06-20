@@ -2,14 +2,20 @@ package Game.Actors.Bots.BotMaps;
 
 import Game.Model.Type;
 
+import java.util.Comparator;
+import java.util.Map;
+
 /**
  * Created by esther on 6/14/16.
  */
-public class MapCellDetails {
+public class MapCellDetails implements Comparable<MapCellDetails>{
     int height;
     int counter;
     Type type;
     boolean visited;
+
+
+
     int x;
     int y;
 
@@ -24,4 +30,28 @@ public class MapCellDetails {
         this.counter = i;
     }
 
+    @Override
+    public int compareTo(MapCellDetails o) {
+        return Integer.compare(this.counter, o.counter);
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

@@ -40,7 +40,7 @@ public class Game {
 
     private static Thread gameThread;
     private static boolean courseLoading;
-    private static Course course1,course2, course3;
+    private static Course course1;
     private static Course previewMiniCourse;
 
     private static boolean pause = false;
@@ -68,7 +68,7 @@ public class Game {
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("Player 1");
-        Player p2  =  new StraightLineBot("Player 2");
+        Player p2  =  new PathfindingBot("Player 2", course);
 
         pp.add(p);
         pp.add(p2);
@@ -90,17 +90,11 @@ public class Game {
 
     private void prepareCourses() {
         course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
-        course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
-        course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
+
         if (course1 == null) {
             course1 = createStandartCourse(1);
         }
-        if (course2 == null) {
-            course2 = createStandartCourse(2);
-        }
-        if (course3 == null) {
-            course3 = createStandartCourse(3);
-        }
+
 
         course = course1;
     }
@@ -133,52 +127,7 @@ public class Game {
                 course1.saveCourse();
                 c = course1;
                 break;
-            /*
-            case 2:
-                Course course2;
-                course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-                course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
-                //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
-                //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
-                course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
 
-                course2.setTile(850, 650, 1, Type.Hole);
-                course2.setTile(100, 100, 9, Type.Start);
-
-                course2.finalise();
-
-
-                course2.saveCourse();
-                c = course2;
-                break;
-            case 3:
-                Course course3;
-                course3 = new Course("GolfDeluxe3", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course3.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-                //course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-                //course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
-                //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
-                //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
-                //course.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
-                //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
-                //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
-                //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
-                //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
-
-                course3.setTile(750, 600, 1, Type.Hole);
-                course3.setTile(100, 100, 9, Type.Start);
-                //course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
-                //course3.addRectangle(400, 400, 50, 100, 100, Type.OBJECT);
-                // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
-                //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
-                // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
-                // course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
-                course3.finalise();
-                course3.saveCourse();
-                c = course3;
-                break;
-                */
             default:
                 Course courseD;
                 courseD = new Course("GolfDeluxeStandart", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
@@ -335,14 +284,9 @@ public class Game {
         JMenu jm3 = new JMenu("Courses");
         JMenuItem courseSelect1 = new JMenuItem("Course1");
         courseSelect1.addActionListener(e -> loadCourse(course1));
-        JMenuItem courseSelect2 = new JMenuItem("Course2");
-        courseSelect2.addActionListener(e -> loadCourse(course2));
-        JMenuItem courseSelect3 = new JMenuItem("Course3");
-        courseSelect3.addActionListener(e -> loadCourse(course3));
+
 
         jm3.add(courseSelect1);
-        jm3.add(courseSelect2);
-        jm3.add(courseSelect3);
         JMB.add(jm3);
         JMB.add(showEditorButton);
 
