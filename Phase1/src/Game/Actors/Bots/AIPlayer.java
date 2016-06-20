@@ -1,10 +1,10 @@
 package Game.Actors.Bots;
 
 
-import Game.*;
 import Game.Actors.HumanPlayer;
 import Game.Actors.Move;
 import Game.Actors.Player;
+import Game.Game;
 import Game.Model.*;
 
 import java.util.ArrayList;
@@ -19,8 +19,9 @@ public abstract class AIPlayer extends Player {
 
     public AIPlayer(String name) {
         super(name);
-
     }
+
+
     public void setCourse(Course course2){
         course = course2;
         System.out.println("ai loaded new course");

@@ -1,7 +1,8 @@
 package Game;
 
 
-import Game.Actors.Bots.*;
+import Game.Actors.Bots.AIPlayer;
+import Game.Actors.Bots.AngryBot;
 import Game.Actors.HumanPlayer;
 import Game.Actors.Player;
 import Game.Model.*;
@@ -20,37 +21,40 @@ import java.util.Random;
 /**
  * Created by tony on 16/03/2016.
  */
-public class Game {
+public class Game extends Thread {
     public static Course course;
     public static JFrame frame;
     private static JPanel RightSidebar;
+    private static JPanel infoSidebar;
     private static JPanel LeftSidebar;
     private static JToggleButton select;
     private static boolean editorVisible;
+    private static boolean infoVisible;
     private static boolean variablesVisible;
 
     private static PhysicsEngine physics;
-    public static AIPlayer AI= new AngryBot("Player 2",64);
-    public static AIPlayer AI2= new AngryBot("Player 3",64);
+    public static AIPlayer AI = new AngryBot("Player 2", 64);
+    public static AIPlayer AI2 = new AngryBot("Player 3", 64);
     public static DrawPanel dp;
+
 
     private static ArrayList<Player> pp;
 
     private static boolean selectNextPlayer;
-    private static int currentPlayer=0;
+    private static int currentPlayer = 0;
 
     private static Thread gameThread;
     private static boolean courseLoading;
-    private static Course course1,course2, course3;
+    private static Course course1, course2, course3;
     private static Course previewMiniCourse;
 
     private static boolean pause = false;
 
-    public static PhysicsEngine getAlternativBoardForTest(){
+    public static PhysicsEngine getAlternativBoardForTest() {
         return physics.getAlternativBoardForTest();
     }
 
-    public Game(){
+    public Game() {
         JOptionPane.showMessageDialog(frame,
                 "Wait for profiler");
         prepareCourses();
@@ -60,18 +64,17 @@ public class Game {
         loadCourse(course);
         gameThread = createGameThread();
         gameThread.run();
-
     }
 
     public static Dimension getFrameDimension() {
-       Dimension d = new Dimension(Config.getWidth()+(variablesVisible? 1 : 0)*Config.sidebarwidth+(editorVisible? 1 : 0)*Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+        Dimension d = new Dimension(Config.getWidth() + (variablesVisible ? 1 : 0) * Config.sidebarwidth + (editorVisible ? 1 : 0) * Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         return d;
     }
 
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("Player 1");
-        Player p2  =  AI;
+        Player p2 = AI;
 
         pp.add(p);
         pp.add(p2);
@@ -85,7 +88,8 @@ public class Game {
         frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         dp = new DrawPanel();
-        frame.setSize(course.getWidth() , course.getHeight() + Config.OFFSET_Y_GAME);
+
+        frame.setSize(course.getWidth(), course.getHeight() + Config.OFFSET_Y_GAME);
         frame.add(dp, BorderLayout.CENTER);
         addMenues(frame);
         frame.setVisible(true);
@@ -111,16 +115,16 @@ public class Game {
 
     private Course createStandartCourse(int standartCourse) {
         Course c;
-        switch (standartCourse){
+        switch (standartCourse) {
             case 1:
                 Course course1;
                 course1 = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course1.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-                course1.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
-                course1.addFrustrum(100,600,10,160,100,20,2,0,0,0,Type.OBJECT);
-                course1.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
-                course1.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
-                course1.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
+                course1.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
+                course1.addFrustrum(200, 0, 10, 160, 440, 20, 2, 0, 0, 0, Type.OBJECT);
+                course1.addFrustrum(100, 600, 10, 160, 100, 20, 2, 0, 0, 0, Type.OBJECT);
+                course1.addFrustrum(420, 220, 10, 160, 340, 20, 1, -3, 1, -1, Type.OBJECT);
+                course1.addFrustrum(620, 320, 10, 330, 240, 40, 2, -1, 1, -4, Type.OBJECT);
+                course1.addFrustrum(620, 120, 10, 330, 140, 60, 15, -4, 15, -4, Type.OBJECT);
                 //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
                 //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
                 //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
@@ -140,11 +144,11 @@ public class Game {
             case 2:
                 Course course2;
                 course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
-                course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+                course2.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
+                course2.addFrustrum(200, 0, 10, 160, 440, 20, 2, 0, 0, 0, Type.OBJECT);
                 //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
                 //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
-                course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
+                course2.addFrustrum(620, 120, 10, 330, 140, 60, 15, -4, 15, -4, Type.OBJECT);
 
                 course2.setTile(850, 650, 1, Type.Hole);
                 course2.setTile(100, 100, 9, Type.Start);
@@ -158,7 +162,7 @@ public class Game {
             case 3:
                 Course course3;
                 course3 = new Course("GolfDeluxe3", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course3.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+                course3.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
                 //course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
                 //course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
                 //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
@@ -184,7 +188,7 @@ public class Game {
             default:
                 Course courseD;
                 courseD = new Course("GolfDeluxeStandart", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                courseD.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0, Type.Grass);
+                courseD.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
                 courseD.setTile(800, 600, 1, Type.Hole);
                 courseD.setTile(100, 100, 4, Type.Start);
                 courseD.finalise();
@@ -205,17 +209,17 @@ public class Game {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if(e.getKeyChar()=='q'){
-                    for (Player p: pp){
+                if (e.getKeyChar() == 'q') {
+                    for (Player p : pp) {
                         p.getBall().printBallInfo();
                         System.out.println();
                     }
                 }
-                if(e.getKeyChar()=='w'){
-                    physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE);
+                if (e.getKeyChar() == 'w') {
+                    physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE);
                     dp.repaint();
                 }
-                if(e.getKeyChar()=='p'){
+                if (e.getKeyChar() == 'p') {
                     pause = !pause;
                 }
             }
@@ -228,10 +232,10 @@ public class Game {
     }
 
     private static Thread createGameThread() {
-        Thread t =  new Thread(){
+        Thread t = new Thread() {
             long lastTime = System.currentTimeMillis();
 
-            public void run(){
+            public void run() {
                 while (true) {
 
                     long currentTime = System.currentTimeMillis();
@@ -241,43 +245,45 @@ public class Game {
                     if (courseLoading) continue;
 // || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
                     if ((physics.atLeastOneBallMoving())) {
-                            selectNextPlayer = true;
-;
-                            if(!pause) physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE); //
+                        selectNextPlayer = true;
+                        ;
+                        if (!pause) physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE); //
 
-                        } else {
-                            dp.resetAIPreview();
-                            if (selectNextPlayer){
-                                if (!IsGameStillOn()) {
-                                    selectNextPlayer = false;
-                                    JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
-                                    showScoreOnScreen();
-                                }
+                        try {
+                            dp.repaint();
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                    } else {
+                        dp.resetAIPreview();
+                        if (selectNextPlayer) {
+                            if (!IsGameStillOn()) {
                                 selectNextPlayer = false;
-
-                                do {
-                                    currentPlayer = (currentPlayer + 1) % (pp.size());
-                                }while (!pp.get(currentPlayer).getBall().inPlay);
-                                ArrayList<Ball> balls = new ArrayList<>(8);
-
-
-                                pp.get(currentPlayer).getBall().setPregame(false);
-                                dp.setCurrentPlayer(pp.get(currentPlayer));
-                                pp.get(currentPlayer).nextMove(physics);
-
-                                dp.repaint();
-
+                                JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
+                                showScoreOnScreen();
                             }
+                            selectNextPlayer = false;
+
+                            do {
+                                currentPlayer = (currentPlayer + 1) % (pp.size());
+                            }
+                            while (!pp.get(currentPlayer).getBall().inPlay);
+                            ArrayList<Ball> balls = new ArrayList<>(8);
 
 
+                            pp.get(currentPlayer).getBall().setPreGame(false);
+                            dp.setCurrentPlayer(pp.get(currentPlayer));
+                            pp.get(currentPlayer).nextMove(physics);
+
+                            dp.repaint();
 
                         }
-                    try {
-                        dp.repaint();
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+
+
                     }
+
 
                 }
             }
@@ -331,7 +337,13 @@ public class Game {
         //showEditorButton.setMinimumSize(setting.getSize());
         //showEditorButton.setPreferredSize(setting.getSize());
         //showEditorButton.setMaximumSize(setting.getSize());
-        showEditorButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showEditor();}});
+        showEditorButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showEditor();
+            }
+        });
+
 
         JMenu jm3 = new JMenu("Courses");
         JMenuItem courseSelect1 = new JMenuItem("Course1");
@@ -346,13 +358,15 @@ public class Game {
         jm3.add(courseSelect3);
         JMB.add(jm3);
         JMB.add(showEditorButton);
+        showInfo();
 
         JMenuItem showVariablesButton = new JMenuItem("Show Variables");
         showVariablesButton.setVisible(true);
-        //showEditorButton.setMinimumSize(setting.getSize());
-        //showEditorButton.setPreferredSize(setting.getSize());
-        //showEditorButton.setMaximumSize(setting.getSize());
-        showVariablesButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showVariables();}
+        showVariablesButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showVariables();
+            }
 
 
         });
@@ -361,9 +375,8 @@ public class Game {
 
     private static void showVariables() {
         variablesVisible = !variablesVisible;
-        frame.setSize(Config.getWidth() +(variablesVisible? 1 : 0)*Config.sidebarwidth+(editorVisible? 1 : 0)*Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
+        frame.setSize(Config.getWidth() + (variablesVisible ? 1 : 0) * Config.sidebarwidth + (editorVisible ? 1 : 0) * Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
         if (variablesVisible) {
-
 
 
             LeftSidebar = new JPanel();
@@ -378,66 +391,59 @@ public class Game {
             LeftSidebar.add(label);
 
             JLabel BallRadius = new JLabel("BallRadius");
-            JTextField BallRadiusT = new JTextField(""+Config.ballRadius);
-
+            JTextField BallRadiusT = new JTextField("" + Config.ballRadius);
 
 
             JLabel collitionSurfacePointRatio = new JLabel("collitionSurfacePointRatio");
-            JTextField collitionSurfacePointRatioT = new JTextField(""+Config.collitionSurfacePointRatio);
+            JTextField collitionSurfacePointRatioT = new JTextField("" + Config.collitionSurfacePointRatio);
 
             JLabel hoverSurfacePointRatio = new JLabel("hoverSurfacePointRatio");
-            JTextField hoverSurfacePointRatioT = new JTextField(""+Config.hoverSurfacePointRatio);
+            JTextField hoverSurfacePointRatioT = new JTextField("" + Config.hoverSurfacePointRatio);
 
             JLabel AirFriction = new JLabel("AirDrag");
-            JTextField AirFrictionT = new JTextField(""+Config.AIR_FRICTION);
+            JTextField AirFrictionT = new JTextField("" + Config.AIR_FRICTION);
 
             JLabel GrassFriction = new JLabel("GrassFriction");
-            JTextField GrassFrictionT = new JTextField(""+Config.GRASS_FRICTION);
+            JTextField GrassFrictionT = new JTextField("" + Config.GRASS_FRICTION);
 
 
             JLabel GrassDampness = new JLabel("GrassDampness");
-            JTextField GrassDampnessT = new JTextField(""+Config.GRASS_DAMPNESS);
+            JTextField GrassDampnessT = new JTextField("" + Config.GRASS_DAMPNESS);
 
 
             JLabel ObjectFriction = new JLabel("ObjectFriction");
-            JTextField ObjectFrictionT = new JTextField(""+Config.OBJECT_FRICTION);
+            JTextField ObjectFrictionT = new JTextField("" + Config.OBJECT_FRICTION);
 
 
             JLabel ObjectDampness = new JLabel("ObjectDampness");
-            JTextField ObjectDampnessT = new JTextField(""+Config.OBJECT_DAMPNESS);
+            JTextField ObjectDampnessT = new JTextField("" + Config.OBJECT_DAMPNESS);
 
             JLabel Gravity = new JLabel("Gravity");
-            JTextField GravityT = new JTextField(""+Config.GRAVITY_FORCE);
-
-
-
-
-
-
+            JTextField GravityT = new JTextField("" + Config.GRAVITY_FORCE);
 
 
             JButton select = new JButton("Physic apply");
             select.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    try{
+                    try {
 
 
-                   Config.collitionSurfacePointRatio = Double.parseDouble(collitionSurfacePointRatioT.getText());
-                    Config.hoverSurfacePointRatio = Double.parseDouble(hoverSurfacePointRatioT.getText());
+                        Config.collitionSurfacePointRatio = Double.parseDouble(collitionSurfacePointRatioT.getText());
+                        Config.hoverSurfacePointRatio = Double.parseDouble(hoverSurfacePointRatioT.getText());
                         Config.AIR_FRICTION = Double.parseDouble(AirFrictionT.getText());
-                    Config.GRASS_FRICTION = Double.parseDouble(GrassFrictionT.getText());
+                        Config.GRASS_FRICTION = Double.parseDouble(GrassFrictionT.getText());
 
-                    Config.GRASS_DAMPNESS = Double.parseDouble(GrassDampnessT.getText());
+                        Config.GRASS_DAMPNESS = Double.parseDouble(GrassDampnessT.getText());
 
-                    Config.OBJECT_FRICTION = Double.parseDouble(ObjectFrictionT.getText());
+                        Config.OBJECT_FRICTION = Double.parseDouble(ObjectFrictionT.getText());
 
-                    Config.OBJECT_DAMPNESS = Double.parseDouble(ObjectDampnessT.getText());
+                        Config.OBJECT_DAMPNESS = Double.parseDouble(ObjectDampnessT.getText());
 
-                    Config.GRAVITY_FORCE = Double.parseDouble(GravityT.getText());
+                        Config.GRAVITY_FORCE = Double.parseDouble(GravityT.getText());
 
                         Type.reset();
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                 }
@@ -447,21 +453,21 @@ public class Game {
             recalcBall.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    try{
+                    try {
 
-                        Config.ballRadius =Double.parseDouble(BallRadiusT.getText());
+                        Config.ballRadius = Double.parseDouble(BallRadiusT.getText());
                         Config.collitionSurfacePointRatio = Double.parseDouble(collitionSurfacePointRatioT.getText());
                         Config.hoverSurfacePointRatio = Double.parseDouble(hoverSurfacePointRatioT.getText());
 
-                        for (Player p  : pp) {
+                        for (Player p : pp) {
 
                             p.resetBall();
 
                         }
-                        physics.init(pp,course);
+                        physics.init(pp, course);
                         dp.precalcBallImage();
                         loadCourse(course);
-                    }catch (Exception ex){
+                    } catch (Exception ex) {
                         ex.printStackTrace();
                     }
                     dp.repaint();
@@ -501,22 +507,51 @@ public class Game {
             LeftSidebar.add(recalcBall);
 
 
+        } else {
 
-
-        }else{
-
-            if (LeftSidebar != null)LeftSidebar.setVisible(false);
+            if (LeftSidebar != null) LeftSidebar.setVisible(false);
 
 
         }
         //
 
 
-
-
-        frame.add(LeftSidebar,BorderLayout.WEST);
+        frame.add(LeftSidebar, BorderLayout.WEST);
     }
 
+    private static void showInfo() {
+
+        frame.setSize(getFrameDimension());
+
+            infoSidebar = new JPanel();
+            Dimension d = new Dimension(Config.sidebarwidth, 50);
+            infoSidebar.setMinimumSize(d);
+            infoSidebar.setPreferredSize(d);
+            infoSidebar.setMaximumSize(d);
+            infoSidebar.setLayout(new BoxLayout(infoSidebar, BoxLayout.LINE_AXIS));
+
+            if(pp==null){
+                JLabel turn = new JLabel("TURN: NONE   ");
+                infoSidebar.add(turn);
+                JLabel strokesp1 = new JLabel("Player 1: 0    ");
+                infoSidebar.add(strokesp1);
+                JLabel strokesp2 = new JLabel("Player 2: 0");
+                infoSidebar.add(strokesp2);
+            }
+            else {
+                JLabel turn = new JLabel("TURN: Player " + pp.get(currentPlayer).getName());
+                infoSidebar.add(turn);
+                JLabel strokesp1 = new JLabel("Player 1: " + pp.get(0).getCurrentStrokes());
+                infoSidebar.add(strokesp1);
+                JLabel strokesp2 = new JLabel("Player 2: 1");
+                infoSidebar.add(strokesp2);
+            }
+
+
+        frame.add(infoSidebar, BorderLayout.SOUTH);
+        dp.repaint();
+        frame.repaint();
+    }
 
     private static void showEditor() {
         editorVisible = !editorVisible;
@@ -570,7 +605,7 @@ public class Game {
             saveCourse.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    String s = (String)JOptionPane.showInputDialog(
+                    String s = (String) JOptionPane.showInputDialog(
                             frame,
                             "Course Name",
                             "Customized Dialog",
@@ -646,11 +681,11 @@ public class Game {
                         previewMiniCourse.calculateShadingMap();
                         previewMiniCourse.setBufferedImage(dp.createImage(previewMiniCourse));
                         dp.setPreviewObject(previewMiniCourse.getManagedBufferedImage());
-                    }else {
+                    } else {
                         previewMiniCourse = null;
                         dp.setPreviewObject(null);
                     }
-                }catch (Exception ex){
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 
@@ -670,7 +705,6 @@ public class Game {
     }
 
     private static void addListenerToShowScore(JMenuItem showScore) {
-
 
 
         showScore.addActionListener(new ActionListener() {
@@ -708,58 +742,60 @@ public class Game {
     }
 
     private static void addListenerToSelectCourse(JMenuItem selectCourse) {
-       selectCourse.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-               String path = "";
+        selectCourse.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String path = "";
 
-               JFileChooser chooser = new JFileChooser();
-               File projectDir = new File(System.getProperty("user.dir"));
-               chooser.setCurrentDirectory(projectDir);
-               int returnVal = chooser.showOpenDialog(frame);
-               if (returnVal == JFileChooser.APPROVE_OPTION) {
-                   path = chooser.getSelectedFile().getAbsolutePath();
+                JFileChooser chooser = new JFileChooser();
+                File projectDir = new File(System.getProperty("user.dir"));
+                chooser.setCurrentDirectory(projectDir);
+                int returnVal = chooser.showOpenDialog(frame);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    path = chooser.getSelectedFile().getAbsolutePath();
 
-                   loadCourse(path);
+                    loadCourse(path);
 
-               }
-           }
-       });
+                }
+            }
+        });
 
     }
+
     private static void loadCourse(String path) {
         Course course = Course.loadCourse(path);
 
         loadCourse(course);
     }
+
     private static void loadCourse(Course coursel) {
         course = coursel;
         courseLoading = true;
         ArrayList<Ball> balls = new ArrayList<>(2);
 
-        selectNextPlayer=false;
+        selectNextPlayer = false;
         for (int i = 0; i < pp.size(); i++) {
             Player p = pp.get(i);
 
             p.resetBall();
             p.resetCurrentStrokes();
             p.setInPlay(true);
-            p.getBall().setPregame(true);
+            p.getBall().setPreGame(true);
             balls.add(p.getBall());
             Tile t = course.getStartTile();
-            p.setBallPositionToCoordinateAndSetSpeedToZero(t.x,t.y,t.z+p.getBall().getRadius());
+            p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z + p.getBall().getRadius());
         }
-        if (pp.size()!=0)pp.get(0).getBall().setPregame(false);
+        if (pp.size() != 0) pp.get(0).getBall().setPreGame(false);
 
         dp.setCourse(course);
         AI.setCourse(course);
 
-        currentPlayer=0;
+        currentPlayer = 0;
         dp.setCurrentPlayer(pp.get(currentPlayer));
         dp.setPlayers(pp);
 
-        if (physics == null)physics = new PhysicsEngine();
-        physics.init(pp,course, new Wind(Config.MINWIND,Config.MAXWIND,0,2*Math.PI));
+        if (physics == null) physics = new PhysicsEngine();
+        physics.init(pp, course, new Wind(Config.MINWIND, Config.MAXWIND, 0, 2 * Math.PI));
 
         dp.repaint();
 
@@ -772,7 +808,7 @@ public class Game {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] possibilities = getPlayerNames(pp);
-                        if (possibilities==null||possibilities.length==0)return;
+                if (possibilities == null || possibilities.length == 0) return;
                 String s = (String) JOptionPane.showInputDialog(
                         frame,
                         "Name", "Enter Name",
@@ -781,8 +817,8 @@ public class Game {
                         possibilities,
                         possibilities[0]);
 
-                for (int i = pp.size()-1; i >= 0; i--) {
-                    if (pp.get(i).getName().equals(s))pp.remove(i);
+                for (int i = pp.size() - 1; i >= 0; i--) {
+                    if (pp.get(i).getName().equals(s)) pp.remove(i);
                 }
             }
         });
@@ -810,19 +846,18 @@ public class Game {
                         "Hans");
 
 
-
                 Player p = new HumanPlayer(s);
                 Tile t = course.getStartTile();
-                p.setBallPositionToCoordinateAndSetSpeedToZero(t.x,t.y,t.z);
+                p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z);
                 pp.add(p);
             }
         });
     }
 
     public static void placeObject(int x, int y) {
-        course.integrate(previewMiniCourse, x,y);
+        course.integrate(previewMiniCourse, x, y);
         select.setSelected(false);
-        previewMiniCourse=null;
+        previewMiniCourse = null;
         dp.setPreviewObject(null);
         dp.repaint();
     }

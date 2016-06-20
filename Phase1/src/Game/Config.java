@@ -30,7 +30,7 @@ public class Config {
     public static  double OBJECT_FRICTION = 0.1;
     public static int sidebarwidth=200;
     public static  int OFFSET_X_GAME=50;
-    public static  int OFFSET_Y_GAME=70;
+    public static  int OFFSET_Y_GAME=130;
     public static  int OFFSET_X_EDITOR=16;
     public static  int OFFSET_Y_EDITOR=62;
     public static  int speedLimiter=120;
