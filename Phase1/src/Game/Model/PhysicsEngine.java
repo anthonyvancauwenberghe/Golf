@@ -4,6 +4,7 @@ import Game.Actors.Player;
 import Game.Game;
 import Game.Config;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 /**
@@ -11,45 +12,103 @@ import java.util.ArrayList;
  */
 public class PhysicsEngine {
     private Course course;
-    public boolean atLeastOneBallMoving;
+
     private ArrayList<Ball> balls = new ArrayList<>(2);
+    private Coordinate wind;
+
+    public PhysicsEngine getAlternativBoardForTest(){
+        return clone();
+    }
 
 
 
-    public void init(Course course, ArrayList<Ball> balls) {
+    public void calculateUntilNoBallIsMoving(double noisePercentage){
+        do {
+            processPhysics(Config.STEPSIZE, noisePercentage);
+
+        }while(atLeastOneBallMoving());
+    }
+
+    public boolean atLeastOneBallMoving() {
+
+        for (int i = 0; i < balls.size(); i++) {
+           if (balls.get(i).isMoving()) return true;
+        }
+        return false;
+    }
+
+    public PhysicsEngine clone(){
+        PhysicsEngine p = new PhysicsEngine();
+        p.course = course;
+        p.wind = wind.clone();
+
+        p.balls = new ArrayList<>();
+        for (Ball b:balls){
+            p.balls.add(b.clone());
+        }
+        return p;
+    }
+
+    public ArrayList<Ball> getBalls(){
+        return balls;
+    }
+
+    public Ball getBallOfPlayer(Player p){
+        for(Ball b:balls){
+            if (b.getPlayer()==p) return b;
+        }
+        return null;
+    }
+
+    public int getBallIndexOfPlayer(Player p){
+        for (int i = 0; i < balls.size(); i++) {
+            if (balls.get(i).getPlayer()==p) return i;
+        }
+        return -1;
+    }
+
+    public void init(Course course, ArrayList<Ball> balls, Coordinate wind) {
         this.course = course;
         this.balls.clear();
         this.balls = balls;
-        atLeastOneBallMoving = false;
+        this.wind = wind;
     }
 
     public void init(ArrayList<Player> players, Course course) {
+        if (wind == null) wind = new Wind(0,0,0,0);
         this.course = course;
         this.balls.clear();
 
         for (int i = 0; i < players.size(); i++) {
             balls.add(players.get(i).getBall());
         }
-        atLeastOneBallMoving = false;
+    }
+
+    public void init(ArrayList<Player> players, Course course, Coordinate wind) {
+        this.course = course;
+        this.balls.clear();
+        this.wind = wind;
+        for (int i = 0; i < players.size(); i++) {
+            balls.add(players.get(i).getBall());
+        }
+
     }
 
 
-    public void processPhysics(double elapsedTime) {
-        atLeastOneBallMoving = false;
-
+    public void processPhysics(double elapsedTime, double noisePercentage) {
 
 
         Type[][][] playfield = course.getPlayfield();
         Coordinate [][] normals = course.getSurfaceNormals();
         for (int i = 0; i < balls.size(); i++) {
 
-
             Ball b = balls.get(i);
             if (!b.inPlay||b.isPregame()) continue;
             gravity(b);
 
             hover(b,elapsedTime,playfield,normals,course.getDimension());
-            collide(b,elapsedTime,playfield,normals,course.getDimension());
+            collide(b,elapsedTime,playfield,normals,course.getDimension(),noisePercentage);
+            drag(b);
             checkborder(b);
             accelerate(b,elapsedTime);
             resetA(b);
@@ -59,23 +118,41 @@ public class PhysicsEngine {
             for (int j = i+1; j < balls.size(); j++) {
                 //check for collision between two balls
                 Ball bd = balls.get(j);
-                if (!bd.inPlay||bd.isPregame()) continue;
+                if (bd.inHole||!bd.inPlay||bd.isPregame()) continue;
                ballCollision(b,bd);
             }
 
             inertia(b,elapsedTime);
-
-
             checkIfInHole(b);
            // setUp(b);
 
         }
 
         for (int i = 0; i < balls.size(); i++) {
-            if (!balls.get(i).checkBallStopped())  atLeastOneBallMoving =true;
+            balls.get(i).checkBallStopped();
+
         }
 
 
+    }
+
+    private void drag(Ball b) {
+        double air= Config.AIR_FRICTION;
+
+        double speed = b.getSpeed();
+
+        if (speed!=0) {
+            double drag = air * (speed * speed);
+
+            double nx = drag * b.getSpeedX() / speed;
+            double ny = drag * b.getSpeedY() / speed;
+            double nz = drag * b.getSpeedZ() / speed;
+
+
+            b.aX -= nx;
+            b.aY -= ny;
+            b.aZ -= nz;
+        }
     }
 
     private void setUp(Ball b) {
@@ -97,49 +174,65 @@ public class PhysicsEngine {
 
         if ((h.isBallIntersectingHole(b))&&b.getSpeed()<0.2){
             b.setInHole(true);
+            b.isMoving=false;
+
+            System.out.println(b.getPlayer().getName() + " put the ball into the hole");
         }
+
 
     }
     private void checkborder(Ball b){
         int height = Game.course.getHeight();
         int width = Game.course.getWidth();
+        int depth = Game.course.getDepth();
 
         double dx = Math.abs(b.getX()-b.getPreviousX());
         double dy = Math.abs(b.getY()-b.getPreviousY());
         double dz = Math.abs(b.getZ()-b.getPreviousZ());
 
+        if(b.getZ()+b.getRadius()<= 0){
+            System.out.println("out of Z border: ");
 
+            b.z = 1+b.getRadius();
+            b.previousZ=b.z-dz;
+            b.printBallInfo();
+
+        }
 
         if(b.getX()+b.getRadius()>width-1){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of X border: ");
+
             b.x = width-1-b.getRadius();
             b.previousX=b.x+dx;
-
+            b.printBallInfo();
         }
 
         if(b.getX()-b.getRadius()<=0){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of X border: ");
             b.x = b.getRadius()+1;
             b.previousX=b.x-dx;
+            b.printBallInfo();
         }
 
         if(b.getY()+b.getRadius()>height-1){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of Y border: ");
             b.y = height-1-b.getRadius();
             b.previousY=b.y+dy;
+            b.printBallInfo();
         }
 
         if(b.getY()-b.getRadius()<=0){
-            System.out.println("out of X border: " + b.getX() + " speedX: " +b.getaX());
+            System.out.println("out of Y border: " );
             b.y = 1+b.getRadius();
             b.previousY=b.y-dy;
+
         }
 
 
 
     }
 
-    private void collide(Ball b, double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
+    private void collide(Ball b, double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension, double noisePercentage) {
         double normalX = 0;
         double normalY = 0;
         double normalZ = 0;
@@ -194,10 +287,16 @@ public class PhysicsEngine {
                 Type t = playfield[x][y][z];
                 if (t!= Type.Empty) {
                     BounceFriction += t.getBounceDampness();
+                    Coordinate c;
+                    if (noisePercentage == 0)  c = normals[x][y];
+                    else{
+                        c = normals[x][y].clone();;
+                        Coordinate.modify3d(c,noisePercentage);
+                        c.normalise();
 
-                     Coordinate c = normals[x][y];
+                    }
 
-                    //Coordinate c = course.getNormal(x, y, z);
+
                     if (!Double.isNaN(c.getX())){
                         normalX += c.getX();
                     normalY += c.getY();
@@ -251,22 +350,7 @@ public class PhysicsEngine {
 
 
         }
-        double air= Config.AIR_FRICTION;
 
-        double speed = b.getSpeed();
-
-        if (speed!=0) {
-            double drag = air * (speed * speed);
-
-            double nx = drag * b.getSpeedX() / speed;
-            double ny = drag * b.getSpeedY() / speed;
-            double nz = drag * b.getSpeedZ() / speed;
-
-
-            b.aX -= nx;
-            b.aY -= ny;
-            b.aZ -= nz;
-        }
     }
 
     private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
@@ -363,8 +447,13 @@ public class PhysicsEngine {
            b.aX+=aX* Config.UPPush*g;
            b.aY+=aY* Config.UPPush*g;
            b.aZ+=aZ* Config.UPPush*g;
-           //friction should come in here
 
+
+       }else{
+           //wind force
+           b.aX+= wind.getX();
+           b.aY+= wind.getY();
+           b.aZ+= wind.getZ();
        }
 
 
@@ -457,9 +546,7 @@ public class PhysicsEngine {
     }
 
     private void gravity(Ball b) {
-
             b.setaZ(-Config.GRAVITY_FORCE);
-
     }
 
 
@@ -469,209 +556,8 @@ public class PhysicsEngine {
         return angle;
     }
 
-    /*
-    private void checkIfObjectIsBetweenBallAndFutureBall(int coordinateX, int coordinateY, int futureXCoordinate, int futureYCoordinate, double v, double angle, double radius) {
-        int collisionX=-6666666;
-        int collisionY=-6666666;
-        ArrayList<int[]> pp = getPointsBetween(coordinateX,coordinateY,futureXCoordinate,futureYCoordinate);
-        Point2D p = new Point();
-        boolean collisionHappened = false;
 
-        int ss = pp.size();
-        loop:for (int i = 0; i < ss; i++) {
-            if (course.getTile(pp.get(i)[0],pp.get(i)[1],0)== Model.Type.OBJECT){
-                collisionX=pp.get(i)[0];
-                collisionY= pp.get(i)[1];
-                collisionHappened = true;
-                break loop;
-            }
-        }
-
-        if (collisionHappened){
-            for (int i = 0; i < 1000; i++) {
-                System.out.println("Coolision happened at: " + collisionX +" " + collisionY);
-            }
-        }
-
-
+    public Coordinate getWind() {
+        return wind;
     }
-
-
-*/
-
-
-
-/*
-    private void checkForCollision(Ball b, Coordinate newPosition) {
-        ArrayList<Coordinate> checkThose = Coordinate.getPxelBetweenToPoints(b.getCoordinate(),newPosition);
-        int indexOfLastFree = checkThose.size()-1;
-
-        Coordinate collisionCoordinate=null;
-        Coordinate lastFreeCoordinate = b.getCoordinate();
-
-        ;
-        for (int j = 0; j < checkThose.size(); j++) {
-            Coordinate c = checkThose.get(j);
-            Type positionType = course.getType(newPosition);
-            if (positionType != Type.Empty){
-                collisionCoordinate = c;
-                if (j > 0)  lastFreeCoordinate = checkThose.get(j-1);
-                else lastFreeCoordinate = checkThose.get(0);
-
-                indexOfLastFree = j-1;
-                break;
-            }
-
-        }
-        if (collisionCoordinate==null) {
-            b.setPosition(newPosition);
-            return;
-        }
-        if (indexOfLastFree>=0) b.setPosition(lastFreeCoordinate);
-
-        //updateSpeed
-        try {
-
-            Coordinate normal = Coordinate.getNormal(course, collisionCoordinate);
-
-            double projection = b.getSpeedX()*normal.getX()+b.getSpeedY()*normal.getY()+b.getSpeedZ()*normal.getZ();
-            projection *=2;
-            double newSpeedX = -normal.getX()*projection;
-            double newSpeedY = -normal.getY()*projection;
-            double newSpeedZ = -normal.getZ()*projection;
-
-            b.speedX = newSpeedX;
-            b.speedY = newSpeedY;
-            b.speedZ = newSpeedZ;
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
-*/
-    /*
-    public void checkColission() {
-        double angle = calculateAngle(ball.getSpeedX(), ball.getSpeedY());
-        double coordinateX, coordinateY, futureXCoordinate, futureYCoordinate;
-        Type nextBallCoordinateType = null;
-
-        if (Math.abs(ball.getSpeedX()) > Math.abs(ball.getSpeedY())) {
-            System.out.println("SpeedX bigger");
-            forloop:
-            for (int i = 0; i <= Math.abs(ball.getSpeedX()); i += 5) {
-                dp.repaint();
-                coordinateX = i;
-                coordinateY = (i * Math.tan(angle));
-                futureXCoordinate = (ball.getCoordinate().getX() + coordinateX);
-                futureYCoordinate = (ball.getCoordinate().getY() + coordinateY);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (futureXCoordinate + ball.getRadius() >= Config.getWidth() || futureXCoordinate - ball.getRadius() <= 0 && futureYCoordinate + ball.getRadius() >= Config.getHeight() || futureYCoordinate - ball.getRadius() <= 0) {
-
-                    System.out.println("bigger!!!!!");
-                    break forloop;
-                } else {
-
-                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate - ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ());
-                    System.out.println(1 + (i / 5) + ". coordinateX: " + futureXCoordinate + " coordinateY: " + futureYCoordinate);
-                    if (nextBallCoordinateType == Type.OBJECT) {
-                        ball.getCoordinate().setX(futureXCoordinate);
-                        ball.getCoordinate().setX(futureYCoordinate);
-                        System.out.println("colission!");
-                        ball.speedX *= WALL_ENERGY_LOSS;
-                        ball.reverseBallDirectionX();
-                        ball.speedY *= WALL_ENERGY_LOSS;
-                        ball.reverseBallDirectionY();
-
-                        break forloop;
-                    }
-                }
-
-            }
-
-        } else {
-            System.out.println("SpeedY bigger");
-            forloop:
-            for (int i = 0; i <= Math.abs(ball.getSpeedY()); i += 1) {
-                dp.repaint();
-                coordinateX = (i / Math.tan(angle));
-                coordinateY = i;
-                futureXCoordinate = (ball.getCoordinate().getX() + coordinateX);
-                futureYCoordinate = (ball.getCoordinate().getY() + coordinateY);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                if (futureXCoordinate + ball.getRadius() >= Config.getWidth() || futureXCoordinate - ball.getRadius() <= 0 && futureYCoordinate + ball.getRadius() >= Config.getHeight() || futureYCoordinate - ball.getRadius() <= 0) {
-                    System.out.println("bigger!!!!!");
-                    break forloop;
-                } else {
-                    nextBallCoordinateType = course.getTile((int) (futureXCoordinate + ball.getRadius()), (int) (futureYCoordinate + ball.getRadius()), (int) ball.getCoordinate().getZ());
-                    System.out.println(1 + (i / 5) + ". coordinateX: " + futureXCoordinate + " coordinateY: " + futureYCoordinate);
-                    if (nextBallCoordinateType == Type.OBJECT) {
-                        System.out.println("colission!");
-                        ball.speedX *= WALL_ENERGY_LOSS;
-                        ball.reverseBallDirectionX();
-                        ball.speedY *= WALL_ENERGY_LOSS;
-                        ball.reverseBallDirectionY();
-                        break forloop;
-                    }
-                }
-
-            }
-        }
-    }
-*/
-
-
-
-    public void processHole(Ball ball) {
-
-        Type ballCoordinateType = null;
-        Coordinate b = ball.getCoordinate();
-        double ballSpeed = ball.getSpeed();
-        Hole h = course.getHole();
-
-        /*********************************/
-        /** Process Hole **/
-        /*********************************/
-        //t = (2*Rh - R)/vf
-        //Rh = radius of hole
-        //R = radius ball
-        //        vf = speed of ball when it reaches the hole
-        //g*t^2/2 > R
-        //g = gravity = 9.81
-        //or expressed in vf: vf < (2Rh - R)(g / 2R)^1/2
-
-
-        if (Math.abs(b.getX() - h.getX()) <= ball.getRadius() + h.radius && Math.abs(b.getY() - h.getY()) <= ball.getRadius() + h.radius) {
-            double distance = Math.sqrt((b.getX() - h.getX()) * (b.getX() - h.getX()) + (b.getY() - h.getY()) * (b.getY() - h.getY()));
-
-            if (distance + ball.getRadius() < +h.radius) {
-                //inAir
-                if (ballSpeed < (2 * ball.radius - h.radius) * Math.sqrt(10 / 2 * h.radius)) {
-                    ball.previousX = ball.x;
-                    ball.previousZ = ball.z;
-                    ball.previousY = ball.y;
-                    ball.setInHole(true);
-                }
-            } else if (distance <= ball.getRadius() + h.radius) {
-                Coordinate c = new Coordinate(h.getX() - b.getX(), h.getY() - b.getY(), h.getZ() - b.getZ());
-                double factor = (1 - distance / (ball.getRadius() + h.radius)) * h.getFriction();
-                //ball.redirect(c, factor);
-
-
-            }
-
-        }
-
-
-    }
-
-
 }

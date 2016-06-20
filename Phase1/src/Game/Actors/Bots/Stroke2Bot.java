@@ -1,13 +1,9 @@
 package Game.Actors.Bots;
 
 
-import Game.Actors.Bots.BotMaps.PathfindingMap;
-import Game.Model.Ball;
-import Game.Model.Coordinate;
-import Game.Model.Course;
-import Game.Model.Type;
+import Game.Model.*;
 import Game.Config;
-import Game.Model.Hole;
+import com.sun.org.glassfish.gmbal.GmbalException;
 
 import java.util.ArrayList;
 
@@ -17,26 +13,30 @@ import java.util.ArrayList;
 
 
 
-public class Stroke2Bot extends AIPlayer {
+public class Stroke2Bot extends AIPlayer{
     public Coordinate alternative=null;
-    Course course;
-
+    public Coordinate[] alternativeAr = new Coordinate[1];
 
     public Stroke2Bot(String s) {
         super(s);
     }
 
     @Override
-    public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
+    public void nextMove(PhysicsEngine p) {
+
+        Ball b2 = p.getBallOfPlayer(this);
+        b2.shootBall(50,50,0);
+        p.calculateUntilNoBallIsMoving(0);
+
+
         Game.Game.dp.repaint();
         Ball b = this.getBall();
-        this.course = c;
+
         Hole h = course.getHole();
         Type[][][] playfield = course.getPlayfield();
 
         Coordinate coordBall = b.getCoordinate();
         Coordinate coordHole = h.getCoordinate();
-
 
         if (course.wayIsObstacleFree(coordBall, coordHole)) {
             int[] delta = getDelta(coordBall, coordHole);
@@ -59,6 +59,8 @@ public class Stroke2Bot extends AIPlayer {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+
             shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
             this.alternative=null;
             System.out.println("bot shooting");
@@ -67,7 +69,8 @@ public class Stroke2Bot extends AIPlayer {
 
     }
     public Coordinate getShootLocation(){
-        return this.alternative;
+
+        return alternative;
     }
     public Coordinate findAlternative(Coordinate coordBall, Coordinate coordHole) {
         int altX, altY, altZ;
@@ -77,7 +80,7 @@ public class Stroke2Bot extends AIPlayer {
             altZ = 16;
             alternative = new Coordinate(altX, altY, altZ);
 
-            //System.out.println(alternative.toString());
+            System.out.println(alternative.toString());
         }
         while (!(course.wayIsObstacleFree(coordBall, alternative,false,false) && course.wayIsObstacleFree(alternative, coordHole,false,true)));
         //&&course.getTile(altX, altY, altZ)==Type.OBJECT

@@ -1,5 +1,9 @@
 package Game;
 
+import Game.Actors.Bots.AIPlayer;
+import Game.Actors.Bots.Stroke2Bot;
+
+import Game.Actors.Move;
 import Game.Actors.Player;
 import Game.Model.*;
 import Game.Unused.Editor;
@@ -15,6 +19,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+
+import static Game.Game.AI;
+import static Game.Game.course;
 
 /**
  * Created by nibbla on 16.03.16.
@@ -45,6 +52,10 @@ public class DrawPanel extends JPanel {
     public boolean prepareShoot;
     private BufferedImage previewObject;
     private Graphics2D g2;
+
+    private Move previewMove;
+    private Move[] previewMoves;
+
 
 
     public void setPlayers(ArrayList<Player> p) {
@@ -218,12 +229,25 @@ public class DrawPanel extends JPanel {
         courseImage = c.getManagedBufferedImage();
     }
 
-    public static BufferedImage createImage(Course course) {
+    public static BufferedImage createImageStandart(Course course) {
         if (grassTexture==null)DrawPanel.loadTextures();
         Type[][][] pf = course.getPlayfield();
         int[][] hm = course.getHeightMap();
+        if (hm==null){
+            course.calculateHeightMapSafe();
+            hm = course.getHeightMap();
+        }
         float[][] sm = course.getShadingMap();
+        if (sm ==null) {
+            course.calculateShadingMap();
+            sm = course.getShadingMap();
+        }
         Coordinate[][] normals = course.getSurfaceNormals();
+        if (normals == null){
+            course.calculateSurfaceNormalsSafe();
+            normals =course.getSurfaceNormals();
+
+        }
         int[] d = course.getDimension();
         BufferedImage bufferedImage =
                 new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);
@@ -283,17 +307,165 @@ public class DrawPanel extends JPanel {
         g.dispose();
         return bufferedImage;
     }
+
+    public static BufferedImage createImage(Course course) {
+        if (grassTexture==null)DrawPanel.loadTextures();
+        Type[][][] pf = course.getPlayfield();
+        int[][] hm = course.getHeightMap();
+        float[][] sm = course.getShadingMap();
+        Coordinate[][] normals = course.getSurfaceNormals();
+        if (hm==null){
+            course.calculateHeightMapSafe();
+            hm = course.getHeightMap();
+        }
+
+        if (sm ==null) {
+            course.calculateShadingMap();
+            sm = course.getShadingMap();
+        }
+
+        if (normals == null){
+            course.calculateSurfaceNormalsSafe();
+            normals =course.getSurfaceNormals();
+
+        }
+
+        int[] d = course.getDimension();
+        BufferedImage bufferedImage =
+                new BufferedImage(d[0], d[1], BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g = bufferedImage.createGraphics();
+
+        Random r = new Random();
+        HashMap<Integer,Color> hightColorFromZ = new HashMap<>(100);
+        HashMap<Float,Color> shadingColorFromZ = new HashMap<>(100);
+        Color shadingC;
+        Color zshadow;
+
+
+
+        for (int x = 0; x < d[0]; x++) {
+            for (int y = 0; y < d[1]; y++) {
+                int z = hm[x][y];
+                Type t = pf[x][y][z];
+                if (t == Type.Empty) continue;
+                Point p = new Point((x)%32,(y)%32);
+                if (t == Type.Grass) g.setColor(GrassText.get(p));
+                if (t == Type.Sand) g.setColor(SandText.get(p));
+                if (t == Type.Water) g.setColor(WaterText.get(p));
+                if (t  == Type.OBJECT) g.setColor(ObjectText.get(p));
+
+
+                g.fillRect(x, y, 1, 1);
+
+            }
+        }
+
+
+
+
+
+        for (int x = 0; x < d[0]; x++) {
+            for (int y = 0; y < d[1]; y++) {
+                int z = hm[x][y];
+                zshadow = hightColorFromZ.get(z);
+                if (zshadow == null){
+                    float f = (float) ((z*1f/d[2])*0.3);
+                    zshadow = new Color(0,0,0,f);
+                    hightColorFromZ.put(z,zshadow);
+                }
+                g.setColor(zshadow);
+
+                g.fillRect(x, y, 1, 1);
+
+                //schraffurShaddow
+                float ss =  sm[x][y];
+                shadingC = shadingColorFromZ.get(ss);
+                if (shadingC == null){
+                    shadingC = new Color(0,0,0,ss*0.9f);
+
+                    shadingColorFromZ.put(ss,shadingC);
+                }
+
+
+                g.setColor(shadingC);
+                g.fillRect(x, y,  1,  1);
+
+            }
+
+        }
+
+
+
+
+
+        g.dispose();
+        return bufferedImage;
+    }
+
     @Override
     protected void paintComponent(Graphics g) {
 
         super.paintComponent(g);
 
         g2 = (Graphics2D)g;//this new object g2,will get the
-
+        Stroke oldStroke = g2.getStroke();
 
         if (courseImage != null) g.drawImage(course.getManagedBufferedImage(), 0, 0, null);
         drawHole(g);
 
+        if(AI instanceof Stroke2Bot){
+            Stroke2Bot stroke2Bot = (Stroke2Bot) AI;
+            Coordinate c = stroke2Bot.getShootLocation();
+            if(c!=null){
+
+
+                g2.setStroke(new BasicStroke(3));
+                g2.setColor(Color.red);
+                g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
+                g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+
+            }
+        }
+
+
+        g2.setColor(Color.BLUE);
+        if(previewMoves != null){
+            for (int i = 0; i < previewMoves.length; i++) {
+                Coordinate c = previewMoves[i].attainedTarget;
+                if (c == null) continue;
+                g2.setStroke(new BasicStroke(3));
+                g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
+                g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+
+                g2.setStroke(new BasicStroke(1));
+
+                Coordinate c2 = previewMoves[i].c;
+                c = previewMoves[i].startCoordinate;
+                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) (c.getX()+c2.getX()),(int) (c.getY()+c2.getY()));
+
+            }
+
+
+        }
+        g2.setStroke(new BasicStroke(3));
+
+        if(previewMove != null){
+                g2.setColor(Color.magenta);
+                Coordinate c = previewMove.attainedTarget;
+
+                g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
+                g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+
+                g2.setColor(Color.red);
+                Coordinate c2 = previewMove.c;
+                c = previewMove.startCoordinate;
+                g2.drawLine((int) c.getX() ,(int) c.getY(),(int) (c.getX() + c2.getX()),(int) (c.getY()+ c2.getY()));
+
+
+
+        }
+        g2.setStroke(oldStroke);
         for (int i = 0; i < players.size(); i++) {
             if (players.get(i).getCurrentStrokes()==0&&!currentPlayer.equals(players.get(i)))
                 continue;
@@ -324,14 +496,36 @@ public class DrawPanel extends JPanel {
             g.drawImage(previewObject, mousePosition.x, mousePosition.y, null);
 
         }
-        if(Game.AI.getShootLocation()!=null){
-            Coordinate c = Game.AI.getShootLocation();
-            g2.setStroke(new BasicStroke(3));
-            g2.setColor(Color.red);
-            g2.drawLine((int) (c.getX()-12) ,(int) (c.getY()-6),(int) (c.getX()+12),(int) (c.getY()+6));
-            g2.drawLine((int) (c.getX()+12) ,(int) (c.getY()-6),(int) (c.getX()-12),(int) (c.getY()+6));
+        Coordinate wind = Game.getWind();
+        if (wind!= null) drawWindpanel(g2,wind);
 
-        }
+    }
+
+    private void drawWindpanel(Graphics2D g2, Coordinate wind) {
+        int x = this.getWidth()*15/16;
+        int y = this.getHeight()*1/16;
+
+        int radius = 30;
+
+        g2.setPaint(Color.BLACK);
+        g2.fillOval(x-radius,y-radius,2*radius,2*radius);
+        radius -= 1;
+        g2.setPaint(Color.WHITE);
+        g2.fillOval(x-radius,y-radius,2*radius,2*radius);
+        radius -= 3;
+
+        int lengthX = (int)(  radius *  wind.getX()/ Config.MAXWIND);
+        int lengthY = (int) (radius * wind.getY()/ Config.MAXWIND);
+        g2.setPaint(Color.MAGENTA);
+        g2.setStroke(new BasicStroke(3));
+
+        int x2 = (int) (this.getWidth()*15/16 + lengthX);
+        int y2 = (int) (this.getHeight()*1/16+ lengthY);;
+
+        g2.drawLine(x,y,x2,y2);
+
+
+
 
     }
 
@@ -468,4 +662,22 @@ public class DrawPanel extends JPanel {
     public void setPreviewObject(BufferedImage previewObject) {
         this.previewObject = previewObject;
     }
+
+
+
+    public void setPreviewMove(Move previewMove) {
+        this.previewMove = previewMove;
+    }
+
+    public void resetAIPreview() {
+
+        previewMoves=null;
+        previewMove = null;
+    }
+
+    public void setPreviewMoves(Move[] previewMoves) {
+        this.previewMoves = previewMoves;
+    }
+
+
 }
