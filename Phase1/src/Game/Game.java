@@ -31,6 +31,7 @@ public class Game {
     private static boolean editorVisible;
     private static boolean infoVisible;
     private static boolean variablesVisible;
+    private static JLabel scoreInfo;
 
     private static PhysicsEngine physics;
     public static AIPlayer AI= new AngryBot("Player 2",64);
@@ -54,8 +55,7 @@ public class Game {
     }
 
     public Game(){
-        JOptionPane.showMessageDialog(frame,
-                "Wait for profiler");
+        //JOptionPane.showMessageDialog(frame, "Wait for profiler");
         prepareCourses();
         prepareView();
         preparePlayers();
@@ -63,6 +63,8 @@ public class Game {
         loadCourse(course);
         gameThread = createGameThread();
         gameThread.run();
+
+
 
     }
 
@@ -91,9 +93,43 @@ public class Game {
 
         frame.setSize(course.getWidth(), course.getHeight() + Config.OFFSET_Y_GAME);
         frame.add(dp, BorderLayout.CENTER);
+        infoSidebar = new JPanel();
         addMenues(frame);
         frame.setVisible(true);
         addKeyListenerToFrame(frame);
+
+    }
+
+    private static void drawScoreInfo(){
+        if(pp!=null) {
+            StringBuilder scores = new StringBuilder();
+            for (int i = 0; i < pp.size(); i++) {
+                Player p = pp.get(i);
+                if(pp.get(currentPlayer).getName()==p.getName()) {
+                    scores.append("CURRENTPLAYER: " + System.lineSeparator()).append(p.getName()).append("  Total Strokes: ").append(p.getTotalStrokes()).append(" Current Strokes: ").append(p.getCurrentStrokes()).append(System.lineSeparator()).append("        ");
+
+                }
+                else{
+                    scores.append(p.getName()).append("  Total Strokes: ").append(p.getTotalStrokes()).append(" Current Strokes: ").append(p.getCurrentStrokes()).append(System.lineSeparator()).append("        ");
+
+                }
+
+            }
+            //JOptionPane.showMessageDialog(null, scores.toString(), "Scores", JOptionPane.INFORMATION_MESSAGE);
+            if(scoreInfo==null){
+                scoreInfo = new JLabel(scores.toString());
+                infoSidebar.add(scoreInfo);
+            }
+            else {
+                if(scoreInfo.getText()!= scores.toString()){
+                    scoreInfo.setText(scores.toString());
+                    infoSidebar.repaint();
+                }
+
+            }
+
+
+        }
     }
 
     private void prepareCourses() {
@@ -249,14 +285,21 @@ public class Game {
                         ;
                         if (!pause) physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE); //
                             selectNextPlayer = true;
+                        try {
+                            dp.repaint();
+                            Thread.sleep(1);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
 
                     } else {
                         dp.resetAIPreview();
+                        drawScoreInfo();
                         if (selectNextPlayer) {
                             if (!IsGameStillOn()) {
                                 selectNextPlayer = false;
-                                JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
-                                showScoreOnScreen();
+                                //JOptionPane.showMessageDialog(null, "Round Finished", "End Round", JOptionPane.INFORMATION_MESSAGE);
+                                //showScoreOnScreen();
                             }
                             selectNextPlayer = false;
 
@@ -278,12 +321,7 @@ public class Game {
 
 
                         }
-                    try {
-                        dp.repaint();
-                        Thread.sleep(1);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
 
                 }
             }
@@ -528,30 +566,11 @@ public class Game {
 
         frame.setSize(getFrameDimension());
 
-            infoSidebar = new JPanel();
             Dimension d = new Dimension(Config.sidebarwidth, 50);
             infoSidebar.setMinimumSize(d);
             infoSidebar.setPreferredSize(d);
             infoSidebar.setMaximumSize(d);
             infoSidebar.setLayout(new BoxLayout(infoSidebar, BoxLayout.LINE_AXIS));
-
-            if(pp==null){
-                JLabel turn = new JLabel("TURN: NONE   ");
-                infoSidebar.add(turn);
-                JLabel strokesp1 = new JLabel("Player 1: 0    ");
-                infoSidebar.add(strokesp1);
-                JLabel strokesp2 = new JLabel("Player 2: 0");
-                infoSidebar.add(strokesp2);
-            }
-            else {
-                JLabel turn = new JLabel("TURN: Player " + pp.get(currentPlayer).getName());
-                infoSidebar.add(turn);
-                JLabel strokesp1 = new JLabel("Player 1: " + pp.get(0).getCurrentStrokes());
-                infoSidebar.add(strokesp1);
-                JLabel strokesp2 = new JLabel("Player 2: 1");
-                infoSidebar.add(strokesp2);
-            }
-
 
         frame.add(infoSidebar, BorderLayout.SOUTH);
         dp.repaint();

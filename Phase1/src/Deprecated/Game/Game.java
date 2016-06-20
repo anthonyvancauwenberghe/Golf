@@ -100,7 +100,8 @@ public class Game {
 
                             pp.get(currentPlayer).getBall().getPhysics().init(course, pp.get(currentPlayer).getBall());
                             dp.setCurrentPlayer(pp.get(currentPlayer));
-                            JOptionPane.showMessageDialog(null, "It is " +  pp.get(currentPlayer).getName() + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
+
+                            //JOptionPane.showMessageDialog(null, "It is " +  pp.get(currentPlayer).getName() + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
                             dp.repaint();
                         }
                         try {
