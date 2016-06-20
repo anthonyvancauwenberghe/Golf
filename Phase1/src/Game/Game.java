@@ -26,11 +26,13 @@ public class Game {
     private static JPanel RightSidebar;
     private static JPanel LeftSidebar;
     private static JToggleButton select;
+    private static JToggleButton obectFormSelect;
     private static boolean editorVisible;
     private static boolean variablesVisible;
 
     private static PhysicsEngine physics;
-    public static Stroke2Bot AI= new Stroke2Bot("Player 2");
+    public static AIPlayer AI= new AngryBot("Player 2",64);
+    public static AIPlayer AI2= new AngryBot("Player 3",64);
     public static DrawPanel dp;
 
     private static ArrayList<Player> pp;
@@ -40,12 +42,14 @@ public class Game {
 
     private static Thread gameThread;
     private static boolean courseLoading;
-    private static Course course1;
+    private static Course course1,course2, course3;
     private static Course previewMiniCourse;
 
     private static boolean pause = false;
 
-
+    public static PhysicsEngine getAlternativBoardForTest(){
+        return physics.getAlternativBoardForTest();
+    }
 
     public Game(){
         JOptionPane.showMessageDialog(frame,
@@ -68,10 +72,11 @@ public class Game {
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("Player 1");
-        Player p2  =  new PathfindingBot("Player 2", course);
+        Player p2  =  AI;
 
         pp.add(p);
         pp.add(p2);
+        pp.add(AI2);
     }
 
     private void prepareView() {
@@ -90,11 +95,17 @@ public class Game {
 
     private void prepareCourses() {
         course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
-
+        //course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
+        //course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
         if (course1 == null) {
             course1 = createStandartCourse(1);
         }
-
+        if (course2 == null) {
+            //course2 = createStandartCourse(2);
+        }
+        if (course3 == null) {
+            //course3 = createStandartCourse(3);
+        }
 
         course = course1;
     }
@@ -127,7 +138,50 @@ public class Game {
                 course1.saveCourse();
                 c = course1;
                 break;
+            case 2:
+                Course course2;
+                course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+                course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+                course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+                //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+                //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+                course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
 
+                course2.setTile(850, 650, 1, Type.Hole);
+                course2.setTile(100, 100, 9, Type.Start);
+
+                course2.finalise();
+
+
+                course2.saveCourse();
+                c = course2;
+                break;
+            case 3:
+                Course course3;
+                course3 = new Course("GolfDeluxe3", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+                course3.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+                //course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+                //course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+                //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+                //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+                //course.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
+                //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
+                //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
+                //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
+                //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
+
+                course3.setTile(750, 600, 1, Type.Hole);
+                course3.setTile(100, 100, 9, Type.Start);
+                //course.addRectangle(600, 400, 50, 100, 0, Type.OBJECT);
+                //course3.addRectangle(400, 400, 50, 100, 100, Type.OBJECT);
+                // course.addCuboid(400, 400, 50, 100, 30, 20, Type.OBJECT);
+                //course.addPyramid(50, 50, 0, 100, 30, 20, Type.OBJECT);
+                // course.addHill(152, 152, 150, 1.5, 0, 20, Type.OBJECT);
+                // course.addPyramid(400, 400, 0, 200, 200, 100, Type.OBJECT);
+                course3.finalise();
+                course3.saveCourse();
+                c = course3;
+                break;
             default:
                 Course courseD;
                 courseD = new Course("GolfDeluxeStandart", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
@@ -159,7 +213,7 @@ public class Game {
                     }
                 }
                 if(e.getKeyChar()=='w'){
-                    physics.processPhysics(Config.STEPSIZE);
+                    physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE);
                     dp.repaint();
                 }
                 if(e.getKeyChar()=='p'){
@@ -186,12 +240,14 @@ public class Game {
                     //System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
                     if (courseLoading) continue;
-
-                    if ((physics.atLeastOneBallMoving || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole) {
+                    // || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
+                    if ((physics.atLeastOneBallMoving())) {
                             selectNextPlayer = true;
-                            if(!pause) physics.processPhysics(0.016); //
+
+                            if(!pause) physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE); //
 
                         } else {
+                            dp.resetAIPreview();
                             if (selectNextPlayer){
                                 if (!IsGameStillOn()) {
                                     selectNextPlayer = false;
@@ -202,16 +258,13 @@ public class Game {
 
                                 do {
                                     currentPlayer = (currentPlayer + 1) % (pp.size());
-                                } while (!pp.get(currentPlayer).getBall().inPlay);
+                                }while (!pp.get(currentPlayer).getBall().inPlay);
                                 ArrayList<Ball> balls = new ArrayList<>(8);
-                                ArrayList<Ball> otherBalls = new ArrayList<>(8);
-                                for (int i = 0; i < pp.size(); i++) {
-                                    balls.add(pp.get(i).getBall());
-                                    if (i != currentPlayer) otherBalls.add(pp.get(i).getBall());
-                                }
+
+
                                 pp.get(currentPlayer).getBall().setPregame(false);
                                 dp.setCurrentPlayer(pp.get(currentPlayer));
-                                pp.get(currentPlayer).nextMove(course, otherBalls);
+                                pp.get(currentPlayer).nextMove(physics);
 
                                 dp.repaint();
 
@@ -262,9 +315,7 @@ public class Game {
         JMenuItem selectCourse = new JMenuItem("Select Course");
         setting.add(addPlayer);
         setting.add(removePlayer);
-        setting.add(resetCourse);
-        setting.add(selectCourse);
-        setting.add(resetStrokes);
+
         addListenerToAddPlayer(addPlayer);
         addListenerToRemovePlayer(removePlayer);
         addListenerToResetCourse(resetCourse);
@@ -282,11 +333,20 @@ public class Game {
         showEditorButton.addActionListener(new ActionListener() {@Override public void actionPerformed(ActionEvent e) {showEditor();}});
 
         JMenu jm3 = new JMenu("Courses");
+
         JMenuItem courseSelect1 = new JMenuItem("Course1");
         courseSelect1.addActionListener(e -> loadCourse(course1));
+        JMenuItem courseSelect2 = new JMenuItem("Course2");
+        courseSelect2.addActionListener(e -> loadCourse(course2));
+        JMenuItem courseSelect3 = new JMenuItem("Course3");
+        courseSelect3.addActionListener(e -> loadCourse(course3));
 
-
+        jm3.add(resetCourse);
+        jm3.add(selectCourse);
+        jm3.add(resetStrokes);
         jm3.add(courseSelect1);
+        jm3.add(courseSelect2);
+        jm3.add(courseSelect3);
         JMB.add(jm3);
         JMB.add(showEditorButton);
 
@@ -479,6 +539,7 @@ public class Game {
             JPanel label = new miniDraw(new Dimension(Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME - 400));
             RightSidebar.add(label);
 
+
             JLabel widthL = new JLabel("Width");
             JTextField widhtT = new JTextField("200");
             JLabel heightL = new JLabel("Height");
@@ -487,6 +548,10 @@ public class Game {
             JTextField depthT = new JTextField("50");
             JLabel zL = new JLabel("z");
             JTextField zT = new JTextField("10");
+            JLabel radiusL = new JLabel("Radius");
+            JTextField deltaRadiusT = new JTextField("-1");
+            JLabel deltaRadiusL = new JLabel("delta Radius per Layer");
+            JTextField radiusT = new JTextField("30");
             JLabel deltaXLL = new JLabel("deltaX left per Layer");
             JTextField deltaXL_T = new JTextField("1");
             JLabel deltaXRL = new JLabel("deltaX right per Layer");
@@ -496,9 +561,12 @@ public class Game {
             JLabel deltaYBL = new JLabel("deltaY bottom per Layer");
             JTextField deltaYB_T = new JTextField("-1");
 
+            JComboBox<String> objectFormBox = new JComboBox<>(Arrays.toString(ObjectForm.values()).replaceAll("^.|.$", "").split(", "));
+            //obectFormSelect = new JToggleButton("select");
             JComboBox<String> typeBox = new JComboBox<>(Arrays.toString(Type.values()).replaceAll("^.|.$", "").split(", "));
             select = new JToggleButton("select");
-            addSelectActionListener(select, widhtT, heightT, depthT, zT, deltaXL_T, deltaXR_T, deltaYT_T, deltaYB_T, typeBox);
+            addSelectActionListener(select, widhtT, heightT, depthT, zT,radiusT, deltaRadiusT, deltaXL_T, deltaXR_T, deltaYT_T, deltaYB_T, typeBox,objectFormBox);
+            //JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField radiusT, JTextField deltaRT,JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox, JComboBox<String> obectFormBox)
             JButton finalizeCourse = new JButton("FinalizeCourse");
             finalizeCourse.addActionListener(new ActionListener() {
                 @Override
@@ -536,7 +604,10 @@ public class Game {
             RightSidebar.add(depthT);
             RightSidebar.add(zL);
             RightSidebar.add(zT);
-
+            RightSidebar.add(radiusL);
+            RightSidebar.add(radiusT);
+            RightSidebar.add(deltaRadiusL);
+            RightSidebar.add(deltaRadiusT);
             RightSidebar.add(deltaXLL);
             RightSidebar.add(deltaXL_T);
             RightSidebar.add(deltaXRL);
@@ -546,8 +617,11 @@ public class Game {
             RightSidebar.add(deltaYBL);
             RightSidebar.add(deltaYB_T);
 
+            RightSidebar.add(objectFormBox);
+            //RightSidebar.add(obectFormSelect);
             RightSidebar.add(typeBox);
             RightSidebar.add(select);
+
             RightSidebar.add(finalizeCourse);
             RightSidebar.add(saveCourse);
 
@@ -564,7 +638,7 @@ public class Game {
         frame.add(RightSidebar, BorderLayout.EAST);
     }
 
-    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox) {
+    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField radiusT, JTextField deltaRT,JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox, JComboBox<String> obectFormBox) {
         select.addActionListener(new ActionListener() {
 
             @Override
@@ -579,13 +653,34 @@ public class Game {
                         double deltaXR = Double.parseDouble(deltaXRL.getText());
                         double deltaYT = Double.parseDouble(deltaYT_t.getText());
                         double deltaYB = Double.parseDouble(deltaYB_t.getText());
+                        double deltaR = Double.parseDouble(deltaRT.getText());
+                        int radius = Integer.parseInt(radiusT.getText());
 
                         Type t = Type.valueOf(typeBox.getSelectedItem().toString());
+                        ObjectForm of = ObjectForm.valueOf(obectFormBox.getSelectedItem().toString());
 
-                        previewMiniCourse = new Course("preview", width, height, course.getLength(), t, 0);
-                        previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
-                        previewMiniCourse.calculateHeightMap();
-                        previewMiniCourse.calculateSurfaceNormals();
+                        switch (of){
+                            case Cuboid:
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, 0, 0, 0, 0, t);
+                                break;
+                            case Fructum:
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
+                               // previewMiniCourse.addFrustrum(0,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+                                break;
+                            case Cylinder:
+                                previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addHill(radius, radius, z, depth, radius,0, t);
+                                break;
+                            case Hill:
+                                previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addHill(radius, radius, z, depth, radius,deltaR, t);
+                                break;
+                        }
+
+                        previewMiniCourse.calculateHeightMapSafe();
+                        previewMiniCourse.calculateSurfaceNormalsSafe();
                         previewMiniCourse.calculateShadingMap();
                         previewMiniCourse.setBufferedImage(dp.createImage(previewMiniCourse));
                         dp.setPreviewObject(previewMiniCourse.getManagedBufferedImage());
@@ -657,7 +752,8 @@ public class Game {
                String path = "";
 
                JFileChooser chooser = new JFileChooser();
-               File projectDir = new File(System.getProperty("user.dir"));
+               String p = System.getProperty("user.dir") + File.separator + Config.CourseLocation;
+               File projectDir = new File(p);
                chooser.setCurrentDirectory(projectDir);
                int returnVal = chooser.showOpenDialog(frame);
                if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -671,7 +767,7 @@ public class Game {
 
     }
     private static void loadCourse(String path) {
-        Course course = Course.loadCourse(path);
+        Course course = Course.loadCourse2_5d(path);
 
         loadCourse(course);
     }
@@ -702,8 +798,7 @@ public class Game {
         dp.setPlayers(pp);
 
         if (physics == null)physics = new PhysicsEngine();
-        physics.init(pp,course);
-        physics.init(course, balls);
+        physics.init(pp,course, new Wind(Config.MINWIND,Config.MAXWIND,0,2*Math.PI));
 
         dp.repaint();
 
@@ -753,14 +848,21 @@ public class Game {
                         null,
                         "Hans");
 
-
-
                 Player p = new HumanPlayer(s);
+                Game.addPlayer(p);
+
+
                 Tile t = course.getStartTile();
                 p.setBallPositionToCoordinateAndSetSpeedToZero(t.x,t.y,t.z);
                 pp.add(p);
             }
         });
+    }
+
+    private static void addPlayer(Player p) {
+        pp.add(p);
+        dp.setPlayers(pp);
+        physics.init(pp,course);
     }
 
     public static void placeObject(int x, int y) {
@@ -769,6 +871,10 @@ public class Game {
         previewMiniCourse=null;
         dp.setPreviewObject(null);
         dp.repaint();
+    }
+
+    public static Coordinate getWind() {
+        return physics.getWind();
     }
 
 

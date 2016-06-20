@@ -3,6 +3,7 @@ package Game.Actors;
 import Game.*;
 import Game.Model.Ball;
 import Game.Model.Course;
+import Game.Model.PhysicsEngine;
 
 import java.util.ArrayList;
 
@@ -33,7 +34,7 @@ public abstract class Player {
         b.inPlay = t;
     }
 
-    public abstract void nextMove(Course c, ArrayList<Ball> balls);
+    public abstract void nextMove(PhysicsEngine p);
 
     public void shoot(double speedX, double speedY, double speedZ){
         b.shootBall(speedX,speedY,speedZ);
@@ -77,6 +78,11 @@ public abstract class Player {
 
     public int getTotalStrokes() {
         return totalStrokes;
+    }
+
+    public void shootBall(Move move) {
+        b.shootBall(move);
+        addStroke();
     }
 
     public void shootBall(double x, double y, double z) {

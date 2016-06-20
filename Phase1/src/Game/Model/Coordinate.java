@@ -1,6 +1,6 @@
 package Game.Model;
 
-
+import org.apache.commons.math3.distribution.NormalDistribution;
 import java.util.ArrayList;
 
 /**
@@ -10,8 +10,8 @@ import java.util.ArrayList;
  */
 public class Coordinate {
 
-    private double xCoord, yCoord, zCoord;
-    private Type type;//This will be the value that references the object at the coordinate space.
+    protected double xCoord, yCoord, zCoord;
+
 
     /**
      * Constructor of the Coordinate class
@@ -30,6 +30,19 @@ public class Coordinate {
         this.xCoord = x;
         this.yCoord = y;
         this.zCoord = z;
+    }
+
+    public Coordinate(double minwind, double maxwind) {
+
+    }
+
+    public Coordinate getDerivate(double maxChangeInPercent){
+        return null;
+    }
+
+    public Coordinate clone(){
+        Coordinate c = new Coordinate(xCoord,yCoord,zCoord);
+        return c;
     }
 
     /**
@@ -68,13 +81,7 @@ public class Coordinate {
         this.zCoord = z;
     }
 
-    /**
-     * setter to set the type of class Type
-     * @param type
-     */
-    public void setType(Type type){
-        this.type = type;
-    }
+
 
     /**
      * getter to get the x-coordinate
@@ -271,4 +278,52 @@ public class Coordinate {
         return passedPoints;
     }
 
+    public static double getDistance(Coordinate coordinate, Coordinate coordinate1) {
+        return getDistance(coordinate.xCoord,coordinate.yCoord,coordinate.zCoord,coordinate1.xCoord,coordinate1.yCoord,coordinate1.zCoord);
+    }
+
+    public double getLength() {
+        return getDistance(0,0,0,xCoord,yCoord,zCoord);
+    }
+
+    public static void modify2d(Coordinate c, double varianz) {
+        NormalDistribution n = new NormalDistribution(c.xCoord,varianz);
+        NormalDistribution n2 = new NormalDistribution(c.yCoord,varianz);
+        c.xCoord = n.sample();
+        c.yCoord = n2.sample();
+
+    }
+
+    public static void modify3d(Coordinate c, double varianz) {
+        if (varianz == 0) return;
+        NormalDistribution n = new NormalDistribution(c.xCoord,varianz);
+        NormalDistribution n2 = new NormalDistribution(c.yCoord,varianz);
+        NormalDistribution n3 = new NormalDistribution(c.zCoord,varianz);
+        c.xCoord = n.sample();
+        c.yCoord = n2.sample();
+        c.zCoord = n3.sample();
+
+    }
+
+    public void normalise() {
+        double length = Math.sqrt(xCoord * xCoord+ yCoord * yCoord + zCoord * zCoord ); // distance from avg to the center
+        xCoord /= length;
+        yCoord /= length;
+        zCoord  /= length;
+    }
+
+
+   /* public static Coordinate(Coordinate a){
+
+        lon = Random(0;2*PI)
+        lat = Random(-PI;PI)
+        lengthC = a.length * percentage;
+        Vector3d c;
+        Vector3d b;
+        c.x = lengthC * cos(lat) * cos(lon)
+        c.y = lengthC * cos(lat) * sin(lon)
+        c.z = lengthC *sin(lat)
+        b = a + c;
+        return b;
+    }*/
 }
