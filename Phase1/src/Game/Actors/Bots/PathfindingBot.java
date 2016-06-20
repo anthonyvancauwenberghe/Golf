@@ -32,6 +32,7 @@ public class PathfindingBot extends AIPlayer {
     Coordinate ballCoord;
     ArrayList<MapCellDetails> pMap;
     int indexList;
+    int u;
 
     public PathfindingBot(String s, Course c) {
         super(s);
