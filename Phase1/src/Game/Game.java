@@ -1,8 +1,7 @@
 package Game;
 
 
-import Game.Actors.Bots.AIPlayer;
-import Game.Actors.Bots.AngryBot;
+import Game.Actors.Bots.*;
 import Game.Actors.HumanPlayer;
 import Game.Actors.Player;
 import Game.Model.*;
@@ -21,40 +20,40 @@ import java.util.Random;
 /**
  * Created by tony on 16/03/2016.
  */
-public class Game extends Thread {
+public class Game {
     public static Course course;
     public static JFrame frame;
     private static JPanel RightSidebar;
     private static JPanel infoSidebar;
     private static JPanel LeftSidebar;
     private static JToggleButton select;
+    private static JToggleButton obectFormSelect;
     private static boolean editorVisible;
     private static boolean infoVisible;
     private static boolean variablesVisible;
 
     private static PhysicsEngine physics;
-    public static AIPlayer AI = new AngryBot("Player 2", 64);
-    public static AIPlayer AI2 = new AngryBot("Player 3", 64);
+    public static AIPlayer AI= new AngryBot("Player 2",64);
+    public static AIPlayer AI2= new AngryBot("Player 3",64);
     public static DrawPanel dp;
-
 
     private static ArrayList<Player> pp;
 
     private static boolean selectNextPlayer;
-    private static int currentPlayer = 0;
+    private static int currentPlayer=0;
 
     private static Thread gameThread;
     private static boolean courseLoading;
-    private static Course course1, course2, course3;
+    private static Course course1,course2, course3;
     private static Course previewMiniCourse;
 
     private static boolean pause = false;
 
-    public static PhysicsEngine getAlternativBoardForTest() {
+    public static PhysicsEngine getAlternativBoardForTest(){
         return physics.getAlternativBoardForTest();
     }
 
-    public Game() {
+    public Game(){
         JOptionPane.showMessageDialog(frame,
                 "Wait for profiler");
         prepareCourses();
@@ -64,6 +63,7 @@ public class Game extends Thread {
         loadCourse(course);
         gameThread = createGameThread();
         gameThread.run();
+
     }
 
     public static Dimension getFrameDimension() {
@@ -74,7 +74,7 @@ public class Game extends Thread {
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("Player 1");
-        Player p2 = AI;
+        Player p2  =  AI;
 
         pp.add(p);
         pp.add(p2);
@@ -115,16 +115,16 @@ public class Game extends Thread {
 
     private Course createStandartCourse(int standartCourse) {
         Course c;
-        switch (standartCourse) {
+        switch (standartCourse){
             case 1:
                 Course course1;
                 course1 = new Course("GolfDeluxe1", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course1.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
-                course1.addFrustrum(200, 0, 10, 160, 440, 20, 2, 0, 0, 0, Type.OBJECT);
-                course1.addFrustrum(100, 600, 10, 160, 100, 20, 2, 0, 0, 0, Type.OBJECT);
-                course1.addFrustrum(420, 220, 10, 160, 340, 20, 1, -3, 1, -1, Type.OBJECT);
-                course1.addFrustrum(620, 320, 10, 330, 240, 40, 2, -1, 1, -4, Type.OBJECT);
-                course1.addFrustrum(620, 120, 10, 330, 140, 60, 15, -4, 15, -4, Type.OBJECT);
+                course1.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+                course1.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+                course1.addFrustrum(100,600,10,160,100,20,2,0,0,0,Type.OBJECT);
+                course1.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
+                course1.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
+                course1.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
                 //course.addFrustrum(650,440,0,110,140,200,15,0,0,-10,Type.OBJECT);
                 //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
                 //course.addFrustrum(520,120,0,160,140,20,2,0,0,0,Type.OBJECT);
@@ -144,11 +144,11 @@ public class Game extends Thread {
             case 2:
                 Course course2;
                 course2 = new Course("GolfDeluxe2", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course2.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
-                course2.addFrustrum(200, 0, 10, 160, 440, 20, 2, 0, 0, 0, Type.OBJECT);
+                course2.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
+                course2.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
                 //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
                 //course.addFrustrum(620,320,10,330,240,40,2,-1,1,-4,Type.OBJECT);
-                course2.addFrustrum(620, 120, 10, 330, 140, 60, 15, -4, 15, -4, Type.OBJECT);
+                course2.addFrustrum(620,120,10,330,140,60,15,-4,15,-4,Type.OBJECT);
 
                 course2.setTile(850, 650, 1, Type.Hole);
                 course2.setTile(100, 100, 9, Type.Start);
@@ -162,7 +162,7 @@ public class Game extends Thread {
             case 3:
                 Course course3;
                 course3 = new Course("GolfDeluxe3", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                course3.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
+                course3.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
                 //course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
                 //course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);
                 //course.addFrustrum(420,220,10,160,340,20,1,-3,1,-1,Type.OBJECT);
@@ -188,7 +188,7 @@ public class Game extends Thread {
             default:
                 Course courseD;
                 courseD = new Course("GolfDeluxeStandart", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
-                courseD.addFrustrum(0, 0, 0, Config.getWidth(), Config.getHeight(), 10, 0, 0, 0, 0, Type.Grass);
+                courseD.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0, Type.Grass);
                 courseD.setTile(800, 600, 1, Type.Hole);
                 courseD.setTile(100, 100, 4, Type.Start);
                 courseD.finalise();
@@ -209,17 +209,17 @@ public class Game extends Thread {
 
             @Override
             public void keyPressed(KeyEvent e) {
-                if (e.getKeyChar() == 'q') {
-                    for (Player p : pp) {
+                if(e.getKeyChar()=='q'){
+                    for (Player p: pp){
                         p.getBall().printBallInfo();
                         System.out.println();
                     }
                 }
-                if (e.getKeyChar() == 'w') {
-                    physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE);
+                if(e.getKeyChar()=='w'){
+                    physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE);
                     dp.repaint();
                 }
-                if (e.getKeyChar() == 'p') {
+                if(e.getKeyChar()=='p'){
                     pause = !pause;
                 }
             }
@@ -232,10 +232,10 @@ public class Game extends Thread {
     }
 
     private static Thread createGameThread() {
-        Thread t = new Thread() {
+        Thread t =  new Thread(){
             long lastTime = System.currentTimeMillis();
 
-            public void run() {
+            public void run(){
                 while (true) {
 
                     long currentTime = System.currentTimeMillis();
@@ -243,18 +243,12 @@ public class Game extends Thread {
                     //System.out.println("time:" +currentTime + "elapsed:" +elapsedTime);
                     lastTime = currentTime;
                     if (courseLoading) continue;
-// || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
+                    // || pp.get(currentPlayer).getBall().isMoving())&&!pp.get(currentPlayer).getBall().inHole
                     if ((physics.atLeastOneBallMoving())) {
                         selectNextPlayer = true;
                         ;
                         if (!pause) physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE); //
-
-                        try {
-                            dp.repaint();
-                            Thread.sleep(1);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                            selectNextPlayer = true;
 
                     } else {
                         dp.resetAIPreview();
@@ -282,8 +276,14 @@ public class Game extends Thread {
                         }
 
 
-                    }
 
+                        }
+                    try {
+                        dp.repaint();
+                        Thread.sleep(1);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }
@@ -353,6 +353,9 @@ public class Game extends Thread {
         JMenuItem courseSelect3 = new JMenuItem("Course3");
         courseSelect3.addActionListener(e -> loadCourse(course3));
 
+        jm3.add(resetCourse);
+        jm3.add(selectCourse);
+        jm3.add(resetStrokes);
         jm3.add(courseSelect1);
         jm3.add(courseSelect2);
         jm3.add(courseSelect3);
@@ -379,6 +382,7 @@ public class Game extends Thread {
         if (variablesVisible) {
 
 
+
             LeftSidebar = new JPanel();
             Dimension d = new Dimension(Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME);
             LeftSidebar.setMinimumSize(d);
@@ -392,6 +396,7 @@ public class Game extends Thread {
 
             JLabel BallRadius = new JLabel("BallRadius");
             JTextField BallRadiusT = new JTextField("" + Config.ballRadius);
+
 
 
             JLabel collitionSurfacePointRatio = new JLabel("collitionSurfacePointRatio");
@@ -571,6 +576,7 @@ public class Game extends Thread {
             JPanel label = new miniDraw(new Dimension(Config.sidebarwidth, Config.getHeight() + Config.OFFSET_Y_GAME - 400));
             RightSidebar.add(label);
 
+
             JLabel widthL = new JLabel("Width");
             JTextField widhtT = new JTextField("200");
             JLabel heightL = new JLabel("Height");
@@ -579,6 +585,10 @@ public class Game extends Thread {
             JTextField depthT = new JTextField("50");
             JLabel zL = new JLabel("z");
             JTextField zT = new JTextField("10");
+            JLabel radiusL = new JLabel("Radius");
+            JTextField deltaRadiusT = new JTextField("-1");
+            JLabel deltaRadiusL = new JLabel("delta Radius per Layer");
+            JTextField radiusT = new JTextField("30");
             JLabel deltaXLL = new JLabel("deltaX left per Layer");
             JTextField deltaXL_T = new JTextField("1");
             JLabel deltaXRL = new JLabel("deltaX right per Layer");
@@ -588,9 +598,12 @@ public class Game extends Thread {
             JLabel deltaYBL = new JLabel("deltaY bottom per Layer");
             JTextField deltaYB_T = new JTextField("-1");
 
+            JComboBox<String> objectFormBox = new JComboBox<>(Arrays.toString(ObjectForm.values()).replaceAll("^.|.$", "").split(", "));
+            //obectFormSelect = new JToggleButton("select");
             JComboBox<String> typeBox = new JComboBox<>(Arrays.toString(Type.values()).replaceAll("^.|.$", "").split(", "));
             select = new JToggleButton("select");
-            addSelectActionListener(select, widhtT, heightT, depthT, zT, deltaXL_T, deltaXR_T, deltaYT_T, deltaYB_T, typeBox);
+            addSelectActionListener(select, widhtT, heightT, depthT, zT,radiusT, deltaRadiusT, deltaXL_T, deltaXR_T, deltaYT_T, deltaYB_T, typeBox,objectFormBox);
+            //JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField radiusT, JTextField deltaRT,JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox, JComboBox<String> obectFormBox)
             JButton finalizeCourse = new JButton("FinalizeCourse");
             finalizeCourse.addActionListener(new ActionListener() {
                 @Override
@@ -628,7 +641,10 @@ public class Game extends Thread {
             RightSidebar.add(depthT);
             RightSidebar.add(zL);
             RightSidebar.add(zT);
-
+            RightSidebar.add(radiusL);
+            RightSidebar.add(radiusT);
+            RightSidebar.add(deltaRadiusL);
+            RightSidebar.add(deltaRadiusT);
             RightSidebar.add(deltaXLL);
             RightSidebar.add(deltaXL_T);
             RightSidebar.add(deltaXRL);
@@ -638,8 +654,11 @@ public class Game extends Thread {
             RightSidebar.add(deltaYBL);
             RightSidebar.add(deltaYB_T);
 
+            RightSidebar.add(objectFormBox);
+            //RightSidebar.add(obectFormSelect);
             RightSidebar.add(typeBox);
             RightSidebar.add(select);
+
             RightSidebar.add(finalizeCourse);
             RightSidebar.add(saveCourse);
 
@@ -656,7 +675,7 @@ public class Game extends Thread {
         frame.add(RightSidebar, BorderLayout.EAST);
     }
 
-    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox) {
+    private static void addSelectActionListener(JToggleButton select, JTextField widhtT, JTextField heightT, JTextField depthT, JTextField zT, JTextField radiusT, JTextField deltaRT,JTextField deltaXLL, JTextField deltaXRL, JTextField deltaYT_t, JTextField deltaYB_t, JComboBox<String> typeBox, JComboBox<String> obectFormBox) {
         select.addActionListener(new ActionListener() {
 
             @Override
@@ -671,13 +690,34 @@ public class Game extends Thread {
                         double deltaXR = Double.parseDouble(deltaXRL.getText());
                         double deltaYT = Double.parseDouble(deltaYT_t.getText());
                         double deltaYB = Double.parseDouble(deltaYB_t.getText());
+                        double deltaR = Double.parseDouble(deltaRT.getText());
+                        int radius = Integer.parseInt(radiusT.getText());
 
                         Type t = Type.valueOf(typeBox.getSelectedItem().toString());
+                        ObjectForm of = ObjectForm.valueOf(obectFormBox.getSelectedItem().toString());
 
-                        previewMiniCourse = new Course("preview", width, height, course.getDepth(), t, 0);
-                        previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
-                        previewMiniCourse.calculateHeightMap();
-                        previewMiniCourse.calculateSurfaceNormals();
+                        switch (of){
+                            case Cuboid:
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, 0, 0, 0, 0, t);
+                                break;
+                            case Fructum:
+                                previewMiniCourse = new Course("preview", width, height, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addFrustrum(0, 0, z, width, height, depth, deltaXL, deltaXR, deltaYT, deltaYB, t);
+                               // previewMiniCourse.addFrustrum(0,0,10,160,440,20,2,0,0,0,Type.OBJECT);
+                                break;
+                            case Cylinder:
+                                previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addHill(radius, radius, z, depth, radius,0, t);
+                                break;
+                            case Hill:
+                                previewMiniCourse = new Course("preview", radius*2, radius*2, course.getDepth(), Type.Empty, 0);
+                                previewMiniCourse.addHill(radius, radius, z, depth, radius,deltaR, t);
+                                break;
+                        }
+
+                        previewMiniCourse.calculateHeightMapSafe();
+                        previewMiniCourse.calculateSurfaceNormalsSafe();
                         previewMiniCourse.calculateShadingMap();
                         previewMiniCourse.setBufferedImage(dp.createImage(previewMiniCourse));
                         dp.setPreviewObject(previewMiniCourse.getManagedBufferedImage());
@@ -747,12 +787,13 @@ public class Game extends Thread {
             public void actionPerformed(ActionEvent e) {
                 String path = "";
 
-                JFileChooser chooser = new JFileChooser();
-                File projectDir = new File(System.getProperty("user.dir"));
-                chooser.setCurrentDirectory(projectDir);
-                int returnVal = chooser.showOpenDialog(frame);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    path = chooser.getSelectedFile().getAbsolutePath();
+               JFileChooser chooser = new JFileChooser();
+               String p = System.getProperty("user.dir") + File.separator + Config.CourseLocation;
+               File projectDir = new File(p);
+               chooser.setCurrentDirectory(projectDir);
+               int returnVal = chooser.showOpenDialog(frame);
+               if (returnVal == JFileChooser.APPROVE_OPTION) {
+                   path = chooser.getSelectedFile().getAbsolutePath();
 
                     loadCourse(path);
 
@@ -763,7 +804,7 @@ public class Game extends Thread {
     }
 
     private static void loadCourse(String path) {
-        Course course = Course.loadCourse(path);
+        Course course = Course.loadCourse2_5d(path);
 
         loadCourse(course);
     }
@@ -845,13 +886,21 @@ public class Game extends Thread {
                         null,
                         "Hans");
 
-
                 Player p = new HumanPlayer(s);
+                Game.addPlayer(p);
+
+
                 Tile t = course.getStartTile();
                 p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z);
                 pp.add(p);
             }
         });
+    }
+
+    private static void addPlayer(Player p) {
+        pp.add(p);
+        dp.setPlayers(pp);
+        physics.init(pp,course);
     }
 
     public static void placeObject(int x, int y) {

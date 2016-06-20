@@ -224,22 +224,33 @@ public class Course {
             c.setTile(x, y, 0, Type.Hole);
             c.hole = new Hole(Config.getHoleRadius(),x, y, 0);
         }
-            System.out.println("try to read " + c.getName()+".png");
-            BufferedImage bi = ImageIO.read(new File(Config.CourseLocation + c.getName()+".png"));
+
+
+
+
+
+
+        c.calculateSurfaceNormalsSafe();
+        System.out.println("try to read " + c.getName()+".png");
+        BufferedImage bi = null;
+            try {
+
+            bi = ImageIO.read(new File(Config.CourseLocation + c.getName() + ".png"));
+            }catch (IOException e){
+            c.calculateHeightMapSafe();
+            bi = DrawPanel.createImage(c);
+            Utils.saveManagedBufferedImage(Config.CourseLocation + c.name + ".png",bi);
+         }finally {
             c.setBufferedImage(bi);
-
-
+         }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            return null;
+
         } catch (IOException e) {
             System.out.println("tried to read " + c.getName()+".png");
             e.printStackTrace();
-            return null;
+
         }
-
-
-        c.calculateSurfaceNormals();
         return c;
 
     }
@@ -304,6 +315,7 @@ public class Course {
                 c.setTile(x, y, 0, Type.Hole);
                 c.hole = new Hole(Config.getHoleRadius(),x, y, 0);
             }
+            c.calculateSurfaceNormalsSafe();
             System.out.println("try to read " + c.getName()+".png");
             BufferedImage bi = ImageIO.read(new File(Config.CourseLocation + c.getName()+".png"));
             c.setBufferedImage(bi);
@@ -319,7 +331,7 @@ public class Course {
         }
 
 
-        c.calculateSurfaceNormals();
+
         return c;
 
     }
@@ -508,45 +520,23 @@ public class Course {
             if (rightXDeltaPerLayer<0)length+=rightXDeltaPerLayer; else length-=rightXDeltaPerLayer;
             y+=topYDeltaPerLayer;
             if (topYDeltaPerLayer>0) height-=topYDeltaPerLayer; else  height+=topYDeltaPerLayer;
-            if (bottomYDeltaPerLayer<0) height+=bottomYDeltaPerLayer; else height-=bottomYDeltaPerLayer;
+            if  (bottomYDeltaPerLayer<0) height+=bottomYDeltaPerLayer; else height-=bottomYDeltaPerLayer;
 
             if (height<=0||length<=0)break;
         }
 
     }
 
-    public void addPyramid(int x, int y, int z, int length, int height, int depth, Type t) {
 
-        int initialX=x;
-        int initalY=y;
-        int initalZ=z;
-        int initialLength=x;
-        int initalHeight=y;
-        for (z = initalZ; z < initalZ+depth; z++) {
-            addRectangle(x,y,z,length,height,t);
+    public void addHill(int initialX, int initialY, int initialZ,int depth ,double r, double DeltaRPerLayer, Type t) {
 
-            x++;
-            y++;
-            length--;
-            height--;
-            length--;
-            height--;
-            if (height<=0||length<=0)break;
-        }
+        double x=initialX;
+        double y=initialY;
 
-    }
-    public void addHill(int a, int b, int r, double n, int z, int depth, Type t) {
+        for (int z = initialZ; z < initialZ+depth; z++) {
+            addSquircle((int)x,(int)y,(int)r,2,z,t);
 
-        int initialX=a;
-        int initalY=b;
-        int initalZ=z;
-
-        for (z = initalZ; z < initalZ+depth; z++) {
-            addSquircle(a,b,r,n,z,t);
-
-            r--;
-
-            if (r<=0)break;
+            r +=DeltaRPerLayer;
         }
 
     }
@@ -590,7 +580,6 @@ public class Course {
 
         return new Coordinate(avgX, avgY, avgZ);
     }
-
     public void calculateSurfaceNormals(){
         surfaceNormals = new Coordinate[dimension[0]][dimension[1]];
 
@@ -602,6 +591,23 @@ public class Course {
                         break;
                     }
                 }
+            }
+            ;
+        }
+
+    }
+    public void calculateSurfaceNormalsSafe(){
+        surfaceNormals = new Coordinate[dimension[0]][dimension[1]];
+
+        for (int x = 0; x <dimension[0];x++){
+            for (int y = 0; y <dimension[1];y++){
+                for (int z = dimension[2]-1; z >=0;z--){
+                    if (playfield[x][y][z] != Type.Empty){
+                        surfaceNormals[x][y] = getNormal(x,y,z);
+                        break;
+                    }
+                }
+
             }
 ;
         }
@@ -624,10 +630,25 @@ public class Course {
 
     }
 
+    public void calculateHeightMapSafe() {
+        heightMap = new int[dimension[0]][dimension[1]];
+
+        for (int x = 0; x <dimension[0];x++){
+            for (int y = 0; y <dimension[1];y++){
+                for (int z = dimension[2]-1; z >= 0;z--){
+                    if (playfield[x][y][z] != Type.Empty){
+                        heightMap[x][y] = z;
+                        break;
+                    }
+                }
+            }
+
+        }
+    }
     public void calculateShadingMap(){
         double[] lv = Config.getLightningVector3d(); //lighting vector
         shadingMap = new float[dimension[0]][dimension[1]];
-        if (surfaceNormals==null) calculateSurfaceNormals(); //this should actually never be executed
+        if (surfaceNormals==null) calculateSurfaceNormalsSafe(); //this should actually never be executed
         for (int x = 0; x <dimension[0];x++){
             for (int y = 0; y <dimension[1];y++){
                     //angle = acos(v1•v2)
@@ -664,10 +685,10 @@ public class Course {
 
     public void finalise() {
         System.out.println("CalculateSurfaceNormals");
-        calculateSurfaceNormals();
+        calculateSurfaceNormalsSafe();
         System.gc();
         System.out.println("CalculateHightMap");
-        calculateHeightMap();
+        calculateHeightMapSafe();
         System.gc();
         System.out.println("CalculateShadingMap");
         calculateShadingMap();
@@ -691,6 +712,7 @@ public class Course {
         for ( insideX = 0; insideX+x<dimension[0]&&insideX<pmcD[0];insideX++) {
             for ( insideY = 0; insideY + y < dimension[1] && insideY < pmcD[1]; insideY++) {
                 for (int z= 0; z<dimension[2];z++){
+                    if (pmc[insideX][insideY][z]!=Type.Empty)
                     playfield[insideX+x][insideY+y][z] = pmc[insideX][insideY][z];
 
                 }
@@ -739,4 +761,6 @@ public class Course {
         }
         return true;
     }
+
+
 }
