@@ -52,6 +52,7 @@ public class PathfindingBot extends AIPlayer {
             newCoord = new Coordinate(pMap.get(indexList).getX(), pMap.get(indexList).getY(), pMap.get(indexList).getHeight());
         }while (course.wayIsObstacleFree(ballCoord, newCoord));
         int[] delta = getDelta(ballCoord, newCoord);
+        indexList = pMap.size();
         shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
     }
 
