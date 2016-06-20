@@ -32,6 +32,7 @@ public class MapCellDetails implements Comparable<MapCellDetails>{
 
     @Override
     public int compareTo(MapCellDetails o) {
+        if (this.counter == -2) return -1;
         return Integer.compare(this.counter, o.counter);
     }
 
@@ -53,5 +54,9 @@ public class MapCellDetails implements Comparable<MapCellDetails>{
 
     public int getHeight() {
         return height;
+    }
+
+    public int getCounter() {
+        return counter;
     }
 }

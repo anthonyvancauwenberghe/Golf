@@ -21,7 +21,7 @@ public class PathfindingMap {
         course = c;
         ball = b;
         hole = h;
-        map = new MapCellDetails[course.playfield.length/2][course.playfield[0].length/2];
+        map = new MapCellDetails[course.playfield.length/4][course.playfield[0].length/4];
         treatedCells = new ArrayList<>();
         visitedCells = new ArrayList<>();
         c.calculateHeightMap();
@@ -34,8 +34,8 @@ public class PathfindingMap {
     public void makeInitialMap() {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                int h = course.heightMap[i][j];
-                Type t = course.playfield[i][j][course.heightMap[i][j]];
+                int h = course.heightMap[i*4][j*4];
+                Type t = course.playfield[i*4][j*4][course.heightMap[i*4][j*4]];
                 int c = -1;
                 if(t == Type.OBJECT) c = -2;
                 map[i][j] = new MapCellDetails(t, h, c, i, j);
@@ -78,7 +78,7 @@ public class PathfindingMap {
         int returnCell = -1;
         for (int i = 0; i < treatedCells.size(); i++){
             if (treatedCells.get(i).visited == true) {
-                visitedCells.add(treatedCells.get(i));
+                if (treatedCells.get(i).counter!=-2)visitedCells.add(treatedCells.get(i));
                 treatedCells.remove(i);
             }else if(treatedCells.get(i).visited == false){
                 returnCell = i;

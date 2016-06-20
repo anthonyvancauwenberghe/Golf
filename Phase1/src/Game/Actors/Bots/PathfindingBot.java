@@ -31,18 +31,7 @@ public class PathfindingBot extends AIPlayer {
     Coordinate holeCoord;
     Coordinate ballCoord;
     ArrayList<MapCellDetails> pMap;
-
-    @Override
-    public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
-        for (MapCellDetails cell:pMap) {
-            Coordinate newCoord = new Coordinate(cell.getX(), cell.getY(), cell.getHeight());
-            if (course.wayIsObstacleFree(ballCoord, newCoord)) {
-                int[] delta = getDelta(holeCoord, holeCoord);
-                shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
-            }
-        }
-
-    }
+    int indexList;
 
     public PathfindingBot(String s, Course c) {
         super(s);
@@ -52,7 +41,21 @@ public class PathfindingBot extends AIPlayer {
         ballCoord = b.getCoordinate();
         PathfindingMap map = new PathfindingMap(c, ballCoord, holeCoord);
         pMap = map.getMap();
+        indexList = pMap.size();
     }
+
+    @Override
+    public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
+        Coordinate newCoord;
+        do{
+            indexList--;
+            newCoord = new Coordinate(pMap.get(indexList).getX(), pMap.get(indexList).getY(), pMap.get(indexList).getHeight());
+        }while (course.wayIsObstacleFree(ballCoord, newCoord));
+        int[] delta = getDelta(ballCoord, newCoord);
+        shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
+    }
+
+
 
 
 }
