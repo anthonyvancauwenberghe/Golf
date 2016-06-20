@@ -3,14 +3,15 @@ package Game.Actors.Bots;
 import Game.Actors.Move;
 import Game.Config;
 import Game.Game;
-import Game.Model.*;
-
-import java.util.ArrayList;
+import Game.Model.Ball;
+import Game.Model.Coordinate;
+import Game.Model.Evaluationfunction;
+import Game.Model.PhysicsEngine;
 
 /**
  * Created by Nibbla on 12.06.2016.
  */
-public class AngryBot extends AIPlayer {
+public class AngryBot extends AIPlayer  {
     public int testMoves;
 
     public AngryBot(String name, int testMoves) {

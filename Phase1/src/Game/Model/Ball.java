@@ -435,7 +435,7 @@ public class Ball {
         return surfaceColectionBig;
     }
 
-    public void setPregame(boolean pregame) {
+    public void setPreGame(boolean pregame) {
         this.pregame = pregame;
     }
 
