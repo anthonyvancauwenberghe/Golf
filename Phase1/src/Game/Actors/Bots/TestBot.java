@@ -7,7 +7,7 @@ package Game.Actors.Bots;
 
 /*
 public class TestBot extends AIPlayer {
-    @Override
+    @Override;;;;
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
         Ball b = this.getBall();
         Hole h = c.getHole();
