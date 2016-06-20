@@ -7,7 +7,7 @@ import Game.Model.Type;
 import java.util.*;
 
 /**
- * Created by lukas on 08/06/16.
+ * Created by lukass on 08/06/16.
  */
 public class PathfindingMap {
     Course course;
