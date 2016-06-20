@@ -28,7 +28,6 @@ public class Stroke2Bot extends AIPlayer{
         b2.shootBall(50,50,0);
         p.calculateUntilNoBallIsMoving(0);
 
-
         Game.Game.dp.repaint();
         Ball b = this.getBall();
 
