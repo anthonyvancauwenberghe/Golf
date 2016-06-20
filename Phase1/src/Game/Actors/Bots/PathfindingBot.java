@@ -36,16 +36,8 @@ public class PathfindingBot extends AIPlayer {
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
         for (MapCellDetails cell:pMap) {
             Coordinate newCoord = new Coordinate(cell.getX(), cell.getY(), cell.getHeight());
-
-
-            if (course.wayIsObstacleFree(holeCoord, holeCoord)) {
+            if (course.wayIsObstacleFree(ballCoord, newCoord)) {
                 int[] delta = getDelta(holeCoord, holeCoord);
-                try {
-                    Game.Game.dp.repaint();
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
                 shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
             }
         }
