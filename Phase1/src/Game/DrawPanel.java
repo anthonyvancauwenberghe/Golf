@@ -629,7 +629,7 @@ public class DrawPanel extends JPanel {
 
         Hole t = course.getHole();
         g2.setPaint(Color.BLACK);
-        //g2.fillOval((int) (t.getX() - t.radius+2), (int) (t.getY() - t.radius+2), (int) (t.radius*2-4), (int) (t.radius*2-4));
+        g2.fillOval((int) (t.getX() - t.radius+2), (int) (t.getY() - t.radius+2), (int) (t.radius*2-4), (int) (t.radius*2-4));
 
 
     }
