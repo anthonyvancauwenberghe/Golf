@@ -49,7 +49,6 @@ public class PathfindingMap {
         //Giving hole counter "-1" (unique)
         mapSH[(int) holeSH.getX()][(int) holeSH.getY()].setCounter(-1);
         makeCounter((int) holeSH.getX(), (int) holeSH.getY());
-
     }
 
     public void makeCounter(int x, int y) {
@@ -84,6 +83,7 @@ public class PathfindingMap {
         }
         return list;
     }
+
     MapCellDetails getNextToVisit(){
         int returnCell = 0;
         for (int i = 0; i < treatedCells.size(); i++){
@@ -94,7 +94,6 @@ public class PathfindingMap {
                 returnCell = i;
                 return treatedCells.get(returnCell);
             }
-
         }
         return treatedCells.get(returnCell);
     }
@@ -112,11 +111,6 @@ public class PathfindingMap {
         System.out.println("-----------------------------------");
     }
     public ArrayList<MapCellDetails> getMapSH(){
-
-//        for (MapCellDetails cell:visitedCells) {
-//            if (cell.counter!=-2)cleanMap.add(cell);
-//        }
-
         return cleanMap;
     }
 }

@@ -30,7 +30,6 @@ public class PathfindingBot extends AIPlayer {
         ballCoord = this.getBall().getCoordinate();
         holeCoord = new Coordinate(800, 650, 1);
         indexList = 0;
-
         map = new PathfindingMap(c, ballCoord, holeCoord);
     }
 
@@ -38,10 +37,7 @@ public class PathfindingBot extends AIPlayer {
     public void nextMove(Course c, ArrayList<Ball> notPlayerBall) {
         Game.Game.dp.repaint();
         ballCoord = new Coordinate(this.getBall().getCoordinate().getX(), this.getBall().getCoordinate().getY(),course.heightMap[(int)this.getBall().getCoordinate().getX()][(int)this.getBall().getCoordinate().getY()]);
-
-
         pMap = map.getMapSH();
-
         do{
             indexList++;
             this.alternative = new Coordinate(pMap.get(indexList).getX()*map.shrink, pMap.get(indexList).getY()*map.shrink, pMap.get(indexList).getHeight()+1);
@@ -52,7 +48,6 @@ public class PathfindingBot extends AIPlayer {
             this.alternative = holeCoord;
             Game.Game.dp.repaint();
             Thread.sleep(1000);
-
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -60,4 +55,3 @@ public class PathfindingBot extends AIPlayer {
         this.alternative = null;
     }
 }
-
