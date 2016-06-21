@@ -14,7 +14,7 @@ public class HumanPlayer extends Player {
 
     @Override
     public void nextMove(PhysicsEngine p) {
-        JOptionPane.showMessageDialog(null, "It is " +  name + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
+        //JOptionPane.showMessageDialog(null, "It is " +  name + " turn", "Player", JOptionPane.INFORMATION_MESSAGE);
     }
 
     public HumanPlayer(String name) {

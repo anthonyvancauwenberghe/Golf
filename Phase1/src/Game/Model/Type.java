@@ -29,8 +29,6 @@ public enum Type {
         this.g = g;
         this.friction = v;
         this.bounceDampness = bd;
-
-
     }
 
     public double getFriction(){

@@ -3,6 +3,7 @@ package Game.Model;
 import Game.Actors.Player;
 import Game.Game;
 import Game.Config;
+import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -93,7 +94,13 @@ public class PhysicsEngine {
         }
 
     }
+    private double getNoise(){
 
+        double noise= Double.parseDouble(null);
+        NormalDistribution normalDistribution = new NormalDistribution();
+
+        return noise;
+    }
 
     public void processPhysics(double elapsedTime, double noisePercentage, double windPercentagePerSecond) {
 
