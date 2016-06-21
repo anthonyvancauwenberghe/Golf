@@ -79,8 +79,8 @@ public class Game {
         Player p2  =  new PathfindingBot("Player 2", course);
 
         pp.add(p);
-        //pp.add(p2);
-        //pp.add(AI2);
+        pp.add(AI);
+        pp.add(AI2);
     }
 
     private void prepareView() {
