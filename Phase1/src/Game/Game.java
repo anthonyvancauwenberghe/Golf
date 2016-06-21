@@ -76,7 +76,7 @@ public class Game {
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
         Player p = new HumanPlayer("Player 1");
-        Player p2  =  new Stroke2Bot("Player 3");
+        Player p2  =  new PathfindingBot("Player 3", course);
 
         pp.add(p);
         //pp.add(p2);
