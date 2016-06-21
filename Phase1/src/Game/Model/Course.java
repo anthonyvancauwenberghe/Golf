@@ -727,21 +727,21 @@ public class Course {
 
         return null;
     }
-    public boolean wayIsObstacleFree(Coordinate Ball, Coordinate Hole){
-        Coordinate cn = new Coordinate(Hole.getX(),Hole.getY(),Hole.getZ()+10+ Config.ballRadius);
-
-
-        ArrayList<Coordinate> all = Coordinate.getPixelBetweenToPoints(Ball, cn);
-        for (int i = 1; i<all.size()-1; i++){
-            Coordinate c = all.get(i);
-            System.out.println(c.getX() + " q" + c.getY() + " " + c.getZ() + "Type" +playfield[(int)c.getX()][(int)c.getY()][(int)(c.getZ() )].name());
-            Type t = playfield[(int)c.getX()][(int)c.getY()][(int)(c.getZ() )];
-            if (t != ((Type.Empty))){
-                System.out.println("Would colide with " + playfield[(int) c.getX()][(int) c.getY()][(int) (c.getZ())]);
+    public boolean wayIsObstacleFree(Coordinate origin, Coordinate destination){
+        //Coordinate destination2 = new Coordinate(destination.getX(),destination.getY(),heightMap[(int)destination.getX()][(int)destination.getY()]+Config.ballRadius);
+        System.out.println("wayIsObstacleFree: " + destination.toString());
+        ArrayList<int[]> all = Coordinate.getPixelBetween((int)origin.getX(), (int)origin.getY(), (int)destination.getX(), (int)destination.getY());
+        for (int[]coord:all) {
+            Coordinate c = new Coordinate(coord[0], coord[1], heightMap[coord[0]] [coord[1]]);
+            Type t = playfield[(int)c.getX()][(int)c.getY()][(int)(c.getZ())];
+            if (t == ((Type.OBJECT))){
+                System.out.println("Would colide with " + playfield[(int) c.getX()][(int) c.getY()][(int) (c.getZ())] + "\n");
                 return false;
 
             }
         }
+        System.out.println("Target approved");
+        System.out.println("---------------");
         return true;
     }
 

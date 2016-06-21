@@ -41,10 +41,7 @@ public class PathfindingBot extends AIPlayer {
         b = p.getBallOfPlayer(this);
         Game.Game.dp.repaint();
         ballCoord = new Coordinate(this.getBall().getCoordinate().getX(), this.getBall().getCoordinate().getY(),course.heightMap[(int)this.getBall().getCoordinate().getX()][(int)this.getBall().getCoordinate().getY()]);
-
-
         pMap = map.getMapSH();
-
         do{
             indexList++;
             this.alternative = new Coordinate(pMap.get(indexList).getX()*map.shrink, pMap.get(indexList).getY()*map.shrink, pMap.get(indexList).getHeight()+1);
