@@ -108,7 +108,7 @@ public abstract class AIPlayer extends Player {
         PhysicsEngine ps = p.getAlternativBoardForTest();
         Ball b = ps.getBallOfPlayer(this);
         b.shootBall(move);
-        ps.calculateUntilNoBallIsMoving(0);
+        ps.calculateUntilNoBallIsMoving(0,0);
         move.attainedTarget = ps.getBallOfPlayer(this).getCoordinate();
         move.setModel(ps);
         Game.dp.repaint();
@@ -161,15 +161,13 @@ public abstract class AIPlayer extends Player {
         summedDistance/= maximumDistance*(balls.size()-skipped);
         return summedDistance;
 
-
     }
 
 
     private double evaluetePlayerClosest(PhysicsEngine p, double maximumDistance, Hole hole) {
         int indexP = p.getBallIndexOfPlayer(this);
         ArrayList<Ball> balls = p.getBalls();
-        double summedDistance = 0;
-
+        double summedDistance;
         summedDistance = maximumDistance-Coordinate.getDistance(balls.get(indexP).getCoordinate(),hole.getCoordinate());
 
 

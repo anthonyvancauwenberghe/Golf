@@ -74,7 +74,7 @@ public class Main extends JPanel {
         while (true) {
             if (p.getBall().isMoving) {
 
-                physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE);
+                physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE,Config.WINDPERCENTAGEPERSECOND);
 
 
                 //p.getBall().printBallInfo();

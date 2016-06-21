@@ -712,11 +712,11 @@ public class Course {
         for ( insideX = 0; insideX+x<dimension[0]&&insideX<pmcD[0];insideX++) {
             for ( insideY = 0; insideY + y < dimension[1] && insideY < pmcD[1]; insideY++) {
                 for (int z= 0; z<dimension[2];z++){
-                    if (pmc[insideX][insideY][z]!=Type.Empty)
+                    if (pmc[insideX][insideY][z]!=Type.Empty){
                     playfield[insideX+x][insideY+y][z] = pmc[insideX][insideY][z];
-
+                    managedBufferedImage.setRGB(insideX+x,insideY+y,bi.getRGB(insideX,insideY));}
                 }
-                managedBufferedImage.setRGB(insideX+x,insideY+y,bi.getRGB(insideX,insideY));
+
             }
         }
 

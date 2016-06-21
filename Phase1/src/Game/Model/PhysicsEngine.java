@@ -22,9 +22,9 @@ public class PhysicsEngine {
 
 
 
-    public void calculateUntilNoBallIsMoving(double noisePercentage){
+    public void calculateUntilNoBallIsMoving(double noisePercentage, double windPercentage){
         do {
-            processPhysics(Config.STEPSIZE, noisePercentage);
+            processPhysics(Config.STEPSIZE, noisePercentage,windPercentage);
 
         }while(atLeastOneBallMoving());
     }
@@ -95,7 +95,7 @@ public class PhysicsEngine {
     }
 
 
-    public void processPhysics(double elapsedTime, double noisePercentage) {
+    public void processPhysics(double elapsedTime, double noisePercentage, double windPercentagePerSecond) {
 
 
         Type[][][] playfield = course.getPlayfield();
@@ -124,6 +124,7 @@ public class PhysicsEngine {
 
             inertia(b,elapsedTime);
             checkIfInHole(b);
+            adjustWind(windPercentagePerSecond*Config.STEPSIZE);
            // setUp(b);
 
         }
@@ -134,6 +135,11 @@ public class PhysicsEngine {
         }
 
 
+    }
+
+    private void adjustWind(double windAdjustPercentage) {
+        if (windAdjustPercentage<=0) return;
+        Coordinate.modify2d(wind,windAdjustPercentage);
     }
 
     private void drag(Ball b) {
@@ -309,44 +315,36 @@ public class PhysicsEngine {
             }
         }
 
-        if (count!=0){
-            normalX/=count;
-            normalY/=count;
-            normalZ/=count;
-            BounceFriction/=count;
+        if (count!=0) {
+            normalX /= count;
+            normalY /= count;
+            normalZ /= count;
+            BounceFriction /= count;
             //addedFriction = (1-addedFriction*elapsedTime);
-            double dx =  b.x -b.previousX;
-            double dy = b.y - b.previousY ;
-            double dz = b.z - b.previousZ ;
+            double dx = b.x - b.previousX;
+            double dy = b.y - b.previousY;
+            double dz = b.z - b.previousZ;
 
             // Project velocity onto the normal, multiply by 2, and subtract it from velocity
 
             // project velocity onto the normal using dot product
-            double scalarProjection = dx * normalX + dy * normalY + dz *normalZ;
-           // if (scalarProjection<0){
+            double scalarProjection = dx * normalX + dy * normalY + dz * normalZ;
+            // if (scalarProjection<0){
 
             //
-            double dxNew = dx -  normalX * scalarProjection * 2;
-            double dyNew = dy -  normalY * scalarProjection * 2;
-            double dzNew = dz -  normalZ * scalarProjection * 2;
-           // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
-            BounceFriction=0;
-               b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
-               b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
-               b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
+            double dxNew = dx - normalX * scalarProjection * 2;
+            double dyNew = dy - normalY * scalarProjection * 2;
+            double dzNew = dz - normalZ * scalarProjection * 2;
+            // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
+            BounceFriction = 0;
+            b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
+            b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
+            b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
 
-                //System.out.println("woop");
-           // }
-           // }
+            //System.out.println("woop");
+            // }
+            // }
             //friction should come in here
-
-
-
-
-        }else{
-
-
-
 
 
         }

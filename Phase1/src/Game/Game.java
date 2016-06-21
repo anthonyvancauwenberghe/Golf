@@ -79,7 +79,7 @@ public class Game {
         Player p2  =  new Stroke2Bot("Player 3");
 
         pp.add(p);
-        pp.add(p2);
+        //pp.add(p2);
         //pp.add(AI2);
     }
 
@@ -120,6 +120,7 @@ public class Game {
                 scoreInfo = new JLabel(scores.toString());
                 infoSidebar.add(scoreInfo);
             }
+
             else {
                 if(scoreInfo.getText()!= scores.toString()){
                     scoreInfo.setText(scores.toString());
@@ -252,7 +253,7 @@ public class Game {
                     }
                 }
                 if(e.getKeyChar()=='w'){
-                    physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE);
+                    physics.processPhysics(Config.STEPSIZE,Config.NOISEPERCENTAGE,Config.WINDPERCENTAGEPERSECOND);
                     dp.repaint();
                 }
                 if(e.getKeyChar()=='p'){
@@ -283,7 +284,7 @@ public class Game {
                     if ((physics.atLeastOneBallMoving())) {
                         selectNextPlayer = true;
                         ;
-                        if (!pause) physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE); //
+                        if (!pause) physics.processPhysics(Config.STEPSIZE, Config.NOISEPERCENTAGE,Config.WINDPERCENTAGEPERSECOND); //
                             selectNextPlayer = true;
                         try {
                             dp.repaint();
