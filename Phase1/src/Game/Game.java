@@ -48,8 +48,7 @@ public class Game {
 
 
     public Game(){
-        JOptionPane.showMessageDialog(frame,
-                "Wait for profiler");
+        //JOptionPane.showMessageDialog(frame, "Wait for profiler");
         prepareCourses();
         prepareView();
         preparePlayers();
@@ -67,7 +66,7 @@ public class Game {
 
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
-        Player p = new HumanPlayer("Player 1");
+        Player p = new Stroke2Bot("Player 1");
         Player p2  =  new PathfindingBot("Player 2", course);
 
         pp.add(p);
@@ -97,6 +96,7 @@ public class Game {
 
 
         course = course1;
+
     }
 
     private Course createStandartCourse(int standartCourse) {

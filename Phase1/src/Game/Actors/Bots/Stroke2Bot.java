@@ -37,7 +37,6 @@ public class Stroke2Bot extends AIPlayer {
         Coordinate coordBall = b.getCoordinate();
         Coordinate coordHole = h.getCoordinate();
 
-
         if (course.wayIsObstacleFree(coordBall, coordHole)) {
             int[] delta = getDelta(coordBall, coordHole);
             try {

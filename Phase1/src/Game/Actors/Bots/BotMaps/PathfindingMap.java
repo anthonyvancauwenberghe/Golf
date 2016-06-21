@@ -11,63 +11,73 @@ import java.util.*;
  */
 public class PathfindingMap {
     Course course;
-    Coordinate ball;
-    Coordinate hole;
-    MapCellDetails[][] map;
+    Coordinate ballSH;
+    Coordinate holeSH;
+    MapCellDetails[][] mapSH;
     ArrayList<MapCellDetails> treatedCells;
     ArrayList<MapCellDetails> visitedCells;
+    ArrayList<MapCellDetails>cleanMap;
+    public final int shrink = 4;
 
     public PathfindingMap(Course c, Coordinate b, Coordinate h) {
         course = c;
-        ball = b;
-        hole = h;
-        map = new MapCellDetails[course.playfield.length/4][course.playfield[0].length/4];
+        ballSH = new Coordinate((int)b.getX()/shrink, (int)b.getY()/shrink, (int)b.getZ()/shrink);
+        holeSH = new Coordinate((int)h.getX()/shrink, (int)h.getY()/shrink, (int)h.getZ()/shrink);
+        mapSH = new MapCellDetails[c.playfield.length/shrink][c.playfield[0].length/shrink];
         treatedCells = new ArrayList<>();
         visitedCells = new ArrayList<>();
+        cleanMap = new ArrayList<>();
         c.calculateHeightMap();
         makeInitialMap();
-        makeCounter((int)hole.getX(), (int)hole.getY());
         completeCounters();
-        Collections.sort(visitedCells);
     }
 
     public void makeInitialMap() {
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                int h = course.heightMap[i*4][j*4];
-                Type t = course.playfield[i*4][j*4][course.heightMap[i*4][j*4]];
-                int c = -1;
+        for (int i = 0; i < mapSH.length; i++) {
+            for (int j = 0; j < mapSH[0].length; j++) {
+                int h = course.heightMap[i*shrink][j*shrink]/shrink;
+                Type t = course.playfield[i*shrink][j*shrink][course.heightMap[i*shrink][j*shrink]];
+
+                int c = 0;
+                //Giving all objects counter "-2"
                 if(t == Type.OBJECT) c = -2;
-                map[i][j] = new MapCellDetails(t, h, c, i, j);
-                map[i][j].visited=false;
+
+                mapSH[i][j] = new MapCellDetails(t, h, c, i, j);
+                mapSH[i][j].visited=false;
             }
         }
-        map[(int)hole.getX()][(int)hole.getY()].setCounter(0);
+        //Giving hole counter "-1" (unique)
+        mapSH[(int) holeSH.getX()][(int) holeSH.getY()].setCounter(-1);
+        makeCounter((int) holeSH.getX(), (int) holeSH.getY());
 
     }
 
     public void makeCounter(int x, int y) {
-        ArrayList<MapCellDetails> adjCells = getadjCells(x, y);
-        for (int i = 0; i < adjCells.size(); i++){
-            int deltaH = Math.abs(adjCells.get(i).height - map[x][y].height);
-            int distance = (int)(Math.sqrt(1+deltaH*deltaH)*10);
-            int total = distance + map[x][y].counter;
-            if ((total < adjCells.get(i).counter && adjCells.get(i).counter != -2) || adjCells.get(i).counter == -1){
-                adjCells.get(i).counter = total;
+        if (mapSH[x][y].counter != -2) {
+            ArrayList<MapCellDetails> adjCells = getadjCells(x, y);
+            for (int i = 0; i < adjCells.size(); i++) {
+                int deltaH = Math.abs(adjCells.get(i).height/shrink - mapSH[x][y].height/shrink);
+                int distance = (int) (Math.sqrt(1 + deltaH * deltaH) * 10);
+                int total = distance + mapSH[x][y].counter;
+                if (((total < adjCells.get(i).counter) && (adjCells.get(i).counter != -2)) || adjCells.get(i).counter == 0){
+                    adjCells.get(i).counter = total;
+                }
+                treatedCells.add(adjCells.get(i));
             }
-            treatedCells.add(adjCells.get(i));
+            cleanMap.add(mapSH[x][y]);
         }
-        map[x][y].visited = true;
+        mapSH[x][y].visited = true;
+        visitedCells.add(mapSH[x][y]);
     }
 
     public ArrayList<MapCellDetails> getadjCells(int x, int y) {
         ArrayList<MapCellDetails> list = new ArrayList<>();
         for (int i = x - 1; i <= x + 1; i++) {
             for (int j = y - 1; j <= y + 1; j++) {
-                if ((i >= 0) && (j >= 0) && (i < map.length) && j < map[0].length) {
+                if ((i >= 0) && (j >= 0) && (i < mapSH.length) && j < mapSH[0].length) {
                     if ((i == x) && (j == y)) {
                     } else {
-                        list.add(map[i][j]);
+                        list.add(mapSH[i][j]);
                     }
                 }
             }
@@ -75,13 +85,14 @@ public class PathfindingMap {
         return list;
     }
     MapCellDetails getNextToVisit(){
-        int returnCell = -1;
+        int returnCell = 0;
         for (int i = 0; i < treatedCells.size(); i++){
-            if (treatedCells.get(i).visited == true) {
-                if (treatedCells.get(i).counter!=-2)visitedCells.add(treatedCells.get(i));
+            if (treatedCells.get(i).visited) {
+                //if (treatedCells.get(i).counter == -2) System.out.println("STOP getNextToVisit found Cell(visited, -2");
                 treatedCells.remove(i);
-            }else if(treatedCells.get(i).visited == false){
+            }else{
                 returnCell = i;
+                return treatedCells.get(returnCell);
             }
 
         }
@@ -89,14 +100,23 @@ public class PathfindingMap {
     }
     void completeCounters(){
         double ratio;
-        double total = map.length * map[0].length;
+        double total = mapSH.length * mapSH[0].length;
         while (visitedCells.size() < total){
-            makeCounter(getNextToVisit().x, getNextToVisit().y);
+            MapCellDetails next = getNextToVisit();
+            makeCounter(next.x, next.y);
             ratio = (visitedCells.size()/total)*100;
             System.out.println(ratio);
         }
+        System.out.println("-----------------------------------");
+        System.out.println("Evaluated " + visitedCells.size() + " Cells.");
+        System.out.println("-----------------------------------");
     }
-    public ArrayList<MapCellDetails> getMap(){
-        return visitedCells;
+    public ArrayList<MapCellDetails> getMapSH(){
+
+//        for (MapCellDetails cell:visitedCells) {
+//            if (cell.counter!=-2)cleanMap.add(cell);
+//        }
+
+        return cleanMap;
     }
 }

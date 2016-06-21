@@ -271,4 +271,130 @@ public class Coordinate {
         return passedPoints;
     }
 
+    public static ArrayList<int[]> getPixelBetweenToPoints2D(int[] coordinate1, int[] coordinate2) {
+
+
+        int xNew = 0;
+        int yNew = 0;
+        int dx, dy = 0;
+        int dx2, dy2 = 0;
+        int aDx = 0;
+        int aDy = 0;
+        int x_inc, y_inc = 0;
+        int xxx, yyy = 0;
+        int xOld, yOld = 0;
+        int err_1 = 0;
+
+        int expectedPoints = (int) (Math.abs(coordinate2[0] - coordinate1[1]) + Math.abs(coordinate2[0] - coordinate1[1]));
+
+
+        ArrayList<int[]> passedPoints = new ArrayList<>(expectedPoints * 2);
+
+        xOld = (int) coordinate1[0];
+        yOld = (int) coordinate1[1];
+
+        xNew = (int) coordinate2[0];
+        yNew = (int) coordinate2[1];
+
+        passedPoints.add(new int[]{xOld, yOld});
+
+        xxx = xOld;
+        yyy = yOld;
+        dx = xNew - xOld;
+        dy = yNew - yOld;
+
+        if (dx < 0) {
+            x_inc = -1;
+        } else {
+            x_inc = 1;
+        }
+        if (dy < 0) {
+            y_inc = -1;
+        } else {
+            y_inc = 1;
+        }
+
+        aDx = Math.abs(dx);
+        aDy = Math.abs(dy);
+
+        dx2 = aDx * 2;
+        dy2 = aDy * 2;
+
+        if (aDx >= aDy) {
+
+            err_1 = dy2 - aDx;
+
+
+            for (int cont = 0; cont < aDx - 1; cont++) {
+
+
+                if (err_1 > 0) {
+                    yyy += y_inc;
+                    err_1 -= dx2;
+                }
+
+                err_1 += dy2;
+                xxx += x_inc;
+
+                passedPoints.add(new int[]{xxx, yyy});
+
+            }
+
+        }
+
+        if (aDy > aDx){
+
+            err_1 = dx2 - aDy;
+
+            for (int cont = 0; cont <= aDy - 1; cont++) {
+
+
+                if (err_1 > 0) {
+                    xxx += x_inc;
+                    err_1 -= dy2;
+                }
+
+
+                err_1 += dx2;
+                yyy += y_inc;
+
+                passedPoints.add(new int[]{xxx, yyy});
+
+            }
+        }
+        return passedPoints;
+    }
+    public static ArrayList<int[]> getPixelBetween(int x1, int y1, int x2, int y2){
+        ArrayList<int[]> passedPoints = new ArrayList<>();
+
+        int dx = Math.abs(x2 - x1);
+        int dy = Math.abs(y2 - y1);
+
+        int sx = (x1 < x2) ? 1 : -1;
+        int sy = (y1 < y2) ? 1 : -1;
+
+        int err = dx - dy;
+
+        while (true) {
+            int[]temp = {x1, y1};
+            passedPoints.add(temp);
+
+            if (x1 == x2 && y1 == y2) {
+                break;
+            }
+
+            int e2 = 2 * err;
+
+            if (e2 > -dy) {
+                err = err - dy;
+                x1 = x1 + sx;
+            }
+
+            if (e2 < dx) {
+                err = err + dx;
+                y1 = y1 + sy;
+            }
+        }
+        return passedPoints;
+    }
 }

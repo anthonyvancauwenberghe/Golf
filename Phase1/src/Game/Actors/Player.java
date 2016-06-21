@@ -14,7 +14,7 @@ public abstract class Player {
     String name;
     int id;
     static int idCounter;
-    Ball b = new Ball(Config.getBallRadius(),this);
+    public Ball b = new Ball(Config.getBallRadius(),this);
 
     int currentStrokes;
     int totalStrokes;
