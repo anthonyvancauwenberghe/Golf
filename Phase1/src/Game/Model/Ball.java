@@ -168,9 +168,7 @@ public class Ball {
 
         int Ncount=0;
         for (double theta = 0; theta <= 2*Math.PI; theta=theta+ (2*Math.PI/16.)) {
-
             for (double arpha = 0; arpha <= Math.PI; arpha=arpha+(Math.PI/8.)) {
-
 
                 double x = radius*cos(theta)*sin(arpha);
                 double y = radius*sin(theta)*sin(arpha);

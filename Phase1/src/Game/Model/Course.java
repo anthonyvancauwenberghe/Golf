@@ -7,9 +7,7 @@ import Game.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /** A course is defined by a 3 dimensional grid containing of tiles
  * A typical course would be 800*600*100 tiles, mostly empty
@@ -20,6 +18,9 @@ import java.util.StringTokenizer;
 public class Course {
     public String name;
     public Coordinate[][]surfaceNormals;
+    public HashMap<IntCoordinate,Coordinate> surfaceNormalsInGood;
+    private IntCoordinate lookup = new IntCoordinate(0,0,0);
+    private Coordinate zeroInt = new Coordinate(0,0,0);
     public int[][]heightMap;
 
 
@@ -231,6 +232,7 @@ public class Course {
 
 
         c.calculateSurfaceNormalsSafe();
+
         System.out.println("try to read " + c.getName()+".png");
         BufferedImage bi = null;
             try {
@@ -573,15 +575,17 @@ public class Course {
                 }
             }
         }
-        double length = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ); // distance from avg to the center
-        if (length==0)return new Coordinate(0, 0, 0);
-        avgX /= length;
-        avgZ /= length;
-        avgY /= length;
+        if (avgX==0&&avgY==0&&avgZ==0)return new Coordinate(0, 0, 0);
+        double length =  Utils.fastInverseSqrt(avgX * avgX + avgY * avgY + avgZ * avgZ);//Math.sqrt(); // distance from avg to the center
+
+        avgX *= length;
+        avgZ *= length;
+        avgY *= length;
 
         return new Coordinate(avgX, avgY, avgZ);
     }
     public void calculateSurfaceNormals(){
+        calculateSurfaceNormalsMap();
         surfaceNormals = new Coordinate[dimension[0]][dimension[1]];
 
         for (int x = 0; x <dimension[0];x++){
@@ -598,6 +602,7 @@ public class Course {
 
     }
     public void calculateSurfaceNormalsSafe(){
+        calculateSurfaceNormalsMap();
         surfaceNormals = new Coordinate[dimension[0]][dimension[1]];
 
         for (int x = 0; x <dimension[0];x++){
@@ -614,6 +619,28 @@ public class Course {
         }
 
     }
+
+    private void calculateSurfaceNormalsMap() {
+        surfaceNormalsInGood = new HashMap<IntCoordinate,Coordinate>((int) (dimension[0]*dimension[1]*3.3));
+        for (int x = 0; x <dimension[0];x++){
+            yLoop:for (int y = 0; y <dimension[1];y++){
+                int z= dimension[2]-1;
+                while (true){
+                    if (z<=0) continue yLoop;
+                    if (playfield[x][y][z] != Type.Empty){
+                        Coordinate c = getNormal(x, y, z);
+                        if (c.getLength()==0) {
+                            continue yLoop;
+                        }
+                        surfaceNormalsInGood.put(new IntCoordinate(x, y, z), getNormal(x, y, z));
+                    }
+                    z--;
+                }
+            }
+
+        }
+    }
+
     public void calculateHeightMap(){
         heightMap = new int[dimension[0]][dimension[1]];
 
@@ -764,4 +791,11 @@ public class Course {
     }
 
 
+    public Coordinate getNormalQuick(int x, int y, int z) {
+        if (surfaceNormalsInGood==null) calculateSurfaceNormalsMap();
+        lookup.set(x, y, z);
+        Coordinate c = surfaceNormalsInGood.get(lookup);
+        if (c==null) return zeroInt;
+        return c;
+    }
 }

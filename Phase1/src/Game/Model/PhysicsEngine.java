@@ -99,15 +99,15 @@ public class PhysicsEngine {
 
 
         Type[][][] playfield = course.getPlayfield();
-        Coordinate [][] normals = course.getSurfaceNormals();
+
         for (int i = 0; i < balls.size(); i++) {
 
             Ball b = balls.get(i);
             if (!b.inPlay||b.isPregame()) continue;
             gravity(b);
 
-            hover(b,elapsedTime,playfield,normals,course.getDimension());
-            collide(b,elapsedTime,playfield,normals,course.getDimension(),noisePercentage);
+            hover(b,elapsedTime,playfield,course.getDimension());
+            collide(b,elapsedTime,playfield,course.getDimension(),noisePercentage);
             drag(b);
             checkborder(b);
             accelerate(b,elapsedTime);
@@ -238,7 +238,7 @@ public class PhysicsEngine {
 
     }
 
-    private void collide(Ball b, double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension, double noisePercentage) {
+    private void collide(Ball b, double elapsedTime, Type[][][] playfield, int[] dimension, double noisePercentage) {
         double normalX = 0;
         double normalY = 0;
         double normalZ = 0;
@@ -294,14 +294,14 @@ public class PhysicsEngine {
                 if (t!= Type.Empty) {
                     BounceFriction += t.getBounceDampness();
                     Coordinate c;
-                    if (noisePercentage == 0)  c = normals[x][y];
+                    if (noisePercentage == 0)  c = course.getNormalQuick(x, y, z);
                     else{
-                        c = normals[x][y].clone();;
+                        c =  course.getNormalQuick(x, y, z);;
                         Coordinate.modify3d(c,noisePercentage);
                         c.normalise();
 
                     }
-                    c = course.getNormal(x,y,z);
+
 
                     if (c.getLength()!=0){
                         normalX += c.getX();
@@ -351,7 +351,7 @@ public class PhysicsEngine {
 
     }
 
-    private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
+    private void hover(Ball b, double elapsedTime, Type[][][] playfield, int[] dimension) {
         double aX = 0;
         double aY = 0;
         double aZ = 0;
@@ -405,8 +405,8 @@ public class PhysicsEngine {
                  if (t!= Type.Empty) {
 
 
-                     Coordinate c = normals[x][y];
-                     c = course.getNormal(x,y,z);
+                     Coordinate c;
+                     c = course.getNormalQuick(x,y,z);
                      if (c.getLength()!=0) {
                          addedFriction+=t.getFriction();
                          System.out.println(c.toString());
