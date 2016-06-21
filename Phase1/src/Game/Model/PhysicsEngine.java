@@ -329,18 +329,18 @@ public class PhysicsEngine {
 
             // project velocity onto the normal using dot product
             double scalarProjection = dx * normalX + dy * normalY + dz * normalZ;
-            // if (scalarProjection<0){
+            if (scalarProjection<0) {
 
-            //
-            double dxNew = dx - normalX * scalarProjection * 2;
-            double dyNew = dy - normalY * scalarProjection * 2;
-            double dzNew = dz - normalZ * scalarProjection * 2;
-            // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
-            BounceFriction = 0;
-            b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
-            b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
-            b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
 
+                double dxNew = dx - normalX * scalarProjection * 2;
+                double dyNew = dy - normalY * scalarProjection * 2;
+                double dzNew = dz - normalZ * scalarProjection * 2;
+                // if (Math.sqrt(dxNew*dxNew+dyNew*dyNew+dzNew*dzNew)< Math.sqrt(dx*dx+dy*dy+dz*dz)) {
+                BounceFriction = 0;
+                b.previousX = b.x - dxNew * (1 - BounceFriction * elapsedTime);
+                b.previousY = b.y - dyNew * (1 - BounceFriction * elapsedTime);
+                b.previousZ = b.z - dzNew * (1 - BounceFriction * elapsedTime);
+            }
             //System.out.println("woop");
             // }
             // }
