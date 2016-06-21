@@ -60,7 +60,14 @@ public class Game {
         prepareView();
         preparePlayers();
 
-        loadCourse(course);
+        try{
+            loadCourse(course);
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+
+
         gameThread = createGameThread();
         gameThread.run();
 
@@ -135,16 +142,17 @@ public class Game {
 
     private void prepareCourses() {
         course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
-        //course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
-        //course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
+        course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
+        course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
+
         if (course1 == null) {
             course1 = createStandartCourse(1);
         }
         if (course2 == null) {
-            //course2 = createStandartCourse(2);
+            course2 = createStandartCourse(2);
         }
         if (course3 == null) {
-            //course3 = createStandartCourse(3);
+            course3 = createStandartCourse(3);
         }
 
         course = course1;
@@ -198,7 +206,7 @@ public class Game {
                 break;
             case 3:
                 Course course3;
-                course3 = new Course("GolfDeluxe3", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
+                course3 = new Course("CourseTerrains", Config.getWidth(), Config.getHeight(), Config.getDepth(), Type.Grass, 1);
                 course3.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
                 //course.addFrustrum(0,0,0,Config.getWidth(),Config.getHeight(),10,0,0,0,0,Type.Grass);
                 //course.addFrustrum(200,0,10,160,440,20,2,0,0,0,Type.OBJECT);

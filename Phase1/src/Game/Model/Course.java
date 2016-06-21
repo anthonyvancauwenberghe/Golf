@@ -653,8 +653,9 @@ public class Course {
             for (int y = 0; y <dimension[1];y++){
                     //angle = acos(v1•v2)
                      Coordinate c = surfaceNormals[x][y];
-                     double[] v = {c.getX(),c.getY(),c.getZ()};
-                     //normaliseV
+                if (c != null) {
+                    double[] v = {c.getX(),c.getY(),c.getZ()};
+                    //normaliseV
                     double length = Math.sqrt(v[0] * v[0] + v[1] * v[1]+v[2] * v[2]);
                     v[0] /= length;
                     v[1] /= length;
@@ -662,8 +663,10 @@ public class Course {
                     double value = Math.acos(lv[0] *  v[0] + lv[1] *  v[1]+lv[2] *  v[2]);
                     System.out.println("x: " + x + " y: " + y + " has the angle two north west " + Math.toDegrees(value) );
                     value = value/Math.PI;
+                    if (Double.isNaN(value)) shadingMap[x][y] = 0; else shadingMap[x][y] = (float) value;
 
-                   if (Double.isNaN(value)) shadingMap[x][y] = 0; else shadingMap[x][y] = (float) value;
+                }
+
             }
 
         }

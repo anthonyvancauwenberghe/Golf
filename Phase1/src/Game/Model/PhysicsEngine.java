@@ -303,7 +303,7 @@ public class PhysicsEngine {
                     }
 
 
-                    if (!Double.isNaN(c.getX())){
+                    if (c != null && !Double.isNaN(c.getX())){
                         normalX += c.getX();
                     normalY += c.getY();
                     normalZ += c.getZ();
@@ -406,10 +406,12 @@ public class PhysicsEngine {
                      addedFriction+=t.getFriction();
 
                      Coordinate c = normals[x][y];
-                     aX += c.getX();
-                     aY += c.getY();
-                     aZ += c.getZ();
-                     count++;
+                     if(c != null) {
+                         aX += c.getX();
+                         aY += c.getY();
+                         aZ += c.getZ();
+                         count++;
+                     }
 
                  }else{
 
