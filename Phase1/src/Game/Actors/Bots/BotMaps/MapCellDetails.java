@@ -1,8 +1,6 @@
 package Game.Actors.Bots.BotMaps;
 
 import Game.Model.Type;
-import java.util.Comparator;
-import java.util.Map;
 
 /**
  * Created by esther on 6/14/16.
