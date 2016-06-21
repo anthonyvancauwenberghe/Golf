@@ -135,6 +135,7 @@ public class Game {
 
     private void prepareCourses() {
         course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
+       // course1 = Course.loadCourse2_5d(Config.CourseLocation + "Course361.gol");
         //course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
         //course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
         if (course1 == null) {

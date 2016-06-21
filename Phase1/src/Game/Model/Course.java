@@ -574,6 +574,7 @@ public class Course {
             }
         }
         double length = Math.sqrt(avgX * avgX + avgY * avgY + avgZ * avgZ); // distance from avg to the center
+        if (length==0)return new Coordinate(0, 0, 0);
         avgX /= length;
         avgZ /= length;
         avgY /= length;

@@ -301,13 +301,13 @@ public class PhysicsEngine {
                         c.normalise();
 
                     }
+                    c = course.getNormal(x,y,z);
 
-
-                    if (!Double.isNaN(c.getX())){
+                    if (c.getLength()!=0){
                         normalX += c.getX();
-                    normalY += c.getY();
-                    normalZ += c.getZ();
-                    count++;
+                        normalY += c.getY();
+                        normalZ += c.getZ();
+                        count++;
 
                     }
                 }
@@ -403,14 +403,18 @@ public class PhysicsEngine {
             if (!skipCheck){
                 Type t = playfield[x][y][z];
                  if (t!= Type.Empty) {
-                     addedFriction+=t.getFriction();
+
 
                      Coordinate c = normals[x][y];
-                     aX += c.getX();
-                     aY += c.getY();
-                     aZ += c.getZ();
-                     count++;
-
+                     c = course.getNormal(x,y,z);
+                     if (c.getLength()!=0) {
+                         addedFriction+=t.getFriction();
+                         System.out.println(c.toString());
+                         aX += c.getX();
+                         aY += c.getY();
+                         aZ += c.getZ();
+                         count++;
+                     }
                  }else{
 
                  }

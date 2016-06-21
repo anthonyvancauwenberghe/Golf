@@ -29,7 +29,7 @@ public class AngryBot extends AIPlayer  {
         for (int i = 0; i < testMoves; i++) {
             moves[i] = new Move(i*1.0/(testMoves)*2*Math.PI, power,b.getCoordinate());
         }
-        double[] ratio = {0.1};
+        double[] ratio = {0.1,0.9,0.0};
         Move m = evaluate(p,moves, Evaluationfunction.botClosest,ratio);
 
 
