@@ -338,6 +338,10 @@ public class Coordinate {
         zCoord  /= length;
     }
 
+    public boolean isNullVector() {
+        return (!(xCoord != 0 || yCoord != 0 || zCoord != 0));
+    }
+
 
    /* public static Coordinate(Coordinate a){
 

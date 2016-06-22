@@ -7,6 +7,7 @@ import org.apache.commons.math3.distribution.NormalDistribution;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by tony and Markus on 16/03/2016.
@@ -106,15 +107,16 @@ public class PhysicsEngine {
 
 
         Type[][][] playfield = course.getPlayfield();
-        Coordinate [][] normals = course.getSurfaceNormals();
+        HashMap<IntCoordinate, Coordinate> surfaceHashMap = course.surfaceNormalsInGood;
+        Coordinate[][] normals = course.surfaceNormals;
         for (int i = 0; i < balls.size(); i++) {
 
             Ball b = balls.get(i);
             if (!b.inPlay||b.isPregame()) continue;
             gravity(b);
 
-            hover(b,elapsedTime,playfield,normals,course.getDimension());
-            collide(b,elapsedTime,playfield,normals,course.getDimension(),noisePercentage);
+            hover(b,elapsedTime,playfield,course.getDimension(),surfaceHashMap,normals);
+            collide(b,elapsedTime,playfield,course.getDimension(),noisePercentage,surfaceHashMap,normals);
             drag(b);
             checkborder(b);
             accelerate(b,elapsedTime);
@@ -245,7 +247,7 @@ public class PhysicsEngine {
 
     }
 
-    private void collide(Ball b, double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension, double noisePercentage) {
+    private void collide(Ball b, double elapsedTime, Type[][][] playfield, int[] dimension, double noisePercentage, HashMap<IntCoordinate, Coordinate> surfaceHashMap, Coordinate[][] normals) {
         double normalX = 0;
         double normalY = 0;
         double normalZ = 0;
@@ -301,16 +303,16 @@ public class PhysicsEngine {
                 if (t!= Type.Empty) {
                     BounceFriction += t.getBounceDampness();
                     Coordinate c;
-                    if (noisePercentage == 0)  c = normals[x][y];
+                    if (noisePercentage == 0)  c=course.getNormalQuick(x, y, z);//c  = normals[x][y];//
                     else{
-                        c = normals[x][y].clone();;
+                        c =  course.getNormalQuick(x, y, z).clone();;
                         Coordinate.modify3d(c,noisePercentage);
                         c.normalise();
 
                     }
-                    c = course.getNormal(x,y,z);
 
-                    if (c.getLength()!=0){
+
+                    if (!c.isNullVector()){
                         normalX += c.getX();
                         normalY += c.getY();
                         normalZ += c.getZ();
@@ -358,7 +360,7 @@ public class PhysicsEngine {
 
     }
 
-    private void hover(Ball b,double elapsedTime, Type[][][] playfield, Coordinate[][] normals, int[] dimension) {
+    private void hover(Ball b, double elapsedTime, Type[][][] playfield, int[] dimension, HashMap<IntCoordinate, Coordinate> surfaceHashMap, Coordinate[][] normals) {
         double aX = 0;
         double aY = 0;
         double aZ = 0;
@@ -412,11 +414,12 @@ public class PhysicsEngine {
                  if (t!= Type.Empty) {
 
 
-                     Coordinate c = normals[x][y];
-                     c = course.getNormal(x,y,z);
-                     if (c.getLength()!=0) {
+                     Coordinate c;
+                     c = course.getNormalQuick(x, y, z);
+                     //c = normals[x][y];
+                     if (!c.isNullVector()) {
                          addedFriction+=t.getFriction();
-                         System.out.println(c.toString());
+                        // System.out.println(c.toString());
                          aX += c.getX();
                          aY += c.getY();
                          aZ += c.getZ();
