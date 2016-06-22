@@ -34,7 +34,7 @@ public class Game {
     private static JLabel scoreInfo;
 
     private static PhysicsEngine physics;
-    public static AIPlayer AI= new AngryBot("Player 2",64);
+    public static AIPlayer AI= new AngryBot("Angry",64);
     public static AIPlayer AI2= new AngryBot("Player 3",64);
     public static DrawPanel dp;
 
@@ -79,7 +79,7 @@ public class Game {
         Player p2  =  new Stroke2Bot("Player 3");
 
         pp.add(p);
-        pp.add(p2);
+        pp.add(AI);
         //pp.add(AI2);
     }
 
@@ -133,7 +133,7 @@ public class Game {
     }
 
     private void prepareCourses() {
-        course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
+        course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe3q.gol");
         //course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
         //course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
         if (course1 == null) {
