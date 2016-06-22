@@ -85,7 +85,7 @@ public class Game {
         Player p = new HumanPlayer("Player 1");
         Player p2  =  new PathfindingBot("Player 2", course);
 
-        pp.add(p);
+        pp.add(p2);
         //pp.add(p2);
         //pp.add(AI2);
     }
@@ -141,18 +141,18 @@ public class Game {
     }
 
     private void prepareCourses() {
-        course1 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe1.gol");
-        course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
-        course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
+        course1 = Course.loadCourse2_5d(Config.CourseLocation + "CourseTerrains.gol");
+        //course2 = Course.loadCourse2_5d(Config.CourseLocation + "GolfDeluxe2.gol");
+        //course3 = Course.loadCourse2_5d(Config.CourseLocation +"GolfDeluxe3.gol");
 
         if (course1 == null) {
             course1 = createStandartCourse(1);
         }
         if (course2 == null) {
-            course2 = createStandartCourse(2);
+            //course2 = createStandartCourse(2);
         }
         if (course3 == null) {
-            course3 = createStandartCourse(3);
+            //course3 = createStandartCourse(3);
         }
 
         course = course1;

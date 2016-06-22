@@ -48,15 +48,8 @@ public class PathfindingBot extends AIPlayer {
         }while (!course.wayIsObstacleFree(ballCoord, alternative));
         indexList = 0;
         int[] delta = getDelta(ballCoord, alternative);
-        try {
-            this.alternative = holeCoord;
-            Game.Game.dp.repaint();
-            Thread.sleep(1000);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         shootBall(getCorrectedShootData(delta, Config.AI_OFFSET));
         this.alternative = null;
+        System.out.println("HOLEEEEE"+course.getHole().getCoordinate());
     }
 }
