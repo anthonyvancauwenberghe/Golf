@@ -68,7 +68,7 @@ public class Main extends JPanel {
                 p.getBall().getPhysics().processPhysics();
                 p.getBall().getPhysics().processNaturalForces();
                 p.getBall().checkBallStopped();
-                p.getBall().printBallInfo();
+               // p.getBall().printBallInfo();
                 try {
                     dp.repaint();
                     Thread.sleep(REFRESH_RATE);

@@ -25,6 +25,7 @@ public class AngryBot extends AIPlayer  {
     public void nextMove(PhysicsEngine p) {
         Move[] moves = new Move[testMoves];
         Ball b = p.getBallOfPlayer(this);
+        System.out.println("starting location ball: " + b.getCoordinate().toString());
         double power = Coordinate.getDistance(b.getCoordinate(),course.getHole().getCoordinate())*Config.AI_OFFSET;
         for (int i = 0; i < testMoves; i++) {
             moves[i] = new Move(i*1.0/(testMoves)*2*Math.PI, power,b.getCoordinate());
@@ -37,7 +38,7 @@ public class AngryBot extends AIPlayer  {
         Game.dp.setPreviewMoves(null);
         Game.dp.repaint();
 
-
+        System.out.println("Target location ball: " + m.attainedTarget.toString());
         double length = Coordinate.getDistance(m.attainedTarget,course.getHole().getCoordinate())*Config.AI_OFFSET;
         moves[0] = m;
         for (int i = 1; i < testMoves; i++) {
@@ -50,7 +51,9 @@ public class AngryBot extends AIPlayer  {
         Game.dp.setPreviewMoves(null);
         Game.dp.repaint();
         shootBall(m);
+
         Game.dp.setPreviewMove(null);
+
 
 
     }

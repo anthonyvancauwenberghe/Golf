@@ -83,6 +83,7 @@ public abstract class Player {
     public void shootBall(Move move) {
         b.shootBall(move);
         addStroke();
+
     }
 
     public void shootBall(double x, double y, double z) {

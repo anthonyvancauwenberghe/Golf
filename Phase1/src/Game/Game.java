@@ -33,6 +33,7 @@ public class Game {
     private static boolean variablesVisible;
     private static JLabel scoreInfo;
 
+
     private static PhysicsEngine physics;
     public static AIPlayer AI= new AngryBot("Player 2",64);
     public static AIPlayer AI2= new AngryBot("Player 3",64);
@@ -75,11 +76,11 @@ public class Game {
 
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
-        Player p = new HumanPlayer("Player 1");
+        //Player p = new HumanPlayer("Player 1");
         Player p2  =  new AngryBot("Player 3",32) {
         };
 
-        pp.add(p);
+        //pp.add(p);
         pp.add(p2);
         //pp.add(AI2);
     }
@@ -249,7 +250,7 @@ public class Game {
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyChar()=='q'){
                     for (Player p: pp){
-                        p.getBall().printBallInfo();
+                        //p.getBall().printBallInfo();
                         System.out.println();
                     }
                 }

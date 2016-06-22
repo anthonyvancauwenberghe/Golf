@@ -61,6 +61,9 @@ public class PhysicsEngine {
         }
         return null;
     }
+    public String getBallOfBot(){
+        return getBalls().get(0).getCoordinate().toString();
+    }
 
     public int getBallIndexOfPlayer(Player p){
         for (int i = 0; i < balls.size(); i++) {
@@ -191,7 +194,7 @@ public class PhysicsEngine {
             b.setInHole(true);
             b.isMoving=false;
 
-            System.out.println(b.getPlayer().getName() + " put the ball into the hole");
+            //System.out.println(b.getPlayer().getName() + " put the ball into the hole");
         }
 
 
@@ -206,38 +209,38 @@ public class PhysicsEngine {
         double dz = Math.abs(b.getZ()-b.getPreviousZ());
 
         if(b.getZ()+b.getRadius()<= 0){
-            System.out.println("out of Z border: ");
+           // System.out.println("out of Z border: ");
 
             b.z = 1+b.getRadius();
             b.previousZ=b.z-dz;
-            b.printBallInfo();
+            //b.printBallInfo();
 
         }
 
         if(b.getX()+b.getRadius()>width-1){
-            System.out.println("out of X border: ");
+            //System.out.println("out of X border: ");
 
             b.x = width-1-b.getRadius();
             b.previousX=b.x+dx;
-            b.printBallInfo();
+            //b.printBallInfo();
         }
 
         if(b.getX()-b.getRadius()<=0){
-            System.out.println("out of X border: ");
+            //System.out.println("out of X border: ");
             b.x = b.getRadius()+1;
             b.previousX=b.x-dx;
-            b.printBallInfo();
+           // b.printBallInfo();
         }
 
         if(b.getY()+b.getRadius()>height-1){
-            System.out.println("out of Y border: ");
+            //System.out.println("out of Y border: ");
             b.y = height-1-b.getRadius();
             b.previousY=b.y+dy;
-            b.printBallInfo();
+            //b.printBallInfo();
         }
 
         if(b.getY()-b.getRadius()<=0){
-            System.out.println("out of Y border: " );
+           // System.out.println("out of Y border: " );
             b.y = 1+b.getRadius();
             b.previousY=b.y-dy;
 

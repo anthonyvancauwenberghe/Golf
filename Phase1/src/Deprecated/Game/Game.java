@@ -76,7 +76,7 @@ public class Game {
                         cp.getBall().getPhysics().processPhysics();
                         cp.getBall().getPhysics().processNaturalForces();
                         cp.getBall().checkBallStopped();
-                        cp.getBall().printBallInfo();
+                        //cp.getBall().printBallInfo();
                         try {
                             dp.repaint();
                             Thread.sleep(REFRESH_RATE);
@@ -169,7 +169,7 @@ public class Game {
                 cp.getBall().getPhysics().processPhysics();
                 cp.getBall().getPhysics().processNaturalForces();
                 cp.getBall().checkBallStopped();
-                cp.getBall().printBallInfo();
+                //cp.getBall().printBallInfo();
                 try {
                     dp.repaint();
                     Thread.sleep(REFRESH_RATE);

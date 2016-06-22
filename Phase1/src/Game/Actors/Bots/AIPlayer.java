@@ -27,6 +27,7 @@ public abstract class AIPlayer extends Player {
         System.out.println("ai loaded new course");
     }
     public void shootBall(int[]xyz){
+
         shootBall(xyz[0], xyz[1], xyz[2]);
     }
     public int[] getDelta(Coordinate ball, Coordinate hole){
@@ -52,14 +53,14 @@ public abstract class AIPlayer extends Player {
         }else{
             ratio = i[0];
         }
-        System.out.println("AI move evalutate");
+        //System.out.println("AI move evalutate");
         //execute all the moves
         PhysicsEngine[] ps = new PhysicsEngine[m.length];
 
         Game.dp.setPreviewMoves(m);
         for (int j = 0; j < m.length; j++) {
             tryOutMoves(m[j],p);
-            System.out.println("AI move " + j);
+            //System.out.println("AI move " + j);
         }
 
 
@@ -112,7 +113,7 @@ public abstract class AIPlayer extends Player {
         move.attainedTarget = ps.getBallOfPlayer(this).getCoordinate();
         move.setModel(ps);
         Game.dp.repaint();
-        b.printBallInfo();
+        //b.printBallInfo();
     }
 
 

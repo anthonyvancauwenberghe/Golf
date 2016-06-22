@@ -178,6 +178,7 @@ public class Ball {
      * method that prints the information about the ball
      */
     public void printBallInfo(){
+        /*
         System.out.println("X: " + getCoordinate().getX());
         System.out.println("Y: " + getCoordinate().getY());
         System.out.println("Z: " + getCoordinate().getZ());
@@ -187,6 +188,7 @@ public class Ball {
         System.out.println("ball radius: " + getRadius());
         if(!isMoving)
             System.out.println("ballStopped");
+            */
     }
 
     /**

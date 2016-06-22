@@ -346,7 +346,7 @@ public class Ball {
      * method that prints the information about the ball
      */
     public void printBallInfo(){
-
+/*
         System.out.println("Name:" + player.getName());
         System.out.println("X: " +x);
         System.out.println("Y: " +y);
@@ -361,6 +361,7 @@ public class Ball {
         System.out.println("ball radius: " + getRadius());
         if(!isMoving)
             System.out.println("ballStopped");
+            */
     }
 
     /**
