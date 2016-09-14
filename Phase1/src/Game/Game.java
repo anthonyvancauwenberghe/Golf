@@ -35,8 +35,8 @@ public class Game {
 
 
     private static PhysicsEngine physics;
-    public static AIPlayer AI= new AngryBot("Player 2",64);
-    public static AIPlayer AI2= new AngryBot("Player 3",64);
+    public static AIPlayer AI= new AngryBot("Player 2",64,Evaluationfunction.playerClosest);
+    public static AIPlayer AI2= new AngryBot("Player 3",64,Evaluationfunction.playerClosest);
     public static DrawPanel dp;
 
     private static ArrayList<Player> pp;
@@ -50,6 +50,7 @@ public class Game {
     private static Course previewMiniCourse;
 
     private static boolean pause = false;
+    public static boolean Botthinking = false;
 
     public static PhysicsEngine getAlternativBoardForTest(){
         return physics.getAlternativBoardForTest();
@@ -76,11 +77,12 @@ public class Game {
 
     private void preparePlayers() {
         pp = new ArrayList<Player>(2);
-        //Player p = new HumanPlayer("Player 1");
-        Player p2  =  new AngryBot("Player 3",32) {
+        Player p = new HumanPlayer("Player 1");
+        double[] ratio = {0.3,0.1,0.7};
+        Player p2  =  new AngryBot("Player 3",32,Evaluationfunction.botClosest,ratio) {
         };
 
-        //pp.add(p);
+        pp.add(p);
         pp.add(p2);
         //pp.add(AI2);
     }
@@ -354,12 +356,18 @@ public class Game {
 
 
         JMenuItem addPlayer = new JMenuItem("Add Player");
+        JMenuItem addMonteCarlo = new JMenuItem("Add MonteCarlo");
+        addMonteCarlo.addActionListener(e->addMonteCarloL());
+        JMenuItem addStraightLine = new JMenuItem("Add Straight Line");
+        addMonteCarlo.addActionListener(e->addStraightLineL());
         JMenuItem resetCourse = new JMenuItem("Reset Course");
         JMenuItem removePlayer = new JMenuItem("Remove Player");
 
         JMenuItem resetStrokes = new JMenuItem("Reset Strokes");
         JMenuItem selectCourse = new JMenuItem("Select Course");
         setting.add(addPlayer);
+        setting.add(addMonteCarlo);
+        setting.add(addStraightLine);
         setting.add(removePlayer);
         setting.add(resetCourse);
         setting.add(selectCourse);
@@ -398,8 +406,8 @@ public class Game {
         jm3.add(selectCourse);
         jm3.add(resetStrokes);
         jm3.add(courseSelect1);
-        jm3.add(courseSelect2);
-        jm3.add(courseSelect3);
+        //jm3.add(courseSelect2);
+        //jm3.add(courseSelect3);
         JMB.add(jm3);
         JMB.add(showEditorButton);
         showInfo();
@@ -415,6 +423,44 @@ public class Game {
 
         });
         JMB.add(showVariablesButton);
+    }
+
+    private static void addStraightLineL() {
+
+        Player p = new StraightLineBot("Straight Line "+ pp.size());
+        pp.add(p);
+        Tile t = course.getStartTile();
+        p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z + p.getBall().getRadius()+1);
+        p.resetCurrentStrokes();
+        p.setInPlay(true);
+        p.getBall().setPreGame(true);
+    }
+
+    private static void addMonteCarloL() {
+        try {
+
+
+        String s = (String)JOptionPane.showInputDialog(
+                frame,
+                "Number of Test Moves:\n"
+                        ,
+                "Montecarlo",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "32");
+
+        int tries = Integer.parseInt(s);
+        Player p = new AngryBot("Angrelo "+ pp.size(),tries, Evaluationfunction.playerClosest);
+        pp.add(p);
+            Tile t = course.getStartTile();
+            p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z + p.getBall().getRadius()+1);
+            p.resetCurrentStrokes();
+            p.setInPlay(true);
+            p.getBall().setPreGame(true);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private static void showVariables() {
@@ -759,6 +805,8 @@ public class Game {
         resetCourse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+
                 loadCourse(course);
 
 
@@ -832,26 +880,40 @@ public class Game {
     }
 
     private static void loadCourse(Course coursel) {
+
+        if (Botthinking){
+            JOptionPane.showMessageDialog(null, "Please retry after the bot did his turn", "Info", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+
+
         course = coursel;
         courseLoading = true;
+        currentPlayer=0;
         ArrayList<Ball> balls = new ArrayList<>(2);
 
         selectNextPlayer = false;
         for (int i = 0; i < pp.size(); i++) {
             Player p = pp.get(i);
 
-            p.resetBall();
+            //p.resetBall();
+            Tile t = course.getStartTile();
+            p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z + p.getBall().getRadius()+1);
             p.resetCurrentStrokes();
             p.setInPlay(true);
             p.getBall().setPreGame(true);
             balls.add(p.getBall());
-            Tile t = course.getStartTile();
-            p.setBallPositionToCoordinateAndSetSpeedToZero(t.x, t.y, t.z + p.getBall().getRadius());
+
+
+            if (p instanceof AIPlayer){
+                ((AIPlayer) p).setCourse(course);
+            }
         }
         if (pp.size() != 0) pp.get(0).getBall().setPreGame(false);
 
         dp.setCourse(course);
-        AI.setCourse(course);
+
 
         currentPlayer = 0;
         dp.setCurrentPlayer(pp.get(currentPlayer));

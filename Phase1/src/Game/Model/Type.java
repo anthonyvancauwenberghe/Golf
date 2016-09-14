@@ -15,8 +15,8 @@ public enum Type {
     Hole(Color.WHITE,0.9,1),
     Grass(Color.GREEN, Config.GRASS_FRICTION, Config.GRASS_DAMPNESS),
     Start(Color.RED,0,1),
-    OBJECT(Color.gray, Config.OBJECT_FRICTION, Config.OBJECT_DAMPNESS),
-    $MARKER(Color.black,0,0);
+    OBJECT(Color.gray, Config.OBJECT_FRICTION, Config.OBJECT_DAMPNESS);
+    //$MARKER(Color.black,0,0);
 
 
 
@@ -55,8 +55,8 @@ public enum Type {
         Start.setDampness(1);
         OBJECT.setFriction(Config.OBJECT_FRICTION);
         OBJECT.setDampness(Config.OBJECT_DAMPNESS);
-        $MARKER.setFriction(0.);
-        $MARKER.setDampness(0.);
+       // $MARKER.setFriction(0.);
+       // $MARKER.setDampness(0.);
 
 
     }

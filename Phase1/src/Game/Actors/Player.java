@@ -102,6 +102,7 @@ public abstract class Player {
     }
 
     public void resetBall() {
+        setBallPositionToCoordinateAndSetSpeedToZero(100,100,23);
         this.b = new Ball(Config.getBallRadius(),this);
     }
 

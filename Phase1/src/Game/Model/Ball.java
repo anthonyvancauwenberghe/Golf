@@ -88,7 +88,7 @@ public class Ball {
     public Ball(double radius, Player p) {
         this.player = p;
         this.radius = radius;
-
+        this.isMoving = false;
         calculateSurfacePoints();
     }
 

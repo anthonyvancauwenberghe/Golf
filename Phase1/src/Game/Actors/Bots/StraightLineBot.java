@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class StraightLineBot extends AIPlayer {
     @Override
     public void nextMove(PhysicsEngine p) {
+        Game.Botthinking=true;
         Ball b = this.getBall();
         Type[][][] playfield = course.getPlayfield();
 
@@ -48,7 +49,7 @@ public class StraightLineBot extends AIPlayer {
 
 
         System.out.format("Shoot ball with XSpeed %f, YSpeed %f, Zspeed %f %n", getBall().getSpeedX(),getBall().getSpeedY(),getBall().getSpeedZ());
-
+        Game.Botthinking=false;
     }
 
     public StraightLineBot(String s) {

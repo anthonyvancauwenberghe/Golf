@@ -91,9 +91,11 @@ public class PhysicsEngine {
 
     public void init(ArrayList<Player> players, Course course, Coordinate wind) {
         this.course = course;
+
         this.balls.clear();
         this.wind = wind;
         for (int i = 0; i < players.size(); i++) {
+
             balls.add(players.get(i).getBall());
         }
 

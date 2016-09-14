@@ -47,11 +47,12 @@ public abstract class AIPlayer extends Player {
     }
 
     public Move evaluate(PhysicsEngine p, Move[] m, Evaluationfunction f, double... i){
-        double ratio; //for the hybrid;
+        double[] ratio; //for the hybrid;
         if (i == null){
-            ratio = 0.5;
+            ratio = new double[]{0.3, 0.3, 0.3};
         }else{
-            ratio = i[0];
+            ratio = i;
+
         }
         //System.out.println("AI move evalutate");
         //execute all the moves
@@ -75,7 +76,7 @@ public abstract class AIPlayer extends Player {
             double val = 0;
             switch (f){
                 case botClosest:
-                    val = evalueteBotClosest(m[j].getModel(),maximumDistance,course.getHole());
+                    val = evalueteBotFriendsClosest(m[j].getModel(),maximumDistance,course.getHole());
                     break;
                 case enemyFurthest:
 
@@ -87,9 +88,14 @@ public abstract class AIPlayer extends Player {
 
                 break;
                 case hybrid:
-                    double val1 = evalueteEnemyFurthest(m[j].getModel(),maximumDistance, course.getHole());
-                    double val2 = evaluetePlayerClosest(m[j].getModel(),maximumDistance, course.getHole());
-                    val = val2 * ratio + val1 * ( 1-ratio);
+                    double[] vals = new double[3];
+                    vals[0] = evaluetePlayerClosest(m[j].getModel(),maximumDistance, course.getHole());
+                    vals[1] = evalueteEnemyFurthest(m[j].getModel(),maximumDistance, course.getHole());
+                    vals[2] = evalueteBotFriendsClosest(m[j].getModel(),maximumDistance, course.getHole());
+                    for (int k = 0; k < ratio.length; k++) {
+                        val = vals[k] * ratio[k];
+                    }
+
                 break;
             }
             if (val >= valOfBest){
@@ -146,19 +152,20 @@ public abstract class AIPlayer extends Player {
 
     }
 
-    private double evalueteBotClosest(PhysicsEngine p, double maximumDistance, Hole hole) {
+    private double evalueteBotFriendsClosest(PhysicsEngine p, double maximumDistance, Hole hole) {
         int indexP = p.getBallIndexOfPlayer(this);
         ArrayList<Ball> balls = p.getBalls();
         double summedDistance = 0;
         int skipped = 0;
         for (int i = 0; i < balls.size(); i++) {
-            if (balls.get(i).getPlayer()instanceof HumanPlayer) {
+            if (balls.get(i).getPlayer()instanceof HumanPlayer||i==indexP) {
                 skipped++;
                 continue;
             }
             summedDistance += maximumDistance-Coordinate.getDistance(balls.get(indexP).getCoordinate(),hole.getCoordinate());
 
         }
+        if (balls.size()-skipped==0)return 0;
         summedDistance/= maximumDistance*(balls.size()-skipped);
         return summedDistance;
 
